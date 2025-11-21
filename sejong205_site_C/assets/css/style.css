@@ -1,0 +1,98 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    color: #111;
+    background: #ffffff;
+}
+
+/* -------------------
+   HEADER
+--------------------*/
+.top-header {
+    width: 100%;
+    border-bottom: 1px solid #eee;
+}
+
+.header-top {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px 40px;
+    font-size: 14px;
+}
+
+.lang-switch a {
+    margin-left: 14px;
+    text-decoration: none;
+    color: #444;
+}
+
+/* HEADER BOTTOM */
+.header-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 40px;
+}
+
+.logo img {
+    height: 48px;
+    width: auto;
+}
+
+.main-nav ul {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+}
+
+.main-nav a {
+    text-decoration: none;
+    font-size: 17px;
+    color: #111;
+}
+
+.main-nav a:hover {
+    color: #4a7c3a;
+}
+
+/* -------------------
+   HERO
+--------------------*/
+.hero {
+    padding: 120px 40px 60px;
+    background: #fbfbfb;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 68px;
+    font-weight: 600;
+}
+
+.hero p {
+    color: #666;
+    font-size: 20px;
+    margin-top: 12px;
+}
+
+/* Content block */
+.content-block {
+    padding: 80px 40px;
+    text-align: center;
+}
+
+.content-block h2 {
+    font-size: 40px;
+    margin-bottom: 16px;
+}
+
+.content-block p {
+    color: #555;
+    font-size: 18px;
+}
