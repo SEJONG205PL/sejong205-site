@@ -102,7 +102,7 @@ a {
 /* ===== MEGA MENU ===== */
 .mega-menu {
   position: absolute;
-  top: 114px;
+  top: calc(100% + 34px);
   left: 50%;                  /* 화면 중앙 기준 */
   transform: translateX(-50%);/* 가운데 정렬 */
   width: 100vw;               /* 화면 전체 너비 */
