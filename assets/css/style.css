@@ -160,8 +160,8 @@ a {
 
 /* ===== HERO BANNER ===== */
 .hero-banner {
-  width: 100%;
-  height: 550px;
+  width: 1400px;
+  height: 600px;
   background-image: url("/assets/img/main-page-banner.jpg");
   background-size: contain;       /* ← 핵심 */
   background-position: center;
