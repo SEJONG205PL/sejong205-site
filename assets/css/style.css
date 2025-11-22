@@ -1,16 +1,1 @@
-/* container */
-.container{max-width:1280px;margin:0 auto;padding:0 20px;}
-.top-bar{background:#f5f5f5;font-size:14px;}
-.top-inner{height:36px;display:flex;align-items:center;justify-content:flex-end;}
-.lang a{color:#333;margin:0 4px;text-decoration:none;}
-.lang span{color:#aaa;margin:0 4px;}
-.platform-link{margin-left:10px;display:inline-flex;align-items:center;font-weight:500;}
-.link-icon{width:14px;height:14px;margin-right:4px;opacity:.7;}
-.main-header{background:#fff;border-bottom:1px solid #eee;}
-.header-inner{height:84px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;}
-.logo{height:48px;object-fit:contain;}
-.nav-menu{display:flex;gap:36px;}
-.nav-menu a{text-decoration:none;color:#333;font-size:16px;}
-.banner-area{background:#fafafa;padding:20px 0;}
-.banner-img{width:100%;border-radius:6px;display:block;}
-main h1{margin:40px 0;font-size:32px;}
+body{}
