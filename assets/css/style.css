@@ -415,13 +415,13 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* 배너 이미지 */
-.slide1 { background-image: url("/sejong205-site/assets/img/banner1.jpg"); }
-.slide2 { background-image: url("/sejong205-site/assets/img/banner2.jpg"); }
+.slide1 { background-image: url(".assets/img/banner1.jpg"); }
+.slide2 { background-image: url(".assets/img/banner2.jpg"); }
 
 @media (max-width: 900px) {
   .main-banner { height: 480px; }
-  .slide1 { background-image: url("/sejong205-site/assets/img/banner1.jpg"); }
-  .slide2 { background-image: url("/sejong205-site/assets/img/banner2.jpg"); }
+  .slide1 { background-image: url(".assets/img/banner1.jpg"); }
+  .slide2 { background-image: url(".assets/img/banner2.jpg"); }
 }
 
 /* Swiper Pagination */
