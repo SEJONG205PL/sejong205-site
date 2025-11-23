@@ -6,15 +6,15 @@
   <title>SEJONG205</title>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="./assets/css/style.css">
-  <link rel="stylesheet" href="./assets/css/animate.css">
+  <link rel="stylesheet" href="/sejong205-site/assets/css/style.css">
+  <link rel="stylesheet" href="/sejong205-site/assets/css/animate.css">
 
   <!-- Swiper -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
   <!-- JS -->
-  <script src="./assets/js/section.js" defer></script>
+  <script src="/sejong205-site/assets/js/section.js" defer></script>
 </head>
 
 <body>
@@ -22,11 +22,11 @@
   <!-- LANGUAGE & TOP LINKS -->
   <div class="top-bar">
     <div class="top-inner width">
-      <a href="/">EN</a>
-      <a href="/kr/">KO</a>
-      <a href="/pl/">PL</a>
-      <a href="/pl/">
-        <img src="./assets/img/free.png" alt="free">
+      <a href="/sejong205-site/">EN</a>
+      <a href="/sejong205-site/kr/">KO</a>
+      <a href="/sejong205-site/pl/">PL</a>
+      <a href="/sejong205-site/pl/">
+        <img src="/sejong205-site/assets/img/free.png" alt="free">
         SEJONGGO
       </a>
     </div>
@@ -43,16 +43,16 @@
         <!-- Slide 1 -->
         <div class="swiper-slide slide1">
           <div class="main_text width">
-            <h2 class="animated fadeInDown" style="animation-delay:.4s;">첫 번째 텍스트</h2>
-            <h2 class="animated fadeInDown" style="animation-delay:.9s;">두 번째 텍스트</h2>
+            <h2 class="animated fadeInDown" style="animation-delay:.4s;">첫 번째 테스트</h2>
+            <h2 class="animated fadeInDown" style="animation-delay:.9s;">두 번째 테스트</h2>
           </div>
         </div>
 
         <!-- Slide 2 -->
         <div class="swiper-slide slide2">
           <div class="main_text width">
-            <h2 class="animated fadeInDown" style="animation-delay:.4s;">첫 번째 텍스트</h2>
-            <h2 class="animated fadeInDown" style="animation-delay:.9s;">두 번째 텍스트</h2>
+            <h2 class="animated fadeInDown" style="animation-delay:.4s;">첫 번째 테스트</h2>
+            <h2 class="animated fadeInDown" style="animation-delay:.9s;">두 번째 테스트</h2>
           </div>
         </div>
 
@@ -65,8 +65,7 @@
   <section class="shopping-event">
     <h2>Shopping News & Event</h2>
     <p class="notice">
-      <span><strong>stop!</strong> Discover shopping information based on your purchasing patterns and
-        preferences.</span>
+      <span><strong>stop!</strong> Discover shopping information based on your purchasing patterns and preferences.</span>
     </p>
   </section>
 
@@ -75,35 +74,35 @@
 
     <div class="cat-item">
       <a href="#">
-        <img src="./assets/img/img (1).jpg" alt="Company">
+        <img src="/sejong205-site/assets/img/img (1).jpg" alt="Company">
         <span>Company</span>
       </a>
     </div>
 
     <div class="cat-item">
       <a href="#">
-        <img src="./assets/img/img (2).jpg" alt="Business">
+        <img src="/sejong205-site/assets/img/img (2).jpg" alt="Business">
         <span>Business</span>
       </a>
     </div>
 
     <div class="cat-item">
       <a href="#">
-        <img src="./assets/img/img (3).jpg" alt="SEJONG Brand">
+        <img src="/sejong205-site/assets/img/img (3).jpg" alt="SEJONG Brand">
         <span>SEJONG Brand</span>
       </a>
     </div>
 
     <div class="cat-item">
       <a href="#">
-        <img src="./assets/img/img (4).jpg" alt="Magazine">
+        <img src="/sejong205-site/assets/img/img (4).jpg" alt="Magazine">
         <span>Magazine</span>
       </a>
     </div>
 
     <div class="cat-item">
       <a href="#">
-        <img src="./assets/img/img (5).jpg" alt="Customer Service">
+        <img src="/sejong205-site/assets/img/img (5).jpg" alt="Customer Service">
         <span>Customer Service</span>
       </a>
     </div>
@@ -116,12 +115,13 @@
   <!-- IMPORT HEADER + FOOTER -->
   <script>
     /* HEADER LOAD */
-    fetch("header.html")
+    fetch("/sejong205-site/header.html")
       .then(r => r.text())
-      .then(html => document.querySelector("#header").innerHTML = html)
-      .then(() => {
+      .then(html => {
+        document.querySelector("#header").innerHTML = html;
+
         const script = document.createElement("script");
-        script.src = "./assets/js/header.js";
+        script.src = "/sejong205-site/assets/js/header.js";
         script.onload = () => {
           if (typeof initMobileHeader === "function") initMobileHeader();
         };
@@ -129,7 +129,7 @@
       });
 
     /* FOOTER LOAD */
-    fetch("footer.html")
+    fetch("/sejong205-site/footer.html")
       .then(r => r.text())
       .then(html => document.querySelector("#footer").innerHTML = html);
   </script>
