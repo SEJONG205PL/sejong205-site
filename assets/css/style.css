@@ -15,15 +15,15 @@ a { text-decoration: none; color: inherit; }
   .mob { display:block !important; }
 }
 
-/* ================================================================
+/* -------------------------------------------------------------------
    HEADER
-================================================================ */
+------------------------------------------------------------------- */
 .main-header {
   background:#fff;
   border-bottom:1px solid #e4e4e4;
   position:relative;
   z-index:2000;
-  transition:.25s;
+  transition:border-color .25s;
 }
 
 .header-inner {
@@ -64,42 +64,44 @@ a { text-decoration: none; color: inherit; }
   height:2px;
   background:#222;
   transform:scaleX(0);
-  transition:.2s;
+  transition:transform .2s ease-out;
 }
 
 .nav-link:hover::after { transform:scaleX(1); }
 
-/* ================================================================
+/* -------------------------------------------------------------------
    MEGA BOX — 단일 고정 박스
-================================================================ */
+------------------------------------------------------------------- */
 .mega-box {
   position:absolute;
-  top:80px;                /* header 아래 고정 */
+  top:80px;
   left:0;
   width:100%;
-  height:260px;            /* 고정 높이 */
+  height:260px;               /* 고정 높이 */
   background:#fff;
   border-top:1px solid #e4e4e4;
   overflow:hidden;
   display:none;
   opacity:0;
   visibility:hidden;
-  transition:opacity .25s ease;
+  transition:opacity .28s ease;
   z-index:3000;
 }
 
-/* mega-box 활성화 (JS가 제어) */
+/* mega-box 표시 */
 .mega-box.show {
   display:block !important;
   opacity:1 !important;
   visibility:visible !important;
 }
 
-/* 내부 콘텐츠 */
+/* -------------------------------------------------------------------
+   MEGA CONTENT
+------------------------------------------------------------------- */
 .mega-content {
-  display:none;
   width:100%;
   height:100%;
+  display:none;
 }
 
 .mega-content.active {
@@ -124,12 +126,7 @@ a { text-decoration: none; color: inherit; }
   text-transform:uppercase;
 }
 
-.mega-col ul {
-  margin:0;
-  padding:0;
-  list-style:none;
-}
-
+.mega-col ul { margin:0; padding:0; list-style:none; }
 .mega-col li { margin:4px 0; }
 
 .mega-col a {
@@ -139,15 +136,9 @@ a { text-decoration: none; color: inherit; }
 
 .mega-col a:hover { color:#000; }
 
-/* ❗ 매우 중요한 부분: 잘못된 CSS 삭제 완료
-   - hover 기반 자동 mega-open 코드 제거됨
-   - nav-link + mega-box 구조 제거됨
-   - mega-box:hover 유지 방식 삭제됨
-*/
-
-/* ================================================================
+/* -------------------------------------------------------------------
    MOBILE HEADER
-================================================================ */
+------------------------------------------------------------------- */
 .main-header.mobile {
   display:flex !important;
   justify-content:center;
@@ -216,214 +207,172 @@ a { text-decoration: none; color: inherit; }
   cursor:pointer;
 }
 
-.mobile-sub { max-height:0; overflow:hidden; transition:.35s; }
+.mobile-sub {
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .35s ease;
+}
 .mobile-sub.open { max-height:800px; }
 
-/* ================================================================
-   FOOTER & MAIN CONTENT — (기존 유지)
-================================================================ */
-
+/* -------------------------------------------------------------------
+   FOOTER
+------------------------------------------------------------------- */
 .main-footer {
-  width: 100vw;
-  background: #000;
-  color: #fff;
-  padding: 40px 0;
-  margin-top: 60px;
+  width:100vw;
+  background:#000;
+  color:#fff;
+  padding:40px 0;
+  margin-top:60px;
 }
 
 .footer-inner {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  text-align: center;
+  max-width:1280px;
+  margin:0 auto;
+  padding:0 20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  text-align:center;
 }
 
 .main-footer p {
-  margin: 0;
-  font-size: 14px;
-  opacity: 0.85;
+  margin:0;
+  font-size:14px;
+  opacity:.85;
 }
 
 .main-footer nav {
-  display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
 }
 
 .main-footer nav a {
-  font-size: 14px;
-  color: #fff;
-  opacity: 0.85;
-  transition: 0.25s;
+  font-size:14px;
+  color:#fff;
+  opacity:.85;
+  transition:.25s;
+}
+.main-footer nav a:hover { opacity:1; }
+
+@media (max-width:480px){
+  .main-footer { padding:32px 0; }
+  .main-footer p { font-size:13px; }
+  .main-footer nav { gap:12px; }
+  .main-footer nav a { font-size:13px; }
 }
 
-.main-footer nav a:hover { opacity: 1; }
-
-@media (max-width: 480px) {
-  .main-footer { padding: 32px 0; }
-  .main-footer p { font-size: 13px; }
-  .main-footer nav { gap: 12px; }
-  .main-footer nav a { font-size: 13px; }
-}
-
-/* 배너, 카테고리 등 기존 유지 — 이하 동일 */
-
-
-/* 메인 배너 */
+/* -------------------------------------------------------------------
+   메인 배너
+------------------------------------------------------------------- */
 .main-banner {
-  width: 100%;
-  height: 820px;
-  overflow: hidden;
+  width:100%;
+  height:820px;
+  overflow:hidden;
 }
 
 .main-banner .swiper,
 .main-banner .swiper-wrapper,
 .main-banner .swiper-slide {
-  width: 100%;
-  height: 100%;
+  width:100%;
+  height:100%;
 }
 
 .main-banner .swiper-slide {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#fff;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
 }
 
 .main-banner .swiper-slide h2 {
-  font-size: 42px;
-  font-weight: 700;
-  text-shadow: 0 2px 10px rgba(0,0,0,.4);
+  font-size:42px;
+  font-weight:700;
+  text-shadow:0 2px 10px rgba(0,0,0,.4);
 }
 
-/* 배너 이미지 */
-.slide1 { background-image: url(".assets/img/banner1.jpg"); }
-.slide2 { background-image: url(".assets/img/banner2.jpg"); }
+.slide1 { background-image:url(".assets/img/banner1.jpg"); }
+.slide2 { background-image:url(".assets/img/banner2.jpg"); }
 
-@media (max-width: 900px) {
-  .main-banner { height: 480px; }
-  .slide1 { background-image: url(".assets/img/banner1.jpg"); }
-  .slide2 { background-image: url(".assets/img/banner2.jpg"); }
+@media (max-width:900px){
+  .main-banner { height:480px; }
 }
 
-/* Swiper Pagination */
+/* Pagination */
 .swiper-pagination-bullet {
-  width: 18px !important;
-  height: 18px !important;
-  margin: 0 8px !important;
-  background: #ffd9e6 !important;
-  opacity: 1 !important;
-  border-radius: 50% !important;
-  transition: transform .4s ease, background .4s ease !important;
+  width:18px !important;
+  height:18px !important;
+  margin:0 8px !important;
+  background:#ffd9e6 !important;
+  opacity:1 !important;
+  border-radius:50% !important;
+  transition:transform .4s ease, background .4s ease !important;
 }
 
 .swiper-pagination-bullet-active {
-  background: #ff9fc2 !important;
-  transform: scale(1.45) !important;
+  background:#ff9fc2 !important;
+  transform:scale(1.45) !important;
 }
 
-.swiper-pagination {
-  bottom: 28px !important;
-}
+.swiper-pagination { bottom:28px !important; }
 
-/* Shopping News & Event */
-.shopping-event {
-  width: 100%;
-  text-align: center;
-  padding: 90px 20px 70px;
-  background: #fff;
-}
-
-.shopping-event h2 {
-  font-family: "Merriweather", serif;
-  font-size: 52px;
-  font-weight: 600;
-  color: #111;
-  margin-bottom: 50px;
-}
-
-.shopping-event .notice {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  font-size: 18px;
-  color: #666;
-  line-height: 1.6;
-}
-
-.shopping-event .notice strong {
-  color: #d98100;
-}
-
-@media (max-width: 900px) {
-  .shopping-event { padding: 60px 16px 55px; }
-  .shopping-event h2 { font-size: 34px; margin-bottom: 35px; }
-  .shopping-event .notice {
-    flex-direction: column;
-    gap: 8px;
-    font-size: 15px;
-  }
-}
-
-/* 카테고리 영역 */
+/* -------------------------------------------------------------------
+   카테고리 영역
+------------------------------------------------------------------- */
 .main-categories {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1vw;
-  flex-wrap: wrap;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:1vw;
+  flex-wrap:wrap;
 }
 
 .main-categories .cat-item a {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 
 .main-categories .cat-item img {
-  width: 18vw;
-  height: 18vw;
-  max-width: 230px;
-  max-height: 230px;
-  min-width: 110px;
-  min-height: 110px;
-  object-fit: cover;
-  border-radius: 50%;
-  transition: 0.35s ease;
-  box-shadow: 0 7px 20px rgba(0, 0, 0, .08);
+  width:18vw;
+  height:18vw;
+  max-width:230px;
+  max-height:230px;
+  min-width:110px;
+  min-height:110px;
+  object-fit:cover;
+  border-radius:50%;
+  transition:.35s ease;
+  box-shadow:0 7px 20px rgba(0,0,0,.08);
 }
 
 .main-categories .cat-item span {
-  margin-top: 1.2vw;
-  font-size: clamp(11px, 1.4vw, 22px);
-  font-weight: 700;
-  color: #222;
-  transition: 0.35s ease;
+  margin-top:1.2vw;
+  font-size:clamp(11px, 1.4vw, 22px);
+  font-weight:700;
+  color:#222;
+  transition:.35s ease;
 }
 
 .main-categories .cat-item:hover img {
-  transform: scale(1.1);
-  filter: brightness(75%);
+  transform:scale(1.1);
+  filter:brightness(75%);
 }
 
 .main-categories .cat-item:hover span {
-  color: #B20038;
-  transform: scale(1.06);
+  color:#B20038;
+  transform:scale(1.06);
 }
 
-@media (max-width: 500px) {
-  .main-categories { gap: 24px; }
+@media (max-width:500px){
+  .main-categories { gap:24px; }
   .main-categories .cat-item span {
-    font-size: 15px;
-    margin-top: 10px;
+    font-size:15px;
+    margin-top:10px;
   }
 }
