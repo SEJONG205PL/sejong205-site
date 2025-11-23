@@ -1,240 +1,294 @@
-<!-- ========== PC HEADER ========== -->
-<header class="main-header pc">
-    <div class="header-inner width">
+<!DOCTYPE html>
+<html lang="en">
 
-        <!-- LOGO -->
-        <div class="logo">
-            <a href="./">
-                <img src="./assets/img/logo.jpg" alt="SEJONG205">
-            </a>
-        </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEJONG205</title>
 
-        <!-- NAVIGATION -->
-        <div class="nav-wrapper">
-            <nav class="nav-menu">
-                <div class="nav-item"><a class="nav-link" data-mega="mega-company">Company</a></div>
-                <div class="nav-item"><a class="nav-link" data-mega="mega-business">Business</a></div>
-                <div class="nav-item"><a class="nav-link" data-mega="mega-brand">SEJONG Brand</a></div>
-                <div class="nav-item"><a class="nav-link" data-mega="mega-magazine">Magazine</a></div>
-                <div class="nav-item"><a class="nav-link" data-mega="mega-support">Customer Service</a></div>
-            </nav>
+  <!-- CSS -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="./assets/css/animate.css">
 
-            <!-- MEGA MENU -->
-            <div class="mega-menus-container">
+  <!-- Swiper -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-                <!-- Company -->
-                <div id="mega-company" class="mega-menu">
-                    <div class="mega-inner width">
-                        <div class="mega-col">
-                            <h3>About</h3>
-                            <ul>
-                                <li><a href="#">Overview</a></li>
-                                <li><a href="#">Founders & Team</a></li>
-                                <li><a href="#">Vision & Mission</a></li>
-                                <li><a href="#">Core Values</a></li>
-                            </ul>
-                        </div>
+  <!-- JS -->
+  <script src="./assets/js/section.js" defer></script>
+</head>
 
-                        <div class="mega-col">
-                            <h3>Corporate</h3>
-                            <ul>
-                                <li><a href="#">Company History</a></li>
-                                <li><a href="#">Legal Info</a></li>
-                                <li><a href="#">Location & Contact</a></li>
-                            </ul>
-                        </div>
+<body>
 
-                        <div class="mega-col">
-                            <h3>Story</h3>
-                            <ul>
-                                <li><a href="#">Why SEJONG205</a></li>
-                                <li><a href="#">Our Background</a></li>
-                                <li><a href="#">Brand Name Meaning</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Business -->
-                <div id="mega-business" class="mega-menu">
-                    <div class="mega-inner width">
-                        <div class="mega-col">
-                            <h3>Platform Model</h3>
-                            <ul>
-                                <li><a href="#">Overview</a></li>
-                                <li><a href="#">Commission Structure</a></li>
-                                <li><a href="#">Vendor Types</a></li>
-                                <li><a href="#">Delivery Model</a></li>
-                            </ul>
-                        </div>
-                        <div class="mega-col">
-                            <h3>Partnership</h3>
-                            <ul>
-                                <li><a href="#">Partner Types</a></li>
-                                <li><a href="#">Requirements</a></li>
-                                <li><a href="#">Benefits</a></li>
-                                <li><a href="#">Collaboration Flow</a></li>
-                            </ul>
-                        </div>
-                        <div class="mega-col">
-                            <h3>Vendor Onboarding</h3>
-                            <ul>
-                                <li><a href="#">Onboarding Guide</a></li>
-                                <li><a href="#">Product Guidelines</a></li>
-                                <li><a href="#">Pricing Policy (±30%)</a></li>
-                                <li><a href="#">Quality & Packaging</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SEJONG Brand -->
-                <div id="mega-brand" class="mega-menu">
-                    <div class="mega-inner width">
-                        <div class="mega-col">
-                            <h3>Identity</h3>
-                            <ul>
-                                <li><a href="#">Brand Story</a></li>
-                                <li><a href="#">Philosophy & Message</a></li>
-                                <li><a href="#">Brand Values</a></li>
-                            </ul>
-                        </div>
-                        <div class="mega-col">
-                            <h3>Design System</h3>
-                            <ul>
-                                <li><a href="#">Logo Usage</a></li>
-                                <li><a href="#">Color System</a></li>
-                                <li><a href="#">Typography</a></li>
-                            </ul>
-                        </div>
-                        <div class="mega-col">
-                            <h3>Resources</h3>
-                            <ul>
-                                <li><a href="#">Basic Brand Kit</a></li>
-                                <li><a href="#">Downloads</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Magazine -->
-                <div id="mega-magazine" class="mega-menu">
-                    <div class="mega-inner width">
-                        <div class="mega-col">
-                            <h3>Magazine</h3>
-                            <ul>
-                                <li><a href="#">Latest Articles</a></li>
-                                <li><a href="#">Interviews</a></li>
-                                <li><a href="#">Insights</a></li>
-                                <li><a href="#">Announcements</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Support -->
-                <div id="mega-support" class="mega-menu">
-                    <div class="mega-inner width">
-                        <div class="mega-col">
-                            <h3>Support</h3>
-                            <ul>
-                                <li><a href="#">Help Center</a></li>
-                                <li><a href="#">FAQ</a></li>
-                                <li><a href="#">Contact Form</a></li>
-                            </ul>
-                        </div>
-                        <div class="mega-col">
-                            <h3>Policies</h3>
-                            <ul>
-                                <li><a href="#">Shipping Policy</a></li>
-                                <li><a href="#">Return & Refund</a></li>
-                                <li><a href="#">Privacy (GDPR)</a></li>
-                                <li><a href="#">Terms of Service</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
+  <!-- LANGUAGE & TOP LINKS -->
+  <div class="top-bar">
+    <div class="top-inner width">
+      <a href="./">EN</a>
+      <a href="./kr/">KO</a>
+      <a href="./pl/">PL</a>
+      <a href="./pl/">
+        <img src="./assets/img/free.png" alt="free">
+        SEJONGGO
+      </a>
     </div>
-</header>
+  </div>
 
-<!-- ========== MOBILE HEADER ========== -->
-<div class="mob">
-    <header class="main-header mobile">
+  <!-- HEADER LOAD (header.html이 여기로 들어감) -->
+  <header id="header"></header>
 
-        <button class="mobile-nav-toggle" aria-label="toggle menu">
-            <span></span><span></span><span></span>
-        </button>
+  <!-- MAIN BANNER -->
+  <section class="main-banner">
+    <div class="swiper mainSwiper">
+      <div class="swiper-wrapper">
 
-        <div class="logo">
-            <a href="./">
-                <img src="./assets/img/logo.jpg" alt="SEJONG205">
-            </a>
+        <!-- Slide 1 -->
+        <div class="swiper-slide slide1">
+          <div class="main_text width">
+            <h2 class="animated fadeInDown" style="animation-delay:.4s;">첫 번째 텍스트</h2>
+            <h2 class="animated fadeInDown" style="animation-delay:.9s;">두 번째 텍스트</h2>
+          </div>
         </div>
 
-        <nav class="mobile-nav">
-            <ul class="mobile-menu">
+        <!-- Slide 2 -->
+        <div class="swiper-slide slide2">
+          <div class="main_text width">
+            <h2 class="animated fadeInDown" style="animation-delay:.4s;">첫 번째 텍스트</h2>
+            <h2 class="animated fadeInDown" style="animation-delay:.9s;">두 번째 텍스트</h2>
+          </div>
+        </div>
 
-                <li>
-                    <button class="mobile-accordion">Company <span class="arrow">▼</span></button>
-                    <div class="mobile-sub">
-                        <button class="mobile-accordion-lv2">About <span class="arrow">▼</span></button>
-                        <div class="mobile-sub-lv2">
-                            <a href="#">Overview</a>
-                            <a href="#">Founders & Team</a>
-                            <a href="#">Vision & Mission</a>
-                            <a href="#">Core Values</a>
-                        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </section>
 
-                        <button class="mobile-accordion-lv2">Corporate <span class="arrow">▼</span></button>
-                        <div class="mobile-sub-lv2">
-                            <a href="#">Company History</a>
-                            <a href="#">Legal Info</a>
-                            <a href="#">Location & Contact</a>
-                        </div>
+  <!-- SHOPPING NEWS -->
+  <section class="shopping-event">
+    <h2>Shopping News & Event</h2>
+    <p class="notice">
+      <span>
+        <strong>stop!</strong>
+        Discover shopping information based on your purchasing patterns and preferences.
+      </span>
+    </p>
+  </section>
 
-                        <button class="mobile-accordion-lv2">Story <span class="arrow">▼</span></button>
-                        <div class="mobile-sub-lv2">
-                            <a href="#">Why SEJONG205</a>
-                            <a href="#">Our Background</a>
-                            <a href="#">Brand Name Meaning</a>
-                        </div>
-                    </div>
-                </li>
+  <!-- MAIN CATEGORIES -->
+  <section class="main-categories width">
 
-                <li>
-                    <button class="mobile-accordion">Business <span class="arrow">▼</span></button>
-                    <div class="mobile-sub">
-                        <button class="mobile-accordion-lv2">Platform Model <span class="arrow">▼</span></button>
-                        <div class="mobile-sub-lv2">
-                            <a href="#">Overview</a>
-                            <a href="#">Commission Structure</a>
-                            <a href="#">Vendor Types</a>
-                            <a href="#">Delivery Model</a>
-                        </div>
+    <div class="cat-item">
+      <a href="#">
+        <img src="./assets/img/img (1).jpg" alt="Company">
+        <span>Company</span>
+      </a>
+    </div>
 
-                        <button class="mobile-accordion-lv2">Partnership <span class="arrow">▼</span></button>
-                        <div class="mobile-sub-lv2">
-                            <a href="#">Partner Types</a>
-                            <a href="#">Requirements</a>
-                            <a href="#">Benefits</a>
-                            <a href="#">Collaboration Flow</a>
-                        </div>
+    <div class="cat-item">
+      <a href="#">
+        <img src="./assets/img/img (2).jpg" alt="Business">
+        <span>Business</span>
+      </a>
+    </div>
 
-                        <button class="mobile-accordion-lv2">Vendor Onboarding <span class="arrow">▼</span></button>
-                        <div class="mobile-sub-lv2">
-                            <a href="#">Onboarding Guide</a>
-                            <a href="#">Product Guidelines</a>
-                            <a href="#">Pricing Policy (±30%)</a>
-                            <a href="#">Quality & Packaging</a>
-                        </div>
-                    </div>
-                </li>
+    <div class="cat-item">
+      <a href="#">
+        <img src="./assets/img/img (3).jpg" alt="SEJONG Brand">
+        <span>SEJONG Brand</span>
+      </a>
+    </div>
 
-            </ul>
-        </nav>
+    <div class="cat-item">
+      <a href="#">
+        <img src="./assets/img/img (4).jpg" alt="Magazine">
+        <span>Magazine</span>
+      </a>
+    </div>
 
-    </header>
-</div>
+    <div class="cat-item">
+      <a href="#">
+        <img src="./assets/img/img (5).jpg" alt="Customer Service">
+        <span>Customer Service</span>
+      </a>
+    </div>
+
+  </section>
+
+  <!-- FOOTER LOAD -->
+  <footer id="footer"></footer>
+
+  <!-- IMPORT HEADER + FOOTER + HEADER.JS -->
+  <script>
+    /* HEADER LOAD */
+    fetch("./header.html")
+      .then(r => r.text())
+      .then(html => {
+        document.querySelector("#header").innerHTML = html;
+
+        // header.js 동적 로드 후 initMobileHeader 실행
+        const script = document.createElement("script");
+        script.src = "./assets/js/header.js";
+        script.onload = () => {
+          if (typeof initMobileHeader === "function") {
+            initMobileHeader();
+          }
+        };
+        document.body.appendChild(script);
+      });
+
+    /* FOOTER LOAD */
+    fetch("./footer.html")
+      .then(r => r.text())
+      .then(html => {
+        document.querySelector("#footer").innerHTML = html;
+      });
+  </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEJONG205</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="./assets/css/animate.css">
+
+  <!-- Swiper -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- JS -->
+  <script src="./assets/js/section.js" defer></script>
+</head>
+
+<body>
+
+  <!-- LANGUAGE & TOP LINKS -->
+  <div class="top-bar">
+    <div class="top-inner width">
+      <a href="./">EN</a>
+      <a href="./kr/">KO</a>
+      <a href="./pl/">PL</a>
+      <a href="./pl/">
+        <img src="./assets/img/free.png" alt="free">
+        SEJONGGO
+      </a>
+    </div>
+  </div>
+
+  <!-- HEADER LOAD (header.html이 여기로 들어감) -->
+  <header id="header"></header>
+
+  <!-- MAIN BANNER -->
+  <section class="main-banner">
+    <div class="swiper mainSwiper">
+      <div class="swiper-wrapper">
+
+        <!-- Slide 1 -->
+        <div class="swiper-slide slide1">
+          <div class="main_text width">
+            <h2 class="animated fadeInDown" style="animation-delay:.4s;">첫 번째 텍스트</h2>
+            <h2 class="animated fadeInDown" style="animation-delay:.9s;">두 번째 텍스트</h2>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="swiper-slide slide2">
+          <div class="main_text width">
+            <h2 class="animated fadeInDown" style="animation-delay:.4s;">첫 번째 텍스트</h2>
+            <h2 class="animated fadeInDown" style="animation-delay:.9s;">두 번째 텍스트</h2>
+          </div>
+        </div>
+
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </section>
+
+  <!-- SHOPPING NEWS -->
+  <section class="shopping-event">
+    <h2>Shopping News & Event</h2>
+    <p class="notice">
+      <span>
+        <strong>stop!</strong>
+        Discover shopping information based on your purchasing patterns and preferences.
+      </span>
+    </p>
+  </section>
+
+  <!-- MAIN CATEGORIES -->
+  <section class="main-categories width">
+
+    <div class="cat-item">
+      <a href="#">
+        <img src="./assets/img/img (1).jpg" alt="Company">
+        <span>Company</span>
+      </a>
+    </div>
+
+    <div class="cat-item">
+      <a href="#">
+        <img src="./assets/img/img (2).jpg" alt="Business">
+        <span>Business</span>
+      </a>
+    </div>
+
+    <div class="cat-item">
+      <a href="#">
+        <img src="./assets/img/img (3).jpg" alt="SEJONG Brand">
+        <span>SEJONG Brand</span>
+      </a>
+    </div>
+
+    <div class="cat-item">
+      <a href="#">
+        <img src="./assets/img/img (4).jpg" alt="Magazine">
+        <span>Magazine</span>
+      </a>
+    </div>
+
+    <div class="cat-item">
+      <a href="#">
+        <img src="./assets/img/img (5).jpg" alt="Customer Service">
+        <span>Customer Service</span>
+      </a>
+    </div>
+
+  </section>
+
+  <!-- FOOTER LOAD -->
+  <footer id="footer"></footer>
+
+  <!-- IMPORT HEADER + FOOTER + HEADER.JS -->
+  <script>
+    /* HEADER LOAD */
+    fetch("./header.html")
+      .then(r => r.text())
+      .then(html => {
+        document.querySelector("#header").innerHTML = html;
+
+        // header.js 동적 로드 후 initMobileHeader 실행
+        const script = document.createElement("script");
+        script.src = "./assets/js/header.js";
+        script.onload = () => {
+          if (typeof initMobileHeader === "function") {
+            initMobileHeader();
+          }
+        };
+        document.body.appendChild(script);
+      });
+
+    /* FOOTER LOAD */
+    fetch("./footer.html")
+      .then(r => r.text())
+      .then(html => {
+        document.querySelector("#footer").innerHTML = html;
+      });
+  </script>
+
+</body>
+</html>
