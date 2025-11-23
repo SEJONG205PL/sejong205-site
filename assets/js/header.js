@@ -1,7 +1,9 @@
+// === header.js (hover 유지형 최종 안정버전) ===
+
 function initMobileHeader() {
 
   /* ---------------------------
-      PC HEADER – Hover 유지형 Mega Menu
+      PC HEADER (Mega Menu Hover)
   ----------------------------*/
   const navItems = document.querySelectorAll(".nav-item");
 
@@ -11,16 +13,25 @@ function initMobileHeader() {
 
     if (!link || !mega) return;
 
-    // nav-item에 hover되면 메뉴 표시
+    // 메뉴 hover 시 열기
     item.addEventListener("mouseenter", () => {
+      closeAllMega();
       mega.classList.add("open");
+      document.querySelector(".main-header").classList.add("menu-open");
     });
 
-    // nav-item에서 마우스가 벗어나면 메뉴 숨김
+    // 메뉴 + mega-menu 전체 hover 유지됨
     item.addEventListener("mouseleave", () => {
-      mega.classList.remove("open");
+      closeAllMega();
+      document.querySelector(".main-header").classList.remove("menu-open");
     });
+
   });
+
+  // 모든 mega-menu 닫기
+  function closeAllMega() {
+    document.querySelectorAll(".mega-menu").forEach(m => m.classList.remove("open"));
+  }
 
 
   /* ---------------------------
@@ -36,7 +47,6 @@ function initMobileHeader() {
     });
   }
 
-
   /* ---------------------------
       MOBILE ACCORDIONS
   ----------------------------*/
@@ -44,8 +54,7 @@ function initMobileHeader() {
   acc1.forEach(btn => {
     btn.addEventListener("click", () => {
       btn.classList.toggle("active");
-      const panel = btn.nextElementSibling;
-      panel.classList.toggle("open");
+      btn.nextElementSibling.classList.toggle("open");
     });
   });
 
@@ -53,8 +62,8 @@ function initMobileHeader() {
   acc2.forEach(btn => {
     btn.addEventListener("click", () => {
       btn.classList.toggle("active");
-      const panel = btn.nextElementSibling;
-      panel.classList.toggle("open");
+      btn.nextElementSibling.classList.toggle("open");
     });
   });
+
 }
