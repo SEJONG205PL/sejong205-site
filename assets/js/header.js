@@ -1,42 +1,63 @@
-// === header.js (hover 유지형 최종 안정버전) ===
+// === header.js (단일 mega-box + hover 유지형 최종버전) ===
 
-function initMobileHeader() {
+function initHeader() {
 
-  /* ---------------------------
-      PC HEADER (Mega Menu Hover)
-  ----------------------------*/
-  const navItems = document.querySelectorAll(".nav-item");
+  /* ------------------------------------
+      PC : 단일 Mega Box 컨트롤
+  ------------------------------------ */
+  const navLinks = document.querySelectorAll(".nav-link[data-menu]");
+  const megaBox = document.querySelector(".mega-box");
+  const megaContents = document.querySelectorAll(".mega-content");
 
-  navItems.forEach(item => {
-    const link = item.querySelector(".nav-link");
-    const mega = item.querySelector(".mega-menu");
+  let hideTimer = null;
 
-    if (!link || !mega) return;
+  function showMega(menuName) {
+    clearTimeout(hideTimer);
 
-    // 메뉴 hover 시 열기
-    item.addEventListener("mouseenter", () => {
-      closeAllMega();
-      mega.classList.add("open");
-      document.querySelector(".main-header").classList.add("menu-open");
-    });
+    // 모든 콘텐츠 숨김
+    megaContents.forEach(c => c.classList.remove("active"));
 
-    // 메뉴 + mega-menu 전체 hover 유지됨
-    item.addEventListener("mouseleave", () => {
-      closeAllMega();
-      document.querySelector(".main-header").classList.remove("menu-open");
-    });
+    // 해당 콘텐츠만 활성화
+    const target = document.querySelector(`.mega-content[data-menu="${menuName}"]`);
+    if (target) target.classList.add("active");
 
-  });
-
-  // 모든 mega-menu 닫기
-  function closeAllMega() {
-    document.querySelectorAll(".mega-menu").forEach(m => m.classList.remove("open"));
+    // mega-box 표시
+    megaBox.classList.add("show");
   }
 
+  function hideMega() {
+    hideTimer = setTimeout(() => {
+      megaBox.classList.remove("show");
+      megaContents.forEach(c => c.classList.remove("active"));
+    }, 120); // 살짝 지연 → 끊김 없음
+  }
 
-  /* ---------------------------
+  // 메뉴 hover → mega box 열림
+  navLinks.forEach(link => {
+    link.addEventListener("mouseenter", () => {
+      const targetMenu = link.dataset.menu;
+      showMega(targetMenu);
+    });
+
+    link.addEventListener("mouseleave", () => {
+      hideMega();
+    });
+  });
+
+  // mega 박스 hover 유지
+  megaBox.addEventListener("mouseenter", () => {
+    clearTimeout(hideTimer);
+  });
+
+  megaBox.addEventListener("mouseleave", () => {
+    hideMega();
+  });
+
+
+
+  /* ------------------------------------
       MOBILE HEADER
-  ----------------------------*/
+  ------------------------------------ */
   const toggleBtn = document.querySelector(".mobile-nav-toggle");
   const mobileNav = document.querySelector(".mobile-nav");
 
@@ -47,19 +68,17 @@ function initMobileHeader() {
     });
   }
 
-  /* ---------------------------
-      MOBILE ACCORDIONS
-  ----------------------------*/
-  const acc1 = document.querySelectorAll(".mobile-accordion");
-  acc1.forEach(btn => {
+  /* ------------------------------------
+      MOBILE ACCORDION
+  ------------------------------------ */
+  document.querySelectorAll(".mobile-accordion").forEach(btn => {
     btn.addEventListener("click", () => {
       btn.classList.toggle("active");
       btn.nextElementSibling.classList.toggle("open");
     });
   });
 
-  const acc2 = document.querySelectorAll(".mobile-accordion-lv2");
-  acc2.forEach(btn => {
+  document.querySelectorAll(".mobile-accordion-lv2").forEach(btn => {
     btn.addEventListener("click", () => {
       btn.classList.toggle("active");
       btn.nextElementSibling.classList.toggle("open");
