@@ -126,34 +126,44 @@ a { text-decoration: none; color: inherit; }
 }
 .nav-link:hover::after { transform: scaleX(1); }
 
-/* MEGA MENU */
-.mega-menus-container {
-  position: absolute;
-  top: 80%;
-  left: 0;
-  width: 100%;
-}
+/* =================================================================
+   MEGA MENU — HOVER 유지형 FIX (최종 적용)
+   ================================================================= */
 
-@keyframes slideDown {
-  0% { transform: translateY(-20px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
-}
-
+/* 기본적으로 숨기기 */
 .mega-menu {
   display: none;
-  width: 100vw;
-  background: #fff;
-  overflow: hidden;
-  z-index: 50;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .25s ease;
 }
 
-.mega-menu.open {
-  max-height: 600px;
-  display: block;
-  border-bottom: 1px solid #e4e4e4;
-  animation: slideDown 0.4s ease forwards;
+/* nav-link hover 시 해당 mega-menu 표시 */
+.nav-item:hover .mega-menu {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
+/* mega-menu 내부 hover해도 유지 */
+.mega-menu:hover {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* 메뉴와 mega-menu 간 gap 제거 */
+.mega-menus-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+/* ================================================================= */
+
+/* 기존 mega-menu 스타일 유지 */
 .mega-inner {
   display: flex;
   gap: 40px;
@@ -174,6 +184,7 @@ a { text-decoration: none; color: inherit; }
 .mega-col li { margin: 4px 0; }
 .mega-col a { font-size: 14px; color: #555; }
 .mega-col a:hover { color: #000; }
+
 
 /* MOBILE HEADER */
 .main-header.mobile {
@@ -379,7 +390,7 @@ a { text-decoration: none; color: inherit; }
   text-shadow: 0 2px 10px rgba(0,0,0,.4);
 }
 
-/* 🟣 배너 이미지 절대경로로 수정 */
+/* 🟣 배너 이미지 절대경로 */
 .slide1 { background-image: url("/sejong205-site/assets/img/banner1.jpg"); }
 .slide2 { background-image: url("/sejong205-site/assets/img/banner2.jpg"); }
 
