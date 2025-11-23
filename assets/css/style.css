@@ -138,9 +138,11 @@ a { text-decoration: none; color: inherit; }
 
 .mega-menu {
   position: absolute;
-  top: 80px;                  /* ⭐ 헤더 바로 아래 */
-  left: 0;
-  width: 100vw;               /* 전체 폭 */
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);   /* ⭐ 중앙 정렬 */
+  width: 100%;                   /* ⭐ 100vw → 100% */
+  max-width: 1280px;             /* ⭐ header와 동일한 폭 유지 */
   background: #fff;
   border-top: 1px solid #e4e4e4;
   padding: 20px 0;
@@ -150,6 +152,7 @@ a { text-decoration: none; color: inherit; }
   transition: opacity .25s ease;
   z-index: 3000;
 }
+
 
 /* 메뉴 hover 시 표시 */
 .nav-item:hover > .mega-menu {
