@@ -126,48 +126,47 @@ a { text-decoration: none; color: inherit; }
 }
 .nav-link:hover::after { transform: scaleX(1); }
 
-/* =================================================================
-   MEGA MENU — HOVER 유지형 FIX (최종 적용)
-   ================================================================= */
+/* ================================================================
+   MEGA MENU — 최종 안정화 Hover 유지형
+   ================================================================ */
 
-/* 기본적으로 숨기기 */
+/* mega-menu 공통 */
 .mega-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100vw;
+  background: #fff;
+  border-top: 1px solid #e4e4e4;
+  padding: 20px 0;
   display: none;
   opacity: 0;
   visibility: hidden;
   transition: opacity .25s ease;
+  z-index: 9999;
 }
 
-/* nav-link hover 시 해당 mega-menu 표시 */
-.nav-item:hover .mega-menu {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
+/* nav-item hover 시 mega-menu 표시 */
+.nav-item:hover > .mega-menu {
+  display: block;
+  opacity: 1;
+  visibility: visible;
 }
 
-/* mega-menu 내부 hover해도 유지 */
+/* mega-menu 안으로 마우스 이동해도 유지 */
 .mega-menu:hover {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
+  display: block;
+  opacity: 1;
+  visibility: visible;
 }
 
-/* 메뉴와 mega-menu 간 gap 제거 */
-.mega-menus-container {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  z-index: 999;
-}
-
-/* ================================================================= */
-
-/* 기존 mega-menu 스타일 유지 */
+/* mega-menu 내부 레이아웃 */
 .mega-inner {
   display: flex;
   gap: 40px;
   padding: 20px;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 .mega-inner.single-column { flex-direction: column; }
@@ -185,6 +184,7 @@ a { text-decoration: none; color: inherit; }
 .mega-col a { font-size: 14px; color: #555; }
 .mega-col a:hover { color: #000; }
 
+/* ================================================================ */
 
 /* MOBILE HEADER */
 .main-header.mobile {
@@ -390,7 +390,7 @@ a { text-decoration: none; color: inherit; }
   text-shadow: 0 2px 10px rgba(0,0,0,.4);
 }
 
-/* 🟣 배너 이미지 절대경로 */
+/* 배너 이미지 */
 .slide1 { background-image: url("/sejong205-site/assets/img/banner1.jpg"); }
 .slide2 { background-image: url("/sejong205-site/assets/img/banner2.jpg"); }
 
@@ -400,7 +400,7 @@ a { text-decoration: none; color: inherit; }
   .slide2 { background-image: url("/sejong205-site/assets/img/banner2.jpg"); }
 }
 
-/* Swiper Pagination Custom */
+/* Swiper Pagination */
 .swiper-pagination-bullet {
   width: 18px !important;
   height: 18px !important;
