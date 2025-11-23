@@ -141,8 +141,10 @@ a { text-decoration: none; color: inherit; }
   top: 32px;
   left: 50%;
   transform: translateX(-50%);   /* ⭐ 중앙 정렬 */
-  width: 100vw;                   /* ⭐ 100vw → 100% */
-  max-width: 100vw;             /* ⭐ header와 동일한 폭 유지 */
+  width: 100%;                   /* ⭐ 100vw → 100% */
+  max-width: 1280px;             /* ⭐ header와 동일한 폭 유지 */
+  height: 260px;  
+  overflow: hidden;
   background: #fff;
   border-top: 1px solid #e4e4e4;
   padding: 20px 0;
