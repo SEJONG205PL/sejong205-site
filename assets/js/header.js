@@ -1,38 +1,27 @@
-// === header.js (GitHub Pages 호환 완전 버전) ===
-
-// header.html이 fetch로 불러온 후 실행되어야 하므로
-// 함수로 감싸고 index.html에서 호출한다.
 function initMobileHeader() {
 
   /* ---------------------------
-      PC 헤더 (Mega Menu)
+      PC HEADER – Hover 유지형 Mega Menu
   ----------------------------*/
-  const navMenu = document.querySelector(".nav-menu");
-  const megaMenusContainer = document.querySelector(".mega-menus-container");
+  const navItems = document.querySelectorAll(".nav-item");
 
-  if (navMenu && megaMenusContainer) {
+  navItems.forEach(item => {
+    const link = item.querySelector(".nav-link");
+    const mega = item.querySelector(".mega-menu");
 
-    const links = navMenu.querySelectorAll(".nav-link[data-mega]");
-    const megaMenus = megaMenusContainer.querySelectorAll(".mega-menu");
+    if (!link || !mega) return;
 
-    function closeAllMega() {
-      megaMenus.forEach(m => m.classList.remove("open"));
-    }
-
-    // hover 시 열기
-    links.forEach(link => {
-      link.addEventListener("mouseenter", () => {
-        const id = link.dataset.mega;
-        closeAllMega();
-        const target = document.getElementById(id);
-        if (target) target.classList.add("open");
-      });
+    // nav-item에 hover되면 메뉴 표시
+    item.addEventListener("mouseenter", () => {
+      mega.classList.add("open");
     });
 
-    // 메뉴 밖으로 마우스 나가면 닫기
-    megaMenusContainer.addEventListener("mouseleave", closeAllMega);
-    navMenu.addEventListener("mouseleave", closeAllMega);
-  }
+    // nav-item에서 마우스가 벗어나면 메뉴 숨김
+    item.addEventListener("mouseleave", () => {
+      mega.classList.remove("open");
+    });
+  });
+
 
   /* ---------------------------
       MOBILE HEADER
@@ -46,6 +35,7 @@ function initMobileHeader() {
       mobileNav.classList.toggle("open");
     });
   }
+
 
   /* ---------------------------
       MOBILE ACCORDIONS
