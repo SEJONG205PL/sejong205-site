@@ -15,9 +15,9 @@ a { text-decoration: none; color: inherit; }
   .mob { display:block !important; }
 }
 
-/* -------------------------------------------------------------------
+/* ================================================================
    HEADER
-------------------------------------------------------------------- */
+================================================================ */
 .main-header {
   background:#fff;
   border-bottom:1px solid #e4e4e4;
@@ -69,30 +69,41 @@ a { text-decoration: none; color: inherit; }
 
 .nav-link:hover::after { transform:scaleX(1); }
 
-/* -------------------------------------------------------------------
-   MEGA BOX — 단일 고정
-------------------------------------------------------------------- */
+/* ================================================================
+   MEGA BOX — 단일 고정 박스
+================================================================ */
 .mega-box {
   position:absolute;
-  top:80px;             /* header 아래 고정 */
+  top:80px;                /* header 아래 고정 */
   left:0;
   width:100%;
-  height:260px;         /* 고정 높이 */
+  height:260px;            /* 고정 높이 */
   background:#fff;
   border-top:1px solid #e4e4e4;
   overflow:hidden;
   display:none;
   opacity:0;
   visibility:hidden;
-  transition:opacity .28s ease;
+  transition:opacity .25s ease;
   z-index:3000;
 }
 
-/* 내부 content 위치 */
+/* mega-box 활성화 (JS가 제어) */
+.mega-box.show {
+  display:block !important;
+  opacity:1 !important;
+  visibility:visible !important;
+}
+
+/* 내부 콘텐츠 */
 .mega-content {
   display:none;
   width:100%;
   height:100%;
+}
+
+.mega-content.active {
+  display:block !important;
 }
 
 .mega-inner {
@@ -114,7 +125,8 @@ a { text-decoration: none; color: inherit; }
 }
 
 .mega-col ul {
-  margin:0; padding:0;
+  margin:0;
+  padding:0;
   list-style:none;
 }
 
@@ -124,39 +136,18 @@ a { text-decoration: none; color: inherit; }
   font-size:14px;
   color:#555;
 }
+
 .mega-col a:hover { color:#000; }
 
-/* -------------------------------------------------------------------
-   HOVER LOGIC
-------------------------------------------------------------------- */
+/* ❗ 매우 중요한 부분: 잘못된 CSS 삭제 완료
+   - hover 기반 자동 mega-open 코드 제거됨
+   - nav-link + mega-box 구조 제거됨
+   - mega-box:hover 유지 방식 삭제됨
+*/
 
-/* 메뉴 hover → mega-box 열림 */
-.nav-link:hover + .mega-box,
-.nav-menu:hover ~ .mega-box {
-  display:block;
-}
-
-/* JS에서 클래스 추가 방식 */
-.mega-box.show {
-  display:block !important;
-  opacity:1 !important;
-  visibility:visible !important;
-}
-
-.mega-content.active {
-  display:block !important;
-}
-
-/* mega-box 위에 마우스 올려도 유지 */
-.mega-box:hover {
-  display:block !important;
-  opacity:1 !important;
-  visibility:visible !important;
-}
-
-/* -------------------------------------------------------------------
+/* ================================================================
    MOBILE HEADER
-------------------------------------------------------------------- */
+================================================================ */
 .main-header.mobile {
   display:flex !important;
   justify-content:center;
@@ -213,7 +204,6 @@ a { text-decoration: none; color: inherit; }
 
 .mobile-menu { list-style:none; padding:0; margin:0; }
 
-/* 모바일 아코디언 */
 .mobile-accordion {
   width:100%;
   padding:18px 20px;
@@ -227,10 +217,12 @@ a { text-decoration: none; color: inherit; }
 }
 
 .mobile-sub { max-height:0; overflow:hidden; transition:.35s; }
-
 .mobile-sub.open { max-height:800px; }
 
-/* FOOTER */
+/* ================================================================
+   FOOTER & MAIN CONTENT — (기존 유지)
+================================================================ */
+
 .main-footer {
   width: 100vw;
   background: #000;
@@ -277,6 +269,9 @@ a { text-decoration: none; color: inherit; }
   .main-footer nav { gap: 12px; }
   .main-footer nav a { font-size: 13px; }
 }
+
+/* 배너, 카테고리 등 기존 유지 — 이하 동일 */
+
 
 /* 메인 배너 */
 .main-banner {
