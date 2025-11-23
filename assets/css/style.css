@@ -73,8 +73,8 @@ a { text-decoration: none; color: inherit; }
 .main-header {
   background: #fff;
   border-bottom: 1px solid #e4e4e4;
-  position: relative;
-  z-index: 100;
+  position: relative;   /* ⭐ mega menu 기준점 */
+  z-index: 2000;
   transition: border-bottom 0.3s ease;
 }
 .main-header.menu-open { border-bottom: none; }
@@ -84,7 +84,7 @@ a { text-decoration: none; color: inherit; }
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  height: 80px;
+  height: 80px;   /* ⭐ mega-menu 위치 기준 */
 }
 
 .logo img {
@@ -99,14 +99,18 @@ a { text-decoration: none; color: inherit; }
   flex-direction: column;
   align-items: center;
   width: 100%;
+  position: static !important; /* ⭐ 상대 위치 제거 */
 }
+
 .nav-menu {
   display: flex;
   gap: 32px;
   justify-content: center;
   width: 100%;
 }
+
 .nav-item { position: relative; }
+
 .nav-link {
   cursor: pointer;
   font-size: 15px;
@@ -114,6 +118,7 @@ a { text-decoration: none; color: inherit; }
   padding: 15px;
   position: relative;
 }
+
 .nav-link::after {
   content: "";
   position: absolute;
@@ -124,18 +129,18 @@ a { text-decoration: none; color: inherit; }
   transform-origin: center;
   transition: transform 0.2s ease-out;
 }
+
 .nav-link:hover::after { transform: scaleX(1); }
 
 /* ================================================================
-   MEGA MENU — 최종 안정화 Hover 유지형
+   MEGA MENU — 기업형 사이트 최종 안정화 Hover 유지형
    ================================================================ */
 
-/* mega-menu 공통 */
 .mega-menu {
   position: absolute;
-  top: 100%;
+  top: 80px;                  /* ⭐ 헤더 바로 아래 */
   left: 0;
-  width: 100vw;
+  width: 100vw;               /* 전체 폭 */
   background: #fff;
   border-top: 1px solid #e4e4e4;
   padding: 20px 0;
@@ -143,24 +148,23 @@ a { text-decoration: none; color: inherit; }
   opacity: 0;
   visibility: hidden;
   transition: opacity .25s ease;
-  z-index: 9999;
+  z-index: 3000;
 }
 
-/* nav-item hover 시 mega-menu 표시 */
+/* 메뉴 hover 시 표시 */
 .nav-item:hover > .mega-menu {
   display: block;
   opacity: 1;
   visibility: visible;
 }
 
-/* mega-menu 안으로 마우스 이동해도 유지 */
+/* mega-menu hover 시 계속 유지 */
 .mega-menu:hover {
-  display: block;
-  opacity: 1;
-  visibility: visible;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
-/* mega-menu 내부 레이아웃 */
 .mega-inner {
   display: flex;
   gap: 40px;
@@ -172,6 +176,7 @@ a { text-decoration: none; color: inherit; }
 .mega-inner.single-column { flex-direction: column; }
 
 .mega-col { flex: 1; }
+
 .mega-col h3 {
   margin-bottom: 10px;
   font-size: 14px;
@@ -179,9 +184,14 @@ a { text-decoration: none; color: inherit; }
   text-transform: uppercase;
   color: #111;
 }
+
 .mega-col ul { list-style: none; padding: 0; margin: 0; }
 .mega-col li { margin: 4px 0; }
-.mega-col a { font-size: 14px; color: #555; }
+
+.mega-col a {
+  font-size: 14px;
+  color: #555;
+}
 .mega-col a:hover { color: #000; }
 
 /* ================================================================ */
@@ -214,6 +224,7 @@ a { text-decoration: none; color: inherit; }
   z-index: 999;
   padding: 0;
 }
+
 .mobile-nav-toggle span {
   display: block;
   height: 3px;
@@ -222,6 +233,7 @@ a { text-decoration: none; color: inherit; }
   border-radius: 2px;
   transition: .3s;
 }
+
 .mobile-nav-toggle.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
 .mobile-nav-toggle.active span:nth-child(2) { opacity: 0; }
 .mobile-nav-toggle.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
@@ -246,6 +258,7 @@ a { text-decoration: none; color: inherit; }
   box-shadow: 8px 0 20px rgba(0,0,0,.1);
   z-index: 900;
 }
+
 .mobile-nav.open { left: 0; }
 
 .mobile-menu { list-style: none; margin: 0; padding: 0; }
@@ -262,10 +275,12 @@ a { text-decoration: none; color: inherit; }
   text-align: left;
   cursor: pointer;
 }
+
 .mobile-accordion .arrow {
   float: right;
   transition: .25s;
 }
+
 .mobile-accordion.active .arrow { transform: rotate(180deg); }
 
 .mobile-accordion-lv2 {
@@ -284,7 +299,10 @@ a { text-decoration: none; color: inherit; }
   float: right;
   transition: .25s;
 }
-.mobile-accordion-lv2.active .arrow { transform: rotate(180deg); }
+
+.mobile-accordion-lv2.active .arrow {
+  transform: rotate(180deg);
+}
 
 .mobile-sub,
 .mobile-sub-lv2 {
@@ -312,6 +330,7 @@ a { text-decoration: none; color: inherit; }
   color: #333;
   border-bottom: 1px solid #f1f1f1;
 }
+
 .mobile-sub-lv2 a:hover { background: #fafafa; }
 
 /* FOOTER */
@@ -352,6 +371,7 @@ a { text-decoration: none; color: inherit; }
   opacity: 0.85;
   transition: 0.25s;
 }
+
 .main-footer nav a:hover { opacity: 1; }
 
 @media (max-width: 480px) {
@@ -367,6 +387,7 @@ a { text-decoration: none; color: inherit; }
   height: 820px;
   overflow: hidden;
 }
+
 .main-banner .swiper,
 .main-banner .swiper-wrapper,
 .main-banner .swiper-slide {
