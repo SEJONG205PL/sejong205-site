@@ -1,348 +1,234 @@
 @import url(".assets/css/fonts.css");
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-  color: #222;
-  background: #fff;
-}
+/* 기본 리셋 */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; color: #222; background: #fff; }
 a { text-decoration: none; color: inherit; }
 
-/* 공용사용 */
-.width {max-width: 1280px; width: 90%; margin: 0 auto;}
-.pc {display: block !important;}
-.mob {display: none !important;}
+/* 공용 */
+.width { max-width: 1280px; width: 90%; margin: 0 auto; }
+.pc { display: block !important; }
+.mob { display: none !important; }
 
-@media (max-width:1024px) {
-  .pc {display: none !important;}
-  .mob {display: block !important;}
+@media (max-width:1024px){
+  .pc { display:none !important; }
+  .mob { display:block !important; }
 }
 
-/* Top bar */
-.top-bar {
-  position: relative;
-  background: #f8f8f8;
-  border-bottom: 1px solid #e3e3e3;
-  font-size: 13px;
-  z-index: 999;
-}
-
-.top-inner {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 12px;
-  height: 34px;
-}
-
-.top-inner a {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: #333;
-  text-decoration: none;
-  font-weight: 500;
-  position: relative;
-  padding: 0 6px;
-}
-
-.top-inner a:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  right: -6px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1px;
-  height: 14px;
-  background: #cfcfcf;
-}
-
-.top-inner a:hover { color: #000; }
-
-.top-inner img {
-  width: 10px;
-  height: 10px;
-  object-fit: contain;
-}
-
-/* HEADER */
+/* -------------------------------------------------------------------
+   HEADER
+------------------------------------------------------------------- */
 .main-header {
-  background: #fff;
-  border-bottom: 1px solid #e4e4e4;
-  position: relative;   /* ⭐ mega menu 기준점 */
-  z-index: 2000;
-  transition: border-bottom 0.3s ease;
+  background:#fff;
+  border-bottom:1px solid #e4e4e4;
+  position:relative;
+  z-index:2000;
+  transition:.25s;
 }
-.main-header.menu-open { border-bottom: none; }
 
 .header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  height: 80px;   /* ⭐ mega-menu 위치 기준 */
+  height:80px;
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
 
 .logo img {
-  height: 60px;
-  max-width: 100%;
-  object-fit: contain;
+  height:60px;
+  object-fit:contain;
 }
 
-/* NAVIGATION */
-.nav-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  position: static !important; /* ⭐ 상대 위치 제거 */
-}
-
+/* NAV */
 .nav-menu {
-  display: flex;
-  gap: 32px;
-  justify-content: center;
-  width: 100%;
+  display:flex;
+  gap:32px;
+  width:100%;
+  justify-content:center;
 }
 
-.nav-item { position: relative; }
+.nav-item { position:relative; }
 
 .nav-link {
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 15px;
-  position: relative;
+  cursor:pointer;
+  padding:15px;
+  font-size:15px;
+  font-weight:500;
+  position:relative;
 }
 
 .nav-link::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: -4px;
-  height: 2px;
-  background: #222;
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 0.2s ease-out;
+  content:"";
+  position:absolute;
+  left:0; right:0; bottom:-4px;
+  height:2px;
+  background:#222;
+  transform:scaleX(0);
+  transition:.2s;
 }
 
-.nav-link:hover::after { transform: scaleX(1); }
+.nav-link:hover::after { transform:scaleX(1); }
 
-/* ================================================================
-   MEGA MENU — 기업형 사이트 최종 안정화 Hover 유지형
-   ================================================================ */
-
-.mega-menu {
-  position: absolute;
-  top: 32px;
-  left: 50%;
-  transform: translateX(-50%);   /* ⭐ 중앙 정렬 */
-  width: 100%;                   /* ⭐ 100vw → 100% */
-  max-width: 1280px;             /* ⭐ header와 동일한 폭 유지 */
-  height: 260px;  
-  overflow: hidden;
-  background: #fff;
-  border-top: 1px solid #e4e4e4;
-  padding: 20px 0;
-  display: none;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity .25s ease;
-  z-index: 3000;
+/* -------------------------------------------------------------------
+   MEGA BOX — 단일 고정
+------------------------------------------------------------------- */
+.mega-box {
+  position:absolute;
+  top:80px;             /* header 아래 고정 */
+  left:0;
+  width:100%;
+  height:260px;         /* 고정 높이 */
+  background:#fff;
+  border-top:1px solid #e4e4e4;
+  overflow:hidden;
+  display:none;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .28s ease;
+  z-index:3000;
 }
 
-
-/* 메뉴 hover 시 표시 */
-.nav-item:hover > .mega-menu,
-.mega-menu:hover {
-  display: block;
-  opacity: 1;
-  visibility: visible;
-}
-
-/* mega-menu hover 시 계속 유지 */
-.mega-menu:hover {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
+/* 내부 content 위치 */
+.mega-content {
+  display:none;
+  width:100%;
+  height:100%;
 }
 
 .mega-inner {
-  max-width: 1280px;            /* 내부 콘텐츠 폭 고정 */
-  margin: 0 auto;
-  display: flex;
-  gap: 40px;
-  padding: 20px;
-  min-height: 260px;
+  max-width:1280px;
+  height:100%;
+  margin:0 auto;
+  padding:20px;
+  display:flex;
+  gap:40px;
 }
 
-.mega-inner.single-column { 
-  display: flex;
-  flex-direction: column;
-  min-height: 200px
-}
-
-.mega-col { flex: 1; }
+.mega-col { flex:1; }
 
 .mega-col h3 {
-  margin-bottom: 10px;
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #111;
+  margin-bottom:10px;
+  font-size:14px;
+  font-weight:700;
+  text-transform:uppercase;
 }
 
-.mega-col ul { list-style: none; padding: 0; margin: 0; }
-.mega-col li { margin: 4px 0; }
+.mega-col ul {
+  margin:0; padding:0;
+  list-style:none;
+}
+
+.mega-col li { margin:4px 0; }
 
 .mega-col a {
-  font-size: 14px;
-  color: #555;
+  font-size:14px;
+  color:#555;
 }
-.mega-col a:hover { color: #000; }
+.mega-col a:hover { color:#000; }
 
-/* ================================================================ */
+/* -------------------------------------------------------------------
+   HOVER LOGIC
+------------------------------------------------------------------- */
 
-/* MOBILE HEADER */
+/* 메뉴 hover → mega-box 열림 */
+.nav-link:hover + .mega-box,
+.nav-menu:hover ~ .mega-box {
+  display:block;
+}
+
+/* JS에서 클래스 추가 방식 */
+.mega-box.show {
+  display:block !important;
+  opacity:1 !important;
+  visibility:visible !important;
+}
+
+.mega-content.active {
+  display:block !important;
+}
+
+/* mega-box 위에 마우스 올려도 유지 */
+.mega-box:hover {
+  display:block !important;
+  opacity:1 !important;
+  visibility:visible !important;
+}
+
+/* -------------------------------------------------------------------
+   MOBILE HEADER
+------------------------------------------------------------------- */
 .main-header.mobile {
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  z-index: 100;
-  padding: 16px;
+  display:flex !important;
+  justify-content:center;
+  align-items:center;
+  height:auto;
+  padding:16px;
+  border-bottom:1px solid #eee;
 }
 
 .mobile-nav-toggle {
-  position: absolute;
-  left: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 26px;
-  height: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background: none;
-  border: none;
-  cursor: pointer;
-  z-index: 999;
-  padding: 0;
+  position:absolute;
+  left:18px;
+  top:50%;
+  transform:translateY(-50%);
+  width:26px;
+  height:20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  border:none;
+  background:none;
+  cursor:pointer;
 }
 
 .mobile-nav-toggle span {
-  display: block;
-  height: 3px;
-  width: 100%;
-  background: #000;
-  border-radius: 2px;
-  transition: .3s;
+  height:3px;
+  width:100%;
+  background:#000;
+  border-radius:2px;
+  transition:.3s;
 }
 
-.mobile-nav-toggle.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
-.mobile-nav-toggle.active span:nth-child(2) { opacity: 0; }
-.mobile-nav-toggle.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
-
-.logo img {
-  position: relative;
-  height: 42px;
-  object-fit: contain;
-  z-index: 9999;
+.mobile-nav-toggle.active span:nth-child(1){
+  transform:translateY(9px) rotate(45deg);
+}
+.mobile-nav-toggle.active span:nth-child(2){ opacity:0; }
+.mobile-nav-toggle.active span:nth-child(3){
+  transform:translateY(-9px) rotate(-45deg);
 }
 
-/* 모바일 전체 메뉴 */
 .mobile-nav {
-  position: fixed;
-  left: -100%;
-  top: 0;
-  width: 100%;
-  background: #fff;
-  overflow-y: auto;
-  padding: 115px 0;
-  transition: left .35s ease;
-  box-shadow: 8px 0 20px rgba(0,0,0,.1);
-  z-index: 900;
+  position:fixed;
+  left:-100%;
+  top:0;
+  width:100%;
+  height:100%;
+  background:#fff;
+  padding:115px 0;
+  overflow-y:auto;
+  transition:left .35s ease;
+  z-index:900;
 }
+.mobile-nav.open { left:0; }
 
-.mobile-nav.open { left: 0; }
+.mobile-menu { list-style:none; padding:0; margin:0; }
 
-.mobile-menu { list-style: none; margin: 0; padding: 0; }
-
-/* MOBILE ACCORDIONS */
+/* 모바일 아코디언 */
 .mobile-accordion {
-  width: 100%;
-  padding: 18px 20px;
-  font-size: 16px;
-  font-weight: 700;
-  background: #fff;
-  border: none;
-  border-bottom: 1px solid #eee;
-  text-align: left;
-  cursor: pointer;
+  width:100%;
+  padding:18px 20px;
+  font-size:16px;
+  font-weight:700;
+  background:#fff;
+  border:none;
+  border-bottom:1px solid #eee;
+  text-align:left;
+  cursor:pointer;
 }
 
-.mobile-accordion .arrow {
-  float: right;
-  transition: .25s;
-}
+.mobile-sub { max-height:0; overflow:hidden; transition:.35s; }
 
-.mobile-accordion.active .arrow { transform: rotate(180deg); }
-
-.mobile-accordion-lv2 {
-  width: 100%;
-  padding: 15px 26px;
-  font-size: 14px;
-  font-weight: 600;
-  background: #f7f7f7;
-  border: none;
-  border-bottom: 1px solid #e1e1e1;
-  text-align: left;
-  cursor: pointer;
-}
-
-.mobile-accordion-lv2 .arrow {
-  float: right;
-  transition: .25s;
-}
-
-.mobile-accordion-lv2.active .arrow {
-  transform: rotate(180deg);
-}
-
-.mobile-sub,
-.mobile-sub-lv2 {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(-6px);
-  transition:
-    max-height 0.9s cubic-bezier(.32, .90, .35, 1),
-    opacity 0.7s ease,
-    transform 0.7s ease;
-}
-
-.mobile-sub.open,
-.mobile-sub-lv2.open {
-  max-height: 800px;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.mobile-sub-lv2 a {
-  display: block;
-  padding: 13px 38px;
-  font-size: 14px;
-  color: #333;
-  border-bottom: 1px solid #f1f1f1;
-}
-
-.mobile-sub-lv2 a:hover { background: #fafafa; }
+.mobile-sub.open { max-height:800px; }
 
 /* FOOTER */
 .main-footer {
