@@ -36,6 +36,7 @@ a { text-decoration: none; color: inherit; }
   align-items: center;      /* 세로 중앙 정렬 */
   gap: 12px;                /* 간격 기본 */
   height: 34px;             /* 전체 높이 */
+  font-size: 13px;
 }
 
 /* 링크 스타일 */
@@ -45,7 +46,6 @@ a { text-decoration: none; color: inherit; }
   gap: 5px;                 /* 아이콘과 텍스트 간격 */
   color: #333;
   text-decoration: none;
-  font-size: 13px;
   font-weight: 500;
   position: relative;
   padding: 0 6px;
