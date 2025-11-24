@@ -28,7 +28,7 @@
       <a href="./pl/">PL</a>
       <a href="./pl/">
         <img src="./assets/img/free.png" alt="free">
-        SEJONGGO
+        SEJONGGO.PL
       </a>
     </div>
   </div>
@@ -78,35 +78,35 @@
 
     <div class="cat-item">
       <a href="#">
-        <img src="./assets/img/img (1).jpg" alt="Company">
+        <img src=".assets/img/img (1).jpg" alt="Company">
         <span>Company</span>
       </a>
     </div>
 
     <div class="cat-item">
       <a href="#">
-        <img src="./assets/img/img (2).jpg" alt="Business">
+        <img src=".assets/img/img (2).jpg" alt="Business">
         <span>Business</span>
       </a>
     </div>
 
     <div class="cat-item">
       <a href="#">
-        <img src="./assets/img/img (3).jpg" alt="SEJONG Brand">
+        <img src=".assets/img/img (3).jpg" alt="SEJONG Brand">
         <span>SEJONG Brand</span>
       </a>
     </div>
 
     <div class="cat-item">
       <a href="#">
-        <img src="./assets/img/img (4).jpg" alt="Magazine">
+        <img src=".assets/img/img (4).jpg" alt="Magazine">
         <span>Magazine</span>
       </a>
     </div>
 
     <div class="cat-item">
       <a href="#">
-        <img src="./assets/img/img (5).jpg" alt="Customer Service">
+        <img src=".assets/img/img (5).jpg" alt="Customer Service">
         <span>Customer Service</span>
       </a>
     </div>
@@ -119,14 +119,14 @@
   <!-- IMPORT HEADER + FOOTER + HEADER.JS -->
   <script>
     /* HEADER LOAD */
-    fetch("./header.html")
+    fetch(".header.html")
       .then(r => r.text())
       .then(html => {
         document.querySelector("#header").innerHTML = html;
 
         // header.js 동적 로드 후 initMobileHeader 실행
         const script = document.createElement("script");
-        script.src = "./assets/js/header.js";
+        script.src = ".assets/js/header.js";
         script.onload = () => {
           if (typeof initMobileHeader === "function") {
             initMobileHeader();
@@ -136,7 +136,7 @@
       });
 
     /* FOOTER LOAD */
-    fetch("./footer.html")
+    fetch(".footer.html")
       .then(r => r.text())
       .then(html => {
         document.querySelector("#footer").innerHTML = html;
