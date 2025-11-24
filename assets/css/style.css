@@ -26,7 +26,6 @@ a { text-decoration: none; color: inherit; }
   position: relative;
   background: #f8f8f8;
   border-bottom: 1px solid #e3e3e3;
-  font-size: 13px;
   z-index: 999;
 }
 
@@ -46,6 +45,7 @@ a { text-decoration: none; color: inherit; }
   gap: 5px;                 /* 아이콘과 텍스트 간격 */
   color: #333;
   text-decoration: none;
+  font-size: 13px;
   font-weight: 500;
   position: relative;
   padding: 0 6px;
