@@ -439,14 +439,14 @@ width: 100%;
 }
 
 /* PC 배너 */
-.slide1 { background-image: url("../img/banner1.jpg"); }
-.slide2 { background-image: url("../img/banner2.jpg"); }
+.slide1 { background-image: url("/assets/img/banner1.jpg"); }
+.slide2 { background-image: url("/assets/img/banner2.jpg"); }
 
 /* 모바일 배너 */
 @media (max-width: 900px) {
   .main-banner { height: 480px; } /* 모바일에서는 높이 줄이기 추천 */
-  .slide1 { background-image: url("../img//banner1.jpg"); }
-  .slide2 { background-image: url("../img//banner2.jpg"); }
+.slide1 { background-image: url("/assets/img/banner1.jpg"); }
+.slide2 { background-image: url("/assets/img/banner2.jpg"); }
 }
 
 /* ==== Swiper Pagination Custom ==== */
