@@ -4,13 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <title>SEJONG205</title>
-  <!-- CSS -->
-  <link rel="stylesheet" href="./assets/css/style.css">
-  <link rel="stylesheet" href="./assets/css/animate.css">
+  <!-- CSS: 3단계 위로 올라가서 assets 폴더 접근 -->
+  <link rel="stylesheet" href="../../../assets/css/style.css">
+  <link rel="stylesheet" href="../../../assets/css/animate.css">
 </head>
 
 <body>
-
   <!-- HEADER LOAD -->
   <header id="header"></header>
 
@@ -20,12 +19,14 @@
   <!-- IMPORT HEADER + FOOTER -->
   <script>
     /* HEADER LOAD */
-    fetch("header.html")
+    fetch("../../../header.html")
       .then(r => r.text())
-      .then(html => document.querySelector("#header").innerHTML = html)
+      .then(html => {
+        document.querySelector("#header").innerHTML = html;
+      })
       .then(() => {
         const script = document.createElement("script");
-        script.src = "./assets/js/header.js";
+        script.src = "../../../assets/js/header.js";   // 여기도 루트 기준으로
         script.onload = () => {
           if (typeof initMobileHeader === "function") initMobileHeader();
         };
@@ -33,11 +34,12 @@
       });
 
     /* FOOTER LOAD */
-    fetch("footer.html")
+    fetch("../../../footer.html")
       .then(r => r.text())
-      .then(html => document.querySelector("#footer").innerHTML = html);
+      .then(html => {
+        document.querySelector("#footer").innerHTML = html;
+      });
   </script>
-
 </body>
 
 </html>
