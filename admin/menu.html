@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메뉴 관리 | SEJONG205 ADMIN</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/assets/js/supabase-init.js"></script>
+    <!-- <script src="/assets/js/include.js" defer></script>
+    <script src="/admin/js/admin-session.js" defer></script> -->
+</head>
+
+<body>
+    <div class="topbar">
+        <div>SEJONG205 ADMIN</div>
+        <div>
+            <span id="adminEmail"></span>
+            <button id="logoutBtn">로그아웃</button>
+        </div>
+    </div>
+
+    <div class="container width" style="max-width:1600px;">
+        <h2>관리자 메뉴</h2>
+        <div class="menu-grid">
+            <div class="menu-item" onclick="location.href='/admin/menu.html'">메뉴 구조 관리</div>
+            <div class="menu-item" onclick="location.href='/admin/posts.html'">게시판 관리</div>
+            <div class="menu-item" onclick="location.href='/admin/posts_edit.html'"> 게시글 작성</div>
+            <div class="menu-item" onclick="location.href='/admin/gallery.html'">갤러리 관리</div>
+            <div class="menu-item" onclick="location.href='/admin/gallery_edit.html'">갤러리 등록</div>
+            <div class="menu-item" onclick="location.href='/index.html'">사이트 홈으로 이동</div>
+        </div>
+    </div>
+
+    <div class="menu-box width" style="max-width:1600px;">
+        <h2>메뉴 관리</h2>
+        <div class="menu-wrapper">
+
+            <table class="menu-table">
+                <thead>
+                    <tr>
+                        <th>메뉴명</th>
+                        <th>링크</th>
+                        <th>타입</th>
+                        <th>새창</th>
+                        <th>PC</th>
+                        <th>Mobile</th>
+                        <th>순서</th>
+                        <th>관리</th>
+                    </tr>
+                </thead>
+                <tbody id="menuTableBody"></tbody>
+            </table>
+
+            <button class="add-btn" onclick="addMainMenu()">+ 대메뉴 추가</button>
+            <button class="save-btn" onclick="saveAll()">전체 저장</button>
+            <button class="dell-btn" onclick="dellAll()">전체 삭제</button>
+        </div>
+
+    </div>
+
+    <!-- 🔥 로딩창 -->
+    <div id="loadingOverlay" style="display:none;">
+        <div class="loading-box">
+            <div class="spinner"></div>
+            <div id="loadingText">처리 중...</div>
+            <div class="progress">
+                <div id="progressBar"></div>
+            </div>
+            <div id="progressPercent">0%</div>
+        </div>
+    </div>
+
+    <style>
+        /* 로딩창 */
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999999;
+        }
+
+        .loading-box {
+            min-width: 380px;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            margin: auto;
+            border: 6px solid #eee;
+            border-top: 6px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .progress {
+            width: 100%;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        #progressBar {
+            height: 100%;
+            width: 0%;
+            background: #007bff;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+    <script src="/admin/js/menu.core.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+body {margin: 0;padding: 0;background: #f4f6f9;font-family: "Pretendard", sans-serif;}
+.width {max-width: 1280px; width: 90%; margin: 0 auto;}
+
+/* 로그인 */
+.login-container {width: 360px;padding: 40px 30px;border-radius: 12px;text-align: center;}
+.login-container h2 {margin-bottom: 25px;font-size: 22px;color: #333;font-weight: 600;}
+.login-container input {width: 100%;padding: 12px 14px;margin-bottom: 15px;border-radius: 8px;border: 1px solid #ddd;font-size: 15px;transition: 0.2s;box-sizing: border-box;}
+.login-container input:focus {border-color: #1a73e8;box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.15);outline: none;}
+.login-container button {width: 100%;padding: 12px;border: none;border-radius: 8px;background: #1a73e8;font-size: 16px;color: white;font-weight: 600;cursor: pointer;transition: 0.2s;}
+.login-container button:hover {background: #155fc4;}
+#loginMessage {margin-top: 15px;font-size: 14px;min-height: 20px;font-weight: 500;}
+
+/* 데시보드 */
+.topbar {background: #042b5e;color: white;padding: 18px 25px;font-size: 18px;font-weight: 600;display: flex;justify-content: space-between;align-items: center;}
+.topbar button {background: rgba(255, 255, 255, 0.2);border: none;padding: 8px 13px;color: white;border-radius: 6px;cursor: pointer;transition: 0.2s;}
+.topbar button:hover {background: rgba(255, 255, 255, 0.35);}
+.container {padding: 30px;}
+.container h2 {margin-top: 0;margin-bottom: 25px;font-size: 22px;color: #333;}
+.container .menu-grid {display: grid;grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));gap: 20px;margin-top: 20px;}
+.container .menu-grid .menu-item {background: #fff;padding: 25px;border-radius: 12px;text-align: center;box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);cursor: pointer;transition: 0.25s;font-size: 16px;font-weight: 600;color: #333;}
+.container .menu-grid .menu-item:hover {transform: translateY(-5px);box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08); background-color: #042b5e; color: #fff;}
+
+/* 메뉴관리 */
+.menu-box {max-width: 1600px !important; padding: 80px 0;}
+.menu-wrapper {background: #fff;border-radius: 10px;padding: 20px;box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);}
+table.menu-table {width: 100%;border-collapse: collapse;font-size: 14px;}
+table.menu-table thead th {background: #34495e;color: #fff;padding: 12px;font-weight: bold;text-align: center;white-space: nowrap;}
+table.menu-table thead th:nth-child(1) { width: 15%; }  /* 메뉴명 */
+table.menu-table thead th:nth-child(2) { width: 40%; }  /* 링크 - 가장 넓게 */
+table.menu-table thead th:nth-child(3) { width: 8%; }  /* 타입 */
+table.menu-table thead th:nth-child(4) { width: 8%; }   /* 새창 */
+table.menu-table thead th:nth-child(5) { width: 6%; }   /* PC */
+table.menu-table thead th:nth-child(6) { width: 6%; }   /* Mobile */
+table.menu-table thead th:nth-child(7) { width: 6%; }   /* 순서 - 좁게 */
+table.menu-table thead th:nth-child(8) { width: 10%; }  /* 관리 버튼 */
+.depth-1:hover,.depth-2:hover,.depth-3:hover {background: #d2e7fc;}
+/*셀 스타일*/
+table.menu-table tbody td {border-bottom: 1px solid #e5e5e5;padding: 10px;text-align: center;vertical-align: middle;}
+table.menu-table input,
+table.menu-table select {width: 100%;height: 36px;line-height: 36px;/*padding: 0 8px;*/font-size: 14px;box-sizing: border-box;}
+.order-input {width: 70px !important;text-align: center;}
+/*버튼 스타일*/
+.add-btn,
+.save-btn,
+.child-btn,.row-btn,.dell-btn,
+.del-btn {padding: 6px 12px;border: none;cursor: pointer;border-radius: 4px;font-size: 13px; color: #fff;}
+.child-btn,.row-btn, .del-btn {background-color: #000;}
+.child-btn:hover,.del-btn:hover {background: #bd1c1c;}
+.btn-group {display: flex;align-items: center;gap: 8px;}
+.btn-group button {white-space: nowrap;}
+.add-btn { background: #3498db; }
+.save-btn { background: #27ae60; margin-top: 20px; }
+.dell-btn { background: #bd1c1c; margin-top: 20px; }
+.child-btn,.del-btn {margin-bottom: 10px;}
+/*대·중·소 메뉴 단계 스타일*/
+.depth-1 td:first-child {font-weight:bold;color:#222;}
+.depth-2 td:first-child {padding-left: 30px;color:#444;}
+.depth-3 td:first-child {padding-left: 60px;color:#666;}
+/*메뉴 Input + 화살표 Wrapper */
+.menu-input-wrapper {position: relative;width: 100%;}
+.menu-input {width: 100%;height: 36px; /*padding-left: 10px;*/   /* 화살표 공간 확보 */box-sizing: border-box;}
+/*화살표 아이콘 */
+.depth-arrow {position: absolute;left: 8px;top: 50%;width: 18px;height: 18px;transform: translateY(-50%);background-image: url('/admin/img/arrow-right.png');background-size: contain;background-repeat: no-repeat;}
+.depth-1 .depth-arrow {display: none;}
+.depth-3 .depth-arrow {left: 30px;}
+
+
+
+
+
+
+
+
