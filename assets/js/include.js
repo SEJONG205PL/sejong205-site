@@ -109,3 +109,8 @@ function initializeSupabaseOnce() {
         document.dispatchEvent(new Event("appReady"));
     }
 }
+
+document.addEventListener("includeLoaded", () => {
+    console.log("🟢 Header loaded → initHeaderMenu 실행");
+    if (typeof initHeaderMenu === "function") initHeaderMenu();
+});
