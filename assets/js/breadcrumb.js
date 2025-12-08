@@ -59,55 +59,63 @@ Breadcrumb & Subpage Navigation (최종 안정버전)
         }
     }
 
-    /* ==================================================
-       Footer Navigation (정적 구조)
-    ==================================================*/
-    function buildFooterMenu(path, breadcrumbEl, titleEl, subNavInner) {
-        const map = {
-            "/subpage/footer/legal_information/": {
-                title: "Legal Information",
-                list: [
-                    ["Legal Info", "/subpage/footer/legal_information/legal-info.html"],
-                    ["Legal Notice", "/subpage/footer/legal_information/legal-notice.html"],
-                    ["Privacy Policy", "/subpage/footer/legal_information/privacy-policy.html"],
-                ]
-            },
-            "/subpage/footer/policies/": {
-                title: "Policies",
-                list: [
-                    ["Refund Policy", "/subpage/footer/policies/refund.html"],
-                    ["Shipping Policy", "/subpage/footer/policies/shipping.html"],
-                ]
-            },
-            "/subpage/footer/vendor/": {
-                title: "Vendor Guide",
-                list: [
-                    ["Vendor Terms", "/subpage/footer/vendor/terms.html"],
-                    ["Settlement Guide", "/subpage/footer/vendor/settlement.html"],
-                    ["VAT Regulations", "/subpage/footer/vendor/vat.html"],
-                    ["Advertisement", "/subpage/footer/vendor/advertisement.html"],
-                ]
-            }
-        };
-
-        const key = Object.keys(map).find(x => path.startsWith(x));
-        if (!key) return;
-
-        const {title, list} = map[key];
-
-        if (breadcrumbEl) breadcrumbEl.textContent = title;
-
-        const file = path.split("/").pop();
-        const matched = list.find(([_, link]) => link.endsWith(file));
-
-        if (titleEl) titleEl.textContent = matched ? matched[0] : title;
-
-        if (subNavInner) {
-            subNavInner.innerHTML = list.map(([name, link]) =>
-                `<a href="${link}" class="sub-nav__item ${link === path ? "is-active" : ""}">${name}</a>`
-            ).join("");
+/* ==================================================
+   Footer Pages 처리 (Vendor / Policies / Legal)
+   파일명 → Title 자동 변환
+==================================================*/
+function buildFooterMenu(path, breadcrumbEl, titleEl, subNavInner) {
+    const map = {
+        "/subpage/footer/legal_information/": {
+            title: "Legal Information",
+            list: [
+                ["Legal Info", "/subpage/footer/legal_information/legal-info.html"],
+                ["Legal Notice", "/subpage/footer/legal_information/legal-notice.html"],
+                ["Privacy Policy", "/subpage/footer/legal_information/privacy-policy.html"],
+            ]
+        },
+        "/subpage/footer/policies/": {
+            title: "Policies",
+            list: [
+                ["Refund Policy", "/subpage/footer/policies/refund.html"],
+                ["Shipping Policy", "/subpage/footer/policies/shipping.html"],
+            ]
+        },
+        "/subpage/footer/vendor/": {
+            title: "Vendor Guide",
+            list: [
+                ["Vendor Terms", "/subpage/footer/vendor/terms.html"],
+                ["Settlement Guide", "/subpage/footer/vendor/settlement.html"],
+                ["VAT Regulations", "/subpage/footer/vendor/vat.html"],
+                ["Advertisement", "/subpage/footer/vendor/advertisement.html"],
+            ]
         }
+    };
+
+    const key = Object.keys(map).find(x => path.startsWith(x));
+    if (!key) return;
+
+    const { title, list } = map[key];
+
+    /* breadcrumb → 그룹 이름만 표시 */
+    if (breadcrumbEl) breadcrumbEl.textContent = title;
+
+    /* 파일명 → 타이틀 자동 변환 */
+    const file = path.split("/").pop().replace(".html", "");
+    let autoTitle = file.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    // ex) legal-notice → Legal Notice
+
+    // 데이터 목록에 존재하면 이름으로, 없으면 자동 생성명 사용
+    const matched = list.find(([name, link]) => link.endsWith(file + ".html"));
+    if (titleEl) titleEl.textContent = matched ? matched[0] : autoTitle;
+
+    /* Footer 네비게이션 생성 */
+    if (subNavInner) {
+        subNavInner.innerHTML = list.map(([name, link]) =>
+            `<a href="${link}" class="sub-nav__item ${link === path ? "is-active" : ""}">${name}</a>`
+        ).join("");
     }
+}
+
 
     /* ==================================================
        DB 메뉴 검색 util
@@ -126,3 +134,4 @@ Breadcrumb & Subpage Navigation (최종 안정버전)
         return stack.join(" > ");
     }
 })();
+
