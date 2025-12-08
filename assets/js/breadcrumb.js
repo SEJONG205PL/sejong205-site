@@ -99,61 +99,57 @@ Breadcrumb & Sub-page Info
             }
         }
         // ---------- 일반 subpage ----------
-         else if (pathname.startsWith("/subpage/")) {
-            // 1) 정확히 일치하는 메뉴 찾기
-            currentMenu = menuData.find((m) => m.link === pathname);
+        else if (pathname.startsWith("/subpage/")) {
+            // 1) depth3 중 URL이 존재하는 항목에서 매칭
+            currentMenu = menuData.find((m) => m.depth === 3 && m.link && m.link === pathname);
 
-            // 2) 언더바/폴더 구조 다를 때 유사매칭 (company_info <-> company/info)
+            // 2) 확장자/경로 차이 허용 (fallback)
             if (!currentMenu) {
-                const fixed1 = pathname.replace("company_info", "company/info");
-                const fixed2 = pathname.replace("company/info", "company_info");
-                currentMenu = menuData.find((m) => m.link === fixed1 || m.link === fixed2);
+                currentMenu = menuData.find((m) => m.depth === 3 && pathname.includes(m.link.replace(/\.html$/, "")));
             }
 
-            // 3) 확장자 제거 후 포함매칭
+            // 3) 가장 강력 fallback: 파일명으로 매칭 (overview.html -> "overview")
             if (!currentMenu) {
-                currentMenu = menuData.find((m) => pathname.includes(m.link.replace(/\.html$/, "")));
+                const key = pathname.split("/").pop().replace(".html", "");
+                currentMenu = menuData.find((m) => m.depth === 3 && m.name.toLowerCase().includes(key.toLowerCase()));
             }
 
-            // 4) depth2 이상 fallback (페이지명 포함 매칭)
-            if (!currentMenu) {
-                const nameKey = pathname.split("/").pop().replace(".html", "");
-                currentMenu = menuData.find((m) => m.name && m.name.toLowerCase().includes(nameKey.toLowerCase()));
-            }
-
-            // 페이지 상단 제목 표시
-            if (currentMenu && titleEl) {
-                titleEl.textContent = currentMenu.name;
-            }
+            // 제목 적용
+            if (currentMenu && titleEl) titleEl.textContent = currentMenu.name;
         }
 
         // ---------- breadcrumb ----------
-        if (currentMenu && breadcrumbEl) {
-            const names = [];
-            let node = currentMenu;
-
-            while (node) {
-                names.unshift(node.name);
-                node = menuData.find((m) => m.id === node.parent_id);
+        if (breadcrumbEl) {
+            if (currentMenu) {
+                const stack = [];
+                let node = currentMenu;
+                while (node) {
+                    stack.unshift(node.name);
+                    node = menuData.find((m) => m.id === node.parent_id);
+                }
+                breadcrumbEl.textContent = stack.join(" > ");
+            } else {
+                breadcrumbEl.textContent = ""; // 혹은 fallback 문구 가능
             }
-
-            breadcrumbEl.textContent = names.join(" > ");
         }
 
-        // ---------- sub-nav ----------
-        if (currentMenu && subNavInner) {
-            const siblings = menuData.filter((m) => m.parent_id === currentMenu.parent_id);
-
+        // ---------- Sub Navigation (소메뉴만) ----------
+        if (subNavInner) {
             subNavInner.innerHTML = "";
-            siblings.forEach((item) => {
-                const a = document.createElement("a");
-                a.href = item.link;
-                a.className = "sub-nav__item";
-                a.textContent = item.name;
-                if (item.id === currentMenu.id) a.classList.add("is-active");
-                subNavInner.appendChild(a);
-            });
+
+            if (currentMenu) {
+                const siblings = menuData.filter((m) => m.parent_id === currentMenu.parent_id && m.depth === 3);
+
+                siblings.forEach((item) => {
+                    const el = document.createElement("a");
+                    el.href = item.link || "#";
+                    el.textContent = item.name;
+                    el.className = "sub-nav__item" + (item.id === currentMenu.id ? " is-active" : "");
+                    subNavInner.appendChild(el);
+                });
+            }
         }
     }
 })();
+
 
