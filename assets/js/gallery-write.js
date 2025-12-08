@@ -1,671 +1,519 @@
-/*
-======================================================
-Gallery Write/Edit - FIXED VERSION
-- 수정 데이터 로딩 버그 수정
-- 에디터 준비 대기 로직 개선
-======================================================
-*/
+/* ======================================================
+ Gallery Write / Edit - Final Stable Version
+  - 링크·파일 UI 게시판 동일
+  - 파일 개수 제한 제거
+  - 수정 모드에서도 파일/링크 완전 유지
+====================================================== */
 
 let editor;
-let editorReady = false; // 에디터 준비 상태 플래그
-let galleryState = {
+let editorReady = false;
+
+const galleryState = {
     isAdmin: false,
     isLoading: false,
     editId: null,
-    uploadedThumbnail: null,
-    uploadedFiles: [],
-    existingFiles: [],
     fileCounter: 0,
     currentUserId: null,
     galleryId: null,
 };
 
-/* --------------------------------------------------
-즉시 초기화
--------------------------------------------------- */
+/* ---------------- 초기 실행 ---------------- */
 (function init() {
-    if (!window.supabaseClient) {
-        let attempts = 0;
-        const check = () => {
-            if (window.supabaseClient || attempts++ > 20) {
-                initGalleryWrite();
-            } else {
-                setTimeout(check, 50);
-            }
-        };
-        check();
-    } else {
-        initGalleryWrite();
-    }
+    const wait = setInterval(() => {
+        if (window.supabaseClient) {
+            clearInterval(wait);
+            initGalleryWrite();
+        }
+    }, 50);
 })();
 
-/* --------------------------------------------------
-메인 초기화
--------------------------------------------------- */
+/* ---------------- 메인 초기화 ---------------- */
 async function initGalleryWrite() {
-    try {
-        console.log("⚡ 초기화 시작");
+    const params = new URLSearchParams(location.search);
+    galleryState.galleryId = Number(params.get("id"));
+    galleryState.editId = params.get("post");
 
-        // URL 파라미터 파싱
-        const params = new URLSearchParams(window.location.search);
-        galleryState.galleryId = Number(params.get("id"));
-        galleryState.editId = params.get("post");
+    if (!galleryState.galleryId) {
+        alert("잘못된 접근입니다.");
+        location.href = "/";
+        return;
+    }
 
-        console.log("📋 파라미터:", {
-            galleryId: galleryState.galleryId,
-            editId: galleryState.editId,
-        });
+    setupEventListeners();
+    ensureDefaultRows();
 
-        if (!galleryState.galleryId) {
-            alert("잘못된 경로입니다.");
-            window.location.href = "/";
-            return;
-        }
+    // 권한 + 에디터 병렬
+    const [auth] = await Promise.all([checkUserPermission(), initEditorAsync()]);
 
-        // UI 먼저 설정
-        setupEventListeners();
-        ensureDefaultRows();
+    if (!auth.isAdmin) {
+        alert("관리자만 접근 가능합니다.");
+        location.href = `/skin/gallery/list.html?id=${galleryState.galleryId}`;
+        return;
+    }
 
-        // 병렬 처리
-        const [authResult] = await Promise.all([checkUserPermission(), initEditorAsync()]);
+    galleryState.isAdmin = true;
+    galleryState.currentUserId = auth.userId;
 
-        if (!authResult.isAdmin) {
-            alert("관리자만 접근할 수 있습니다.");
-            window.location.href = `/skin/gallery/list.html?id=${galleryState.galleryId}`;
-            return;
-        }
+    // 수정 모드
+    if (galleryState.editId) {
+        const titleEl = document.querySelector(".sub-hero__title");
+        const submitBtn = document.getElementById("btnSubmit");
+        if (titleEl) titleEl.textContent = "갤러리 수정";
+        if (submitBtn) submitBtn.textContent = "수정 완료";
 
-        galleryState.isAdmin = true;
-        galleryState.currentUserId = authResult.userId;
-
-        // 수정 모드
-        if (galleryState.editId) {
-            const title = document.querySelector(".sub-hero__title");
-            const btn = document.getElementById("btnSubmit");
-            if (title) title.innerText = "갤러리 수정";
-            if (btn) btn.innerText = "수정 완료";
-
-            console.log("📝 수정 모드 - 데이터 로딩 시작");
-
-            // 🔥 에디터 준비 대기 후 데이터 로드
-            await waitForEditor();
-            await loadEditData();
-        }
-
-        console.log("✅ 초기화 완료");
-    } catch (error) {
-        console.error("❌ 초기화 실패:", error);
-        alert("초기화 실패: " + error.message);
+        await waitForEditor();
+        await loadEditData();
     }
 }
 
-/* --------------------------------------------------
-사용자 권한 체크
--------------------------------------------------- */
+/* ---------------- 권한 확인 ---------------- */
 async function checkUserPermission() {
-    const {data: sessionData} = await supabaseClient.auth.getSession();
+    const {data} = await supabaseClient.auth.getSession();
+    if (!data?.session?.user) return {isAdmin: false};
 
-    if (!sessionData?.session?.user) {
-        throw new Error("로그인이 필요합니다.");
-    }
+    const uid = data.session.user.id;
+    const {data: profile} = await supabaseClient.from("profiles").select("role").eq("id", uid).maybeSingle();
 
-    const userId = sessionData.session.user.id;
-    const {data: profile} = await supabaseClient.from("profiles").select("role").eq("id", userId).maybeSingle();
-
-    return {
-        isAdmin: profile?.role === "admin",
-        userId: userId,
-    };
+    return {isAdmin: profile?.role === "admin", userId: uid};
 }
 
-/* --------------------------------------------------
-에디터 초기화
--------------------------------------------------- */
+/* ---------------- SunEditor ---------------- */
 async function initEditorAsync() {
     return new Promise((resolve) => {
-        let attempts = 0;
-        const check = () => {
+        let chk = 0;
+        const load = setInterval(() => {
             if (typeof SUNEDITOR !== "undefined") {
-                try {
-                    editor = SUNEDITOR.create("editorContent", {
-                        height: 300,
-                        lang: SUNEDITOR_LANG["ko"],
-                        buttonList: [
-                            ["undo", "redo"],
-                            ["formatBlock", "bold", "underline", "italic", "strike"],
-                            ["fontColor", "align", "list", "table"],
-                            ["image", "link"],
-                        ],
-                        placeholder: "갤러리에 대한 설명을 입력하세요...",
-                    });
-                    editorReady = true;
-                    console.log("✅ 에디터 초기화 완료");
-                    resolve();
-                } catch (err) {
-                    console.error("에디터 생성 실패:", err);
-                    editorReady = false;
-                    resolve();
-                }
-            } else if (attempts++ < 50) {
-                // 5초 대기
-                setTimeout(check, 100);
-            } else {
-                console.warn("SUNEDITOR 로드 실패");
-                editorReady = false;
+                editor = SUNEDITOR.create("editorContent", {
+                    height: 350,
+                    lang: SUNEDITOR_LANG["ko"],
+                    buttonList: [
+                        ["undo", "redo"],
+                        ["bold", "underline", "italic", "strike"],
+                        ["align", "list", "fontColor", "table"],
+                        ["image", "link"],
+                    ],
+                    placeholder: "갤러리 내용을 입력하세요...",
+                });
+                editorReady = true;
+                clearInterval(load);
                 resolve();
             }
-        };
-        check();
+            if (chk++ > 40) {
+                // 4초 타임아웃
+                clearInterval(load);
+                resolve();
+            }
+        }, 100);
     });
 }
 
-/* --------------------------------------------------
-에디터 준비 대기 (수정 모드용)
--------------------------------------------------- */
-async function waitForEditor() {
-    if (editorReady && editor) {
-        console.log("✅ 에디터 준비됨");
-        return Promise.resolve();
-    }
-
-    console.log("⏳ 에디터 대기 중...");
-
+function waitForEditor() {
     return new Promise((resolve) => {
-        let attempts = 0;
-        const check = () => {
-            if (editorReady && editor) {
-                console.log("✅ 에디터 준비 완료");
-                resolve();
-            } else if (attempts++ < 50) {
-                setTimeout(check, 100);
-            } else {
-                console.warn("⚠️ 에디터 대기 타임아웃");
+        let chk = 0;
+        const t = setInterval(() => {
+            if (editorReady) {
+                clearInterval(t);
                 resolve();
             }
-        };
-        check();
+            if (chk++ > 50) {
+                clearInterval(t);
+                resolve();
+            }
+        }, 100);
     });
 }
 
-/* --------------------------------------------------
-이벤트 리스너 설정
--------------------------------------------------- */
+/* ---------------- 이벤트 ---------------- */
 function setupEventListeners() {
-    // 썸네일
-    const thumbnailInput = document.getElementById("thumbnail");
-    thumbnailInput?.addEventListener("change", handleThumbnailSelect);
+    const thumbInput = document.getElementById("thumbnail");
+    const thumbRemove = document.getElementById("btnRemoveThumbnail");
+    const thumbPreview = document.getElementById("thumbnailPreview");
 
-    const removeBtn = document.getElementById("btnRemoveThumbnail");
-    removeBtn?.addEventListener("click", removeThumbnail);
+    thumbInput?.addEventListener("change", handleThumbnailSelect);
+    thumbRemove?.addEventListener("click", removeThumbnail);
+    // 썸네일 박스 클릭 → 파일 선택
+    thumbPreview?.addEventListener("click", () => thumbInput?.click());
 
-    const thumbnailPreview = document.getElementById("thumbnailPreview");
-    thumbnailPreview?.addEventListener("click", () => thumbnailInput?.click());
+    const btnAddLink = document.getElementById("btnAddLink");
+    const btnAddFile = document.getElementById("btnAddFile");
 
-    // 추가 버튼
-    document.getElementById("btnAddLink")?.addEventListener("click", () => {
-        document.getElementById("linkContainer").insertAdjacentHTML("beforeend", createLinkRow());
+    btnAddLink?.addEventListener("click", () => {
+        const linkContainer = document.getElementById("linkContainer");
+        linkContainer?.insertAdjacentHTML("beforeend", createLinkRow());
     });
 
-    document.getElementById("btnAddFile")?.addEventListener("click", () => {
-        document.getElementById("fileContainer").insertAdjacentHTML("beforeend", createFileRow());
+    btnAddFile?.addEventListener("click", () => {
+        const fileContainer = document.getElementById("fileContainer");
+        fileContainer?.insertAdjacentHTML("beforeend", createFileRow());
     });
 
-    // 제출
     document.getElementById("btnSubmit")?.addEventListener("click", handleSubmit);
 
-    // 위임 이벤트
-    document.addEventListener("click", handleGlobalClick);
-    document.getElementById("fileContainer")?.addEventListener("change", handleFileContainerChange);
+    // 삭제 / 파일 이름 클릭
+    document.addEventListener("click", (e) => {
+        if (e.target.classList.contains("multi-remove")) {
+            e.target.closest(".multi-item")?.remove();
+        }
+        if (e.target.classList.contains("file-name")) {
+            const wrap = e.target.closest(".file-row");
+            wrap?.querySelector(".file-input")?.click();
+        }
+    });
+
+    // 파일 선택
+    document.getElementById("fileContainer")?.addEventListener("change", (e) => {
+        if (e.target.classList.contains("file-input")) handleFileSelect(e);
+    });
 }
 
-/* --------------------------------------------------
-기본 행 보장
--------------------------------------------------- */
+/* ---------------- 기본행 보장 ---------------- */
 function ensureDefaultRows() {
     const linkContainer = document.getElementById("linkContainer");
     const fileContainer = document.getElementById("fileContainer");
 
-    if (linkContainer?.children.length === 0) {
+    if (linkContainer && !linkContainer.children.length) {
         linkContainer.insertAdjacentHTML("beforeend", createLinkRow());
     }
-    if (fileContainer?.children.length === 0) {
+    if (fileContainer && !fileContainer.children.length) {
         fileContainer.insertAdjacentHTML("beforeend", createFileRow());
     }
 }
 
-/* --------------------------------------------------
-행 생성 함수들
--------------------------------------------------- */
+/* ======================================================
+🔹 링크 / 파일 UI
+====================================================== */
+
 function createLinkRow(value = "") {
     return `
-        <div class="multi-item">
-            <input type="text" class="link-input" placeholder="https://..." value="${escapeHtml(value)}">
-            <button type="button" class="multi-remove">삭제</button>
-        </div>
-    `;
+    <div class="multi-item link-row">
+        <input type="text" class="link-input" placeholder="https://" value="${escapeHtml(value)}">
+        <button type="button" class="multi-remove btn-remove-link">삭제</button>
+    </div>`;
 }
 
-function createFileRow(fileData = null) {
-    const fileId = fileData?.id || `file_${Date.now()}_${++galleryState.fileCounter}`;
-    const fileName = fileData?.name || "파일을 선택하세요";
+/**
+ * file: { id, name, url, size }
+ */
+function createFileRow(file = null) {
+    const id = file?.id || `file_${Date.now()}_${++galleryState.fileCounter}`;
+    const name = file?.name || "첨부파일 선택";
+    const url = file?.url || "";
+    const size = file?.size || "";
 
     return `
-        <div class="multi-item" data-file-id="${fileId}">
-            <div class="file-input-wrapper">
-                <div class="file-name">${escapeHtml(fileName)}</div>
-                <input type="file" class="file-input" data-file-id="${fileId}" accept="*" style="display:none;">
-            </div>
-            <button type="button" class="multi-remove" data-file-id="${fileId}">삭제</button>
-            <div class="file-upload-progress"></div>
-        </div>
-    `;
+    <div class="multi-item file-row"
+         data-file-id="${id}"
+         data-file-url="${escapeHtml(url)}"
+         data-file-name="${escapeHtml(name)}"
+         data-file-size="${size}">
+        <div class="file-name" data-file-id="${id}">${escapeHtml(name)}</div>
+        <input type="file" class="file-input" data-file-id="${id}" style="display:none;">
+        <button type="button" class="multi-remove btn-remove-file" data-file-id="${id}">삭제</button>
+        <div class="file-upload-progress"></div>
+    </div>`;
 }
 
-/* --------------------------------------------------
-전역 클릭 핸들러
--------------------------------------------------- */
-function handleGlobalClick(e) {
-    // 삭제
-    if (e.target.classList.contains("multi-remove")) {
-        const item = e.target.closest(".multi-item");
-        const fileId = item?.dataset.fileId;
-
-        if (fileId) {
-            galleryState.uploadedFiles = galleryState.uploadedFiles.filter((f) => f.id !== fileId);
-            galleryState.existingFiles = galleryState.existingFiles.filter((f) => f.id !== fileId);
-        }
-        item?.remove();
-    }
-
-    // 파일명 클릭
-    if (e.target.classList.contains("file-name")) {
-        e.preventDefault();
-        e.stopPropagation();
-        e.target.closest(".file-input-wrapper")?.querySelector(".file-input")?.click();
-    }
-}
-
-function handleFileContainerChange(e) {
-    if (e.target.classList.contains("file-input")) {
-        handleFileSelect(e);
-    }
-}
-
-/* --------------------------------------------------
-썸네일 핸들러
--------------------------------------------------- */
-async function handleThumbnailSelect(event) {
-    const file = event.target.files[0];
+/* ======================================================
+썸네일 처리
+====================================================== */
+async function handleThumbnailSelect(e) {
+    const file = e.target.files[0];
     if (!file) return;
 
-    try {
-        if (!file.type.startsWith("image/")) {
-            throw new Error("이미지 파일만 업로드 가능합니다.");
-        }
-        if (file.size > 10 * 1024 * 1024) {
-            throw new Error("썸네일은 10MB 이하만 가능합니다.");
-        }
-
-        const uploaded = await uploadThumbnail(file);
-        galleryState.uploadedThumbnail = uploaded;
-
-        updateThumbnailPreview(uploaded.url);
-        document.getElementById("thumbnail_url").value = uploaded.url;
-        document.getElementById("btnRemoveThumbnail").style.display = "inline-block";
-    } catch (error) {
-        alert("썸네일 업로드 실패: " + error.message);
-        event.target.value = "";
+    if (!file.type.startsWith("image/")) {
+        alert("이미지 파일만 업로드 가능합니다.");
+        e.target.value = "";
+        return;
     }
-}
+    if (file.size > 10 * 1024 * 1024) {
+        alert("썸네일은 10MB 이하만 가능합니다.");
+        e.target.value = "";
+        return;
+    }
 
-async function uploadThumbnail(file) {
     const ext = file.name.split(".").pop();
-    const name = `thumbnail_${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const name = `thumb_${Date.now()}.${ext}`;
     const path = `gallery-thumbnails/${name}`;
 
     const {error} = await supabaseClient.storage
     .from("gallery-files")
     .upload(path, file, {cacheControl: "3600", upsert: false});
 
-    if (error) throw new Error(error.message);
+    if (error) {
+        alert("썸네일 업로드 실패: " + error.message);
+        return;
+    }
 
     const {data} = supabaseClient.storage.from("gallery-files").getPublicUrl(path);
+    const url = data.publicUrl;
 
-    return {
-        name: file.name,
-        path: path,
-        url: data.publicUrl,
-        size: file.size,
-        type: file.type,
-        safeName: name,
-    };
-}
-
-function updateThumbnailPreview(url) {
     const img = document.getElementById("thumbnailImage");
-    const placeholder = document.getElementById("thumbnailPlaceholder");
+    const ph = document.getElementById("thumbnailPlaceholder");
+    const hidden = document.getElementById("thumbnail_url");
+    const btnRemove = document.getElementById("btnRemoveThumbnail");
 
-    if (img && placeholder) {
+    if (img && ph && hidden && btnRemove) {
         img.src = url;
         img.style.display = "block";
-        placeholder.style.display = "none";
+        ph.style.display = "none";
+        hidden.value = url;
+        btnRemove.style.display = "inline-block";
     }
 }
 
 function removeThumbnail() {
     const img = document.getElementById("thumbnailImage");
-    const placeholder = document.getElementById("thumbnailPlaceholder");
+    const ph = document.getElementById("thumbnailPlaceholder");
+    const hidden = document.getElementById("thumbnail_url");
+    const btnRemove = document.getElementById("btnRemoveThumbnail");
 
     if (img) {
-        img.style.display = "none";
         img.src = "";
+        img.style.display = "none";
     }
-    if (placeholder) {
-        placeholder.style.display = "flex";
-    }
-
-    document.getElementById("thumbnail").value = "";
-    document.getElementById("thumbnail_url").value = "";
-    document.getElementById("btnRemoveThumbnail").style.display = "none";
-    galleryState.uploadedThumbnail = null;
+    if (ph) ph.style.display = "flex";
+    if (hidden) hidden.value = "";
+    if (btnRemove) btnRemove.style.display = "none";
 }
 
-/* --------------------------------------------------
-파일 핸들러
--------------------------------------------------- */
-async function handleFileSelect(event) {
-    const input = event.target;
+/* ======================================================
+파일 업로드 (data-*에 직접 저장)
+====================================================== */
+async function handleFileSelect(e) {
+    const input = e.target;
     const file = input.files[0];
     if (!file) return;
 
-    const fileItem = input.closest(".multi-item");
-    const nameEl = fileItem?.querySelector(".file-name");
-    const progressEl = fileItem?.querySelector(".file-upload-progress");
+    const wrap = input.closest(".file-row");
+    if (!wrap) return;
 
-    if (!nameEl || !progressEl) return;
+    const nameEl = wrap.querySelector(".file-name");
+    const prog = wrap.querySelector(".file-upload-progress");
 
-    nameEl.textContent = file.name;
-    progressEl.textContent = "업로드 중...";
-    progressEl.className = "file-upload-progress";
-
-    try {
-        const fileId =
-            input.dataset.fileId || fileItem.dataset.fileId || `file_${Date.now()}_${++galleryState.fileCounter}`;
-
-        fileItem.setAttribute("data-file-id", fileId);
-        input.setAttribute("data-file-id", fileId);
-
-        const uploaded = await uploadFile(file, fileId);
-
-        const idx = galleryState.uploadedFiles.findIndex((f) => f.id === fileId);
-        if (idx === -1) {
-            galleryState.uploadedFiles.push(uploaded);
-        } else {
-            galleryState.uploadedFiles[idx] = uploaded;
-        }
-
-        progressEl.textContent = "완료";
-        progressEl.classList.add("file-success");
-    } catch (err) {
-        progressEl.textContent = "실패";
-        progressEl.classList.add("file-error");
-        input.value = "";
-        nameEl.textContent = "파일을 선택하세요";
-        alert("파일 업로드 실패: " + err.message);
-    }
-}
-
-async function uploadFile(file, fileId) {
-    if (file.size > 500 * 1024 * 1024) {
-        throw new Error("파일은 500MB 이하만 가능합니다.");
+    if (nameEl) nameEl.textContent = file.name;
+    if (prog) {
+        prog.textContent = "Uploading...";
+        prog.classList.remove("file-success", "file-error");
     }
 
     const ext = file.name.split(".").pop();
-    const name = `file_${Date.now()}_${fileId}.${ext}`;
+    const id = input.dataset.fileId || wrap.dataset.fileId;
+    const name = `file_${Date.now()}_${id}.${ext}`;
     const path = `gallery-files/${name}`;
 
     const {error} = await supabaseClient.storage
     .from("gallery-files")
     .upload(path, file, {cacheControl: "3600", upsert: false});
 
-    if (error) throw new Error(error.message);
-
-    const {data} = supabaseClient.storage.from("gallery-files").getPublicUrl(path);
-
-    return {
-        id: fileId,
-        name: file.name,
-        path: path,
-        url: data.publicUrl,
-        size: file.size,
-        type: file.type,
-        safeName: name,
-    };
-}
-
-/* --------------------------------------------------
-수정 데이터 로드 (수정 버전)
--------------------------------------------------- */
-async function loadEditData() {
-    if (!galleryState.editId) {
-        console.warn("⚠️ editId 없음");
+    if (error) {
+        if (prog) {
+            prog.textContent = "Error";
+            prog.classList.add("file-error");
+        }
+        alert("파일 업로드 실패: " + error.message);
         return;
     }
 
-    console.log("📥 수정 데이터 로딩 시작", {
-        editId: galleryState.editId,
-        galleryId: galleryState.galleryId,
-    });
+    const {data} = supabaseClient.storage.from("gallery-files").getPublicUrl(path);
+    const url = data.publicUrl;
 
-    try {
-        const {data: gallery, error} = await supabaseClient
-        .from("gallery")
-        .select("*")
-        .eq("id", galleryState.editId)
-        .maybeSingle();
+    // ✅ 이 행에 파일 정보 직접 저장 (상태 배열 필요 없음)
+    wrap.dataset.fileUrl = url;
+    wrap.dataset.fileName = file.name;
+    wrap.dataset.fileSize = String(file.size);
 
-        console.log("📦 DB 응답:", {gallery, error});
-
-        if (error) {
-            console.error("❌ DB 오류:", error);
-            throw error;
-        }
-
-        if (!gallery) {
-            console.error("❌ 갤러리 없음");
-            alert("갤러리를 찾을 수 없습니다.");
-            window.location.href = `/skin/gallery/list.html?id=${galleryState.galleryId}`;
-            return;
-        }
-
-        // 🔥 gallery_id 확인 (선택사항)
-        if (gallery.gallery_id !== galleryState.galleryId) {
-            console.warn("⚠️ gallery_id 불일치", {
-                expected: galleryState.galleryId,
-                actual: gallery.gallery_id,
-            });
-        }
-
-        console.log("✅ 갤러리 데이터:", gallery);
-
-        // 🎯 데이터 렌더링
-        const titleInput = document.getElementById("title");
-        const noticeCheck = document.getElementById("notice");
-
-        if (titleInput) {
-            titleInput.value = gallery.title || "";
-            console.log("📝 제목 설정:", titleInput.value);
-        }
-
-        if (noticeCheck) {
-            noticeCheck.checked = !!gallery.notice;
-            console.log("📌 공지 설정:", noticeCheck.checked);
-        }
-
-        // 에디터 (준비 확인)
-        if (editor && editorReady) {
-            editor.setContents(gallery.description || "");
-            console.log("📄 내용 설정 완료");
-        } else {
-            console.warn("⚠️ 에디터 준비 안됨");
-        }
-
-        // 썸네일
-        if (gallery.image_url) {
-            updateThumbnailPreview(gallery.image_url);
-            document.getElementById("thumbnail_url").value = gallery.image_url;
-            document.getElementById("btnRemoveThumbnail").style.display = "inline-block";
-            console.log("🖼️ 썸네일 설정:", gallery.image_url);
-        }
-
-        // 링크
-        const linkContainer = document.getElementById("linkContainer");
-        if (linkContainer) {
-            linkContainer.innerHTML = "";
-
-            if (gallery.links?.length > 0) {
-                gallery.links.forEach((url) => {
-                    if (url?.trim()) {
-                        linkContainer.insertAdjacentHTML("beforeend", createLinkRow(url));
-                    }
-                });
-                console.log("🔗 링크 설정:", gallery.links.length);
-            } else {
-                linkContainer.insertAdjacentHTML("beforeend", createLinkRow());
-            }
-        }
-
-        // 파일
-        const fileContainer = document.getElementById("fileContainer");
-        if (fileContainer) {
-            fileContainer.innerHTML = "";
-            galleryState.existingFiles = [];
-
-            if (gallery.files?.length > 0) {
-                gallery.files.forEach((fileInfo, index) => {
-                    if (fileInfo?.name || fileInfo?.url) {
-                        const fileId = `existing_${index}_${Date.now()}_${++galleryState.fileCounter}`;
-                        galleryState.existingFiles.push({
-                            ...fileInfo,
-                            id: fileId,
-                            keep: true,
-                        });
-                        fileContainer.insertAdjacentHTML(
-                            "beforeend",
-                            createFileRow({
-                                id: fileId,
-                                name: fileInfo.name || `파일_${index + 1}`,
-                            })
-                        );
-                    }
-                });
-                console.log("📎 파일 설정:", gallery.files.length);
-            } else {
-                fileContainer.insertAdjacentHTML("beforeend", createFileRow());
-            }
-        }
-
-        console.log("✅ 수정 데이터 로딩 완료");
-    } catch (error) {
-        console.error("❌ 로드 실패:", error);
-        alert("데이터 로드 실패: " + error.message);
+    if (prog) {
+        prog.textContent = "완료";
+        prog.classList.add("file-success");
     }
 }
 
-/* --------------------------------------------------
-제출 핸들러
--------------------------------------------------- */
+/* ======================================================
+수정모드 데이터 로드
+====================================================== */
+async function loadEditData() {
+    const {data: post, error} = await supabaseClient
+    .from("gallery")
+    .select("*")
+    .eq("id", galleryState.editId)
+    .maybeSingle();
+
+    if (error || !post) {
+        alert("갤러리를 찾을 수 없습니다.");
+        location.href = `/skin/gallery/list.html?id=${galleryState.galleryId}`;
+        return;
+    }
+
+    const titleEl = document.getElementById("title");
+    const noticeEl = document.getElementById("notice");
+    const thumbImg = document.getElementById("thumbnailImage");
+    const thumbPh = document.getElementById("thumbnailPlaceholder");
+    const thumbHidden = document.getElementById("thumbnail_url");
+    const thumbRemoveBtn = document.getElementById("btnRemoveThumbnail");
+    const linkContainer = document.getElementById("linkContainer");
+    const fileContainer = document.getElementById("fileContainer");
+
+    if (titleEl) titleEl.value = post.title || "";
+    if (noticeEl) noticeEl.checked = !!post.notice;
+    if (editorReady && editor) editor.setContents(post.description || "");
+
+    if (post.image_url && thumbImg && thumbPh && thumbHidden && thumbRemoveBtn) {
+        thumbImg.src = post.image_url;
+        thumbImg.style.display = "block";
+        thumbPh.style.display = "none";
+        thumbHidden.value = post.image_url;
+        thumbRemoveBtn.style.display = "inline-block";
+    }
+
+    // 링크 로드 (문자열/JSON/배열 모두 처리)
+    if (linkContainer) {
+        linkContainer.innerHTML = "";
+        const links = normalize(post.links);
+        if (links.length) {
+            links.forEach((url) => {
+                linkContainer.insertAdjacentHTML("beforeend", createLinkRow(url));
+            });
+        } else {
+            linkContainer.insertAdjacentHTML("beforeend", createLinkRow());
+        }
+    }
+
+    // 파일 로드 (문자열/JSON/배열 → 통일 구조)
+    if (fileContainer) {
+        fileContainer.innerHTML = "";
+        const files = normalize(post.files).map((f, idx) => {
+            if (typeof f === "string") {
+                return {id: `ex_${idx}`, url: f, name: `파일_${idx + 1}`, size: ""};
+            }
+            return {
+                id: `ex_${idx}`,
+                url: f.url || f.path || "",
+                name: f.name || `파일_${idx + 1}`,
+                size: f.size || "",
+            };
+        });
+
+        if (files.length) {
+            files.forEach((f) => {
+                fileContainer.insertAdjacentHTML("beforeend", createFileRow(f));
+            });
+        } else {
+            fileContainer.insertAdjacentHTML("beforeend", createFileRow());
+        }
+    }
+}
+
+/* ======================================================
+저장
+====================================================== */
 async function handleSubmit() {
     if (galleryState.isLoading) return;
-
     galleryState.isLoading = true;
 
     try {
-        const title = document.getElementById("title").value.trim();
-        const notice = document.getElementById("notice").checked;
-        const description = editor?.getContents() || "";
-        const thumbnailUrl = document.getElementById("thumbnail_url").value.trim();
+        const titleEl = document.getElementById("title");
+        const noticeEl = document.getElementById("notice");
+        const thumbHidden = document.getElementById("thumbnail_url");
 
-        // 유효성 검사
-        if (!title) {
+        const titleTxt = titleEl?.value.trim() || "";
+        const desc = editor?.getContents() || "";
+        const thumb = thumbHidden?.value.trim() || "";
+
+        if (!titleTxt) {
             alert("제목을 입력하세요.");
-            document.getElementById("title").focus();
+            titleEl?.focus();
+            galleryState.isLoading = false;
             return;
         }
-
-        if (!thumbnailUrl) {
+        if (!thumb) {
             alert("썸네일을 업로드하세요.");
+            galleryState.isLoading = false;
             return;
         }
-
-        if (!description || description.trim() === "<p><br></p>") {
+        if (!desc || desc === "<p><br></p>") {
             alert("내용을 입력하세요.");
             editor?.focus();
+            galleryState.isLoading = false;
             return;
         }
 
         // 링크 수집
-        const links = [...document.querySelectorAll(".link-input")].map((input) => input.value.trim()).filter(Boolean);
+        const links = Array.from(document.querySelectorAll(".link-input"))
+        .map((el) => el.value.trim())
+        .filter((v) => v);
 
-        // 파일 수집
-        const finalFiles = [];
-        document.querySelectorAll("#fileContainer .multi-item").forEach((item) => {
-            const fileId = item.dataset.fileId;
-            const uploaded = galleryState.uploadedFiles.find((f) => f.id === fileId);
-            const existing = galleryState.existingFiles.find((f) => f.id === fileId);
+        // 파일 수집: DOM data-* 기반 (개수 제한 없음)
+        const files = Array.from(document.querySelectorAll("#fileContainer .file-row"))
+        .map((row, idx) => {
+            const url = row.dataset.fileUrl;
+            const name = row.dataset.fileName || row.querySelector(".file-name")?.textContent?.trim();
+            const size = row.dataset.fileSize;
 
-            if (uploaded) finalFiles.push(uploaded);
-            else if (existing) finalFiles.push(existing);
-        });
+            if (!url) return null;
+            return {
+                url,
+                name: name || `파일_${idx + 1}`,
+                size: size ? Number(size) : null,
+            };
+        })
+        .filter(Boolean);
 
-        // 페이로드
         const payload = {
             gallery_id: galleryState.galleryId,
-            title: escapeHtml(title),
-            description: description,
-            image_url: thumbnailUrl,
-            notice: notice,
-            links: links,
-            files: finalFiles,
+            title: titleTxt,
+            description: desc,
+            image_url: thumb,
+            notice: !!(noticeEl && noticeEl.checked),
+            links,
+            files,
             author_id: galleryState.currentUserId,
             updated_at: new Date().toISOString(),
         };
 
-        if (!galleryState.editId) {
-            payload.created_at = new Date().toISOString();
-            payload.views = 0;
-        }
-
-        console.log("💾 저장 페이로드:", payload);
-
-        // DB 저장
         let result;
         if (galleryState.editId) {
             result = await supabaseClient.from("gallery").update(payload).eq("id", galleryState.editId);
         } else {
+            payload.created_at = new Date().toISOString();
+            payload.views = 0;
             result = await supabaseClient.from("gallery").insert(payload);
         }
 
-        console.log("💾 저장 결과:", result);
-
-        if (result.error) throw result.error;
-
-        alert(galleryState.editId ? "수정 완료" : "등록 완료");
-        window.location.href = `/skin/gallery/list.html?id=${galleryState.galleryId}`;
-    } catch (error) {
-        console.error("❌ 저장 실패:", error);
-        alert("저장 실패: " + error.message);
+        if (result.error) {
+            console.error(result.error);
+            alert("저장 실패: " + result.error.message);
+        } else {
+            alert(galleryState.editId ? "수정이 완료되었습니다." : "등록이 완료되었습니다.");
+            location.href = `/skin/gallery/list.html?id=${galleryState.galleryId}`;
+        }
+    } catch (err) {
+        console.error(err);
+        alert("저장 중 오류 발생: " + err.message);
     } finally {
         galleryState.isLoading = false;
     }
 }
 
-/* --------------------------------------------------
-유틸리티
--------------------------------------------------- */
-function escapeHtml(text) {
-    if (!text) return "";
+/* -------------------------------------------------- */
+function escapeHtml(txt) {
+    if (!txt) return "";
     const div = document.createElement("div");
-    div.textContent = text;
+    div.textContent = txt;
     return div.innerHTML;
+}
+
+// 문자열 / JSON / 배열 모두 배열로 변환
+function normalize(value) {
+    if (!value) return [];
+    if (Array.isArray(value)) return value;
+    if (typeof value === "string") {
+        // JSON 문자열 가능성 체크
+        try {
+            const parsed = JSON.parse(value);
+            return Array.isArray(parsed) ? parsed : [parsed];
+        } catch {
+            return [value];
+        }
+    }
+    return [value];
 }

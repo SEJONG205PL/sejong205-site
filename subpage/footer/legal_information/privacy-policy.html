@@ -9,22 +9,23 @@
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/animate.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/assets/js/header-core.js"></script>
     <script src="/assets/js/breadcrumb.js"></script>
-      <base href="/" />   <!-- 루트 배포이므로 이게 정답 -->
+    <base href="/" /> <!-- 루트 배포이므로 이게 정답 -->
 </head>
 
 <body>
-    <div id="header" data-include="/header.html"></div>
+    <div data-include="/header.html"></div>
 
     <main class="subpage">
 
         <!-- 서브페이지 상단 배너 -->
-    <section class="sub-hero sub-hero--company">
-      <div class="sub-hero__inner width">
-        <p class="sub-hero__label"></p>
-        <h1 class="sub-hero__title"></h1>
-      </div>
-    </section>n>
+        <section class="sub-hero sub-hero--company">
+            <div class="sub-hero__inner width">
+                <p class="sub-hero__label"></p>
+                <h1 class="sub-hero__title"></h1>
+            </div>
+        </section>n>
 
         <!-- 공통 서브 네비게이션 -->
         <nav class="sub-nav">
@@ -46,6 +47,3 @@
 
 
 </html>
-
-
-

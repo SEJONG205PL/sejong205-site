@@ -9,12 +9,13 @@
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/assets/css/animate.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/assets/js/header-core.js"></script>
   <script src="/assets/js/breadcrumb.js"></script>
-    <base href="/" />   <!-- 루트 배포이므로 이게 정답 -->
+  <base href="/" /> <!-- 루트 배포이므로 이게 정답 -->
 </head>
 
 <body>
-  <div id="header" data-include="/header.html"></div>
+  <div data-include="/header.html"></div>
 
   <main class="subpage">
 
@@ -27,25 +28,17 @@
     </section>
 
     <!-- 공통 서브 네비게이션 -->
-        <nav class="sub-nav">
-            <div class="sub-nav__inner width">
-                <!-- JS가 여기 안을 자동으로 채움 -->
-            </div>
-        </nav>
+    <nav class="sub-nav">
+      <div class="sub-nav__inner width">
+        <!-- JS가 여기 안을 자동으로 채움 -->
+      </div>
+    </nav>
 
   </main>
 
   <div id="footer" data-include="/footer.html"></div>
 
-  <script src="/assets/js/include.js"></script>
-  <script src="/assets/js/supabase-init.js"></script>
-  <script src="/assets/js/header-menu.js"></script>
-  <script src="/assets/js/header.js"></script>
-
 </body>
 
 
 </html>
-
-
-

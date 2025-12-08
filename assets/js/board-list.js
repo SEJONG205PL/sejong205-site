@@ -1,4 +1,13 @@
-document.addEventListener("appReady", initBoardList);
+// 게시판 목록 — APP READY 기준
+document.addEventListener("appReady", () => {
+    // supabaseClient 없으면 그냥 포기 (에러 표기)
+    if (!window.supabaseClient) {
+        console.error("❌ supabaseClient not found");
+        showError("데이터베이스 연결에 실패했습니다.");
+        return;
+    }
+    initBoardList();
+});
 
 let boardState = {
     boardId: null,
@@ -67,7 +76,7 @@ async function checkAdminPermission() {
         .from("profiles")
         .select("role")
         .eq("id", sessionData.session.user.id)
-        .single();
+        .maybeSingle();
 
         if (profileError) return false;
 
@@ -162,7 +171,7 @@ function renderTable() {
     const totalRegular = boardState.regularPosts.length;
     let html = "";
 
-    // 공지
+    // 공지 (notice-row + notice-badge)
     boardState.noticePosts.forEach((post) => {
         const adminTd = boardState.isAdmin
             ? `<td class="admin-td"><input type="checkbox" class="admin-checkbox" data-id="${post.id}"></td>`

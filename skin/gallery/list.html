@@ -7,13 +7,15 @@
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/gallery.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/assets/js/header-core.js"></script>
     <script src="/assets/js/breadcrumb.js"></script>
-     <base href="/" />   <!-- 루트 배포이므로 이게 정답 -->
+    <script src="/assets/js/gallery-list.js"></script>
+    <base href="/" /> <!-- 루트 배포이므로 이게 정답 -->
     <title>SEJONG News</title>
 </head>
 
 <body>
-    <div id="header" data-include="/header.html"></div>
+    <div data-include="/header.html"></div>
 
 
 
@@ -49,13 +51,9 @@
 
     </main>
 
-    <div id="footer" data-include="/footer.html"></div>
-    <script src="/assets/js/include.js"></script>
-    <script src="/assets/js/supabase-init.js"></script>
-    <script src="/assets/js/header-menu.js"></script>
-    <script src="/assets/js/header.js"></script>
+    <div data-include="/footer.html"></div>
 
-    <script src="/assets/js/gallery-list.js"></script>
+
 </body>
 
 

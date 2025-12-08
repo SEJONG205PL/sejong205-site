@@ -1,9 +1,9 @@
 /*
 ======================================================
-Board Write/Edit - OPTIMIZED VERSION
-- 병렬 처리로 초기화 속도 개선
-- 수정 데이터 로딩 최적화
-- 불필요한 대기 시간 제거
+Board Write/Edit
+- appReady 이벤트 기준으로 초기화
+- 관리자만 접근
+- 글쓰기 + 수정 + 파일 업로드 유지
 ======================================================
 */
 
@@ -19,33 +19,26 @@ let boardState = {
     boardId: null,
 };
 
-/* --------------------------------------------------
-초기화 - 즉시 실행
--------------------------------------------------- */
-(function initWhenReady() {
-    // Supabase 대기
-    if (!window.supabaseClient) {
-        const check = () => {
-            if (window.supabaseClient) {
-                initBoardWrite();
-            } else {
-                setTimeout(check, 50);
-            }
-        };
+let boardWriteInitialized = false;
 
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", check);
-        } else {
-            check();
-        }
-    } else {
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", initBoardWrite);
-        } else {
-            initBoardWrite();
-        }
+/* --------------------------------------------------
+appReady 기준 초기화
+-------------------------------------------------- */
+document.addEventListener("appReady", () => {
+    if (boardWriteInitialized) return;
+    boardWriteInitialized = true;
+
+    if (!window.supabaseClient) {
+        alert("데이터베이스 연결에 실패했습니다.");
+        return;
     }
-})();
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initBoardWrite);
+    } else {
+        initBoardWrite();
+    }
+});
 
 /* --------------------------------------------------
 메인 초기화
@@ -54,22 +47,19 @@ async function initBoardWrite() {
     try {
         console.log("⚡ 보드 글쓰기 초기화 시작");
 
-        // URL 파라미터 파싱
         const params = new URLSearchParams(window.location.search);
         boardState.boardId = Number(params.get("id"));
         boardState.editId = params.get("post");
 
-        // 게시판 ID 유효성 검사
         if (!boardState.boardId) {
             alert("잘못된 게시판 경로입니다.");
             window.location.href = "/skin/board/list.html";
             return;
         }
 
-        // 🚀 병렬 처리: 사용자 정보 + 에디터 초기화 동시 실행
+        // 사용자 권한 + 에디터 초기화 병렬 처리
         const [authResult] = await Promise.all([checkUserPermission(), initEditorAsync()]);
 
-        // 권한 체크
         if (!authResult.isAdmin) {
             alert("관리자만 접근할 수 있습니다.");
             window.location.href = `/skin/board/list.html?id=${boardState.boardId}`;
@@ -79,16 +69,17 @@ async function initBoardWrite() {
         boardState.isAdmin = true;
         boardState.currentUserId = authResult.userId;
 
-        // UI 설정
+        // UI
         ensureDefaultRows();
         setupEventListeners();
 
-        // 수정 모드면 데이터 로드
+        // 수정 모드
         if (boardState.editId) {
-            document.querySelector(".sub-hero__title").innerText = "BOARD_EDIT";
-            document.getElementById("btnSubmit").innerText = "수정완료";
+            const titleEl = document.querySelector(".sub-hero__title");
+            if (titleEl) titleEl.innerText = "BOARD_EDIT";
+            const submitBtn = document.getElementById("btnSubmit");
+            if (submitBtn) submitBtn.innerText = "수정완료";
 
-            // 에디터 준비 대기 후 로드
             await loadEditData();
         }
 
@@ -100,7 +91,7 @@ async function initBoardWrite() {
 }
 
 /* --------------------------------------------------
-사용자 권한 체크 (병렬 처리)
+사용자 권한 체크
 -------------------------------------------------- */
 async function checkUserPermission() {
     try {
@@ -124,11 +115,10 @@ async function checkUserPermission() {
 }
 
 /* --------------------------------------------------
-에디터 초기화 (비동기)
+에디터 초기화
 -------------------------------------------------- */
 async function initEditorAsync() {
     return new Promise((resolve, reject) => {
-        // SUNEDITOR 로드 대기
         let attempts = 0;
         const checkEditor = () => {
             if (typeof SUNEDITOR !== "undefined") {
@@ -150,7 +140,6 @@ async function initEditorAsync() {
                     reject(new Error("에디터 생성 실패: " + err.message));
                 }
             } else if (attempts >= 50) {
-                // 5초 대기
                 reject(new Error("SUNEDITOR 로드 타임아웃"));
             } else {
                 attempts++;
@@ -199,10 +188,10 @@ function ensureDefaultRows() {
     const linkContainer = document.getElementById("linkContainer");
     const fileContainer = document.getElementById("fileContainer");
 
-    if (linkContainer.children.length === 0) {
+    if (linkContainer && linkContainer.children.length === 0) {
         linkContainer.insertAdjacentHTML("beforeend", createLinkRow());
     }
-    if (fileContainer.children.length === 0) {
+    if (fileContainer && fileContainer.children.length === 0) {
         fileContainer.insertAdjacentHTML("beforeend", createFileRow());
     }
 }
@@ -220,6 +209,18 @@ function setupEventListeners() {
     });
 
     document.getElementById("btnSubmit")?.addEventListener("click", handleSubmit);
+
+    const cancelBtn = document.getElementById("btnCancel");
+    if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+            if (!boardState.boardId) {
+                history.back();
+            } else {
+                location.href = `/skin/board/list.html?id=${boardState.boardId}`;
+            }
+        });
+    }
+
     document.addEventListener("click", handleGlobalClick);
     document.getElementById("fileContainer")?.addEventListener("change", handleFileContainerChange);
 }
@@ -228,9 +229,9 @@ function setupEventListeners() {
 전역 클릭 핸들러
 -------------------------------------------------- */
 function handleGlobalClick(e) {
-    // 삭제 버튼
     if (e.target.classList.contains("multi-remove")) {
         const item = e.target.closest(".multi-item");
+        if (!item) return;
         const fileId = item.dataset.fileId;
 
         boardState.uploadedFiles = boardState.uploadedFiles.filter((f) => f.id !== fileId);
@@ -239,7 +240,6 @@ function handleGlobalClick(e) {
         item.remove();
     }
 
-    // 파일명 클릭
     if (e.target.classList.contains("file-name")) {
         const input = e.target.closest(".file-input-wrapper")?.querySelector(".file-input");
         if (input) input.click();
@@ -329,7 +329,7 @@ async function uploadFile(file, fileId) {
 }
 
 /* --------------------------------------------------
-수정 데이터 로드 (최적화)
+수정 데이터 로드
 -------------------------------------------------- */
 async function loadEditData() {
     if (!boardState.editId) return;
@@ -337,7 +337,6 @@ async function loadEditData() {
     console.log("📥 수정 데이터 로딩 시작");
 
     try {
-        // 게시글 데이터 로드
         const {data: post, error} = await supabaseClient
         .from("posts")
         .select("*")
@@ -350,16 +349,13 @@ async function loadEditData() {
             return;
         }
 
-        // 🎯 즉시 렌더링
         document.getElementById("title").value = post.title || "";
         document.getElementById("notice").checked = !!post.notice;
 
-        // 에디터 콘텐츠 설정
         if (editor) {
             editor.setContents(post.content || "");
         }
 
-        // 링크 렌더링
         const linkContainer = document.getElementById("linkContainer");
         linkContainer.innerHTML = "";
 
@@ -371,7 +367,6 @@ async function loadEditData() {
             linkContainer.insertAdjacentHTML("beforeend", createLinkRow());
         }
 
-        // 파일 렌더링
         const fileContainer = document.getElementById("fileContainer");
         fileContainer.innerHTML = "";
         boardState.existingFiles = [];
@@ -416,21 +411,20 @@ async function handleSubmit() {
         const content = editor ? editor.getContents() : "";
         const notice = document.getElementById("notice")?.checked ?? false;
 
-        // 유효성 검사
         if (!title) {
             alert("제목을 입력하세요.");
+            boardState.isLoading = false;
             return;
         }
 
         if (!content || content.trim() === "<p><br></p>") {
             alert("내용을 입력하세요.");
+            boardState.isLoading = false;
             return;
         }
 
-        // 링크 수집
         const links = [...document.querySelectorAll(".link-input")].map((input) => input.value.trim()).filter(Boolean);
 
-        // 파일 수집
         let finalFiles = [];
         const fileItems = document.querySelectorAll("#fileContainer .multi-item");
 
@@ -446,7 +440,6 @@ async function handleSubmit() {
             }
         });
 
-        // 페이로드 생성
         const payload = {
             board_id: boardState.boardId,
             title: escapeHtml(title),
@@ -463,7 +456,6 @@ async function handleSubmit() {
             payload.views = 0;
         }
 
-        // DB 저장
         let supaResult;
 
         if (boardState.editId) {
