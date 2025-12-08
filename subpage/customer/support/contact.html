@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/email_form.CSS">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/assets/js/menu-map.js"></script>
+    <script src="/assets/js/breadcrumb.js"></script>
+    <title>Contact Us</title>
+</head>
+
+<body>
+    <div id="header" data-include="/header.html"></div>
+
+
+    <main class="subpage">
+
+        <!-- 서브페이지 상단 배너 -->
+        <section class="sub-hero sub-hero--company">
+            <div class="sub-hero__inner width">
+                <p class="sub-hero__label" id="breadcrumb"></p>
+                <h1 class="sub-hero__title"></h1>
+                <p class="sub-hero__desc">
+                    SEJONG205 is a multi-vendor platform dedicated to Korean products in Poland,
+                    connecting trusted local vendors with customers who love K-culture.
+                </p>
+            </div>
+        </section>
+
+        <nav class="sub-nav">
+            <div class="sub-nav__inner width">
+                <!-- JS가 여기 안을 자동으로 채움 -->
+            </div>
+        </nav>
+
+        <!-- ✔ 문의 전송 폼 -->
+        <section class="contact-section width">
+            <h2 class="contact-title">Send Inquiry</h2>
+
+            <form id="contactForm" class="contact-form">
+
+                <div class="form-group">
+                    <label>Your Email</label>
+                    <input type="email" id="customer_email" placeholder="you@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Message</label>
+                    <textarea id="customer_message" rows="6" placeholder="Write your message..." required></textarea>
+                </div>
+
+                <button class="contact-btn" type="submit">Send</button>
+
+                <p id="contactResult" class="contact-result"></p>
+            </form>
+        </section>
+    </main>
+
+    <div id="footer" data-include="/footer.html"></div>
+
+    <script src="/assets/js/include.js"></script>
+    <script src="/assets/js/supabase-init.js"></script>
+    <script src="/assets/js/header-menu.js"></script>
+    <script src="/assets/js/header.js"></script>
+
+    <script src="/assets/js/send-email.js"></script>
+</body>
+
+</html>

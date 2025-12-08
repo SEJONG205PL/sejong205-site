@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEJONG205 | Company</title>
+    <!-- CSS: 3단계 위로 올라가서 assets 폴더 접근 -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/animate.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/assets/js/breadcrumb.js"></script>
+</head>
+
+<body>
+    <div id="header" data-include="/header.html"></div>
+
+    <main class="subpage">
+
+        <!-- 서브페이지 상단 배너 -->
+        <section class="sub-hero sub-hero--company">
+            <div class="sub-hero__inner width">
+                <h1 class="sub-hero__title">privacy policy</h1>
+            </div>
+        </section>
+
+        <!-- 공통 서브 네비게이션 -->
+        <nav class="sub-nav">
+            <div class="sub-nav__inner width">
+                <!-- Company 서브 메뉴 예시: 필요한 만큼 추가 가능 -->
+                <a href="/subpage/footer/legal_information/legal-info.html" class="sub-nav__item">
+                    legal info
+                </a>
+                <a href="/subpage/footer/legal_information/legal-notice.html" class="sub-nav__item">
+                    legal notice
+                </a>
+                <a href="/subpage/footer/legal_information/privacy-policy.html" class="sub-nav__item is-active">
+                    legal notice
+                </a>
+            </div>
+        </nav>
+
+    </main>
+
+    <div id="footer" data-include="/footer.html"></div>
+
+    <script src="/assets/js/include.js"></script>
+    <script src="/assets/js/supabase-init.js"></script>
+    <script src="/assets/js/header-menu.js"></script>
+    <script src="/assets/js/header.js"></script>
+
+</body>
+
+</html>
