@@ -98,25 +98,80 @@ Breadcrumb & Sub-page Info
                 titleEl.textContent = galleryInfo.title;
             }
         }
-        // ---------- 일반 subpage ----------
-        else if (pathname.startsWith("/subpage/")) {
-            // 1) depth3 중 URL이 존재하는 항목에서 매칭
-            currentMenu = menuData.find((m) => m.depth === 3 && m.link && m.link === pathname);
+       // ---------- 일반 subpage ----------
+else if (pathname.startsWith("/subpage/")) {
+    // 1) depth3 중 URL이 존재하는 항목에서 매칭
+    currentMenu = menuData.find((m) => m.depth === 3 && m.link && m.link === pathname);
 
-            // 2) 확장자/경로 차이 허용 (fallback)
-            if (!currentMenu) {
-                currentMenu = menuData.find((m) => m.depth === 3 && pathname.includes(m.link.replace(/\.html$/, "")));
-            }
+    // 2) 확장자/경로 차이 허용 (fallback)
+    if (!currentMenu) {
+        currentMenu = menuData.find((m) => m.depth === 3 && pathname.includes(m.link.replace(/\.html$/, "")));
+    }
 
-            // 3) 가장 강력 fallback: 파일명으로 매칭 (overview.html -> "overview")
-            if (!currentMenu) {
-                const key = pathname.split("/").pop().replace(".html", "");
-                currentMenu = menuData.find((m) => m.depth === 3 && m.name.toLowerCase().includes(key.toLowerCase()));
-            }
+    // 3) 파일명 기반 fallback
+    if (!currentMenu) {
+        const key = pathname.split("/").pop().replace(".html", "");
+        currentMenu = menuData.find((m) => m.depth === 3 && m.name.toLowerCase().includes(key.toLowerCase()));
+    }
 
-            // 제목 적용
-            if (currentMenu && titleEl) titleEl.textContent = currentMenu.name;
-        }
+    if (currentMenu && titleEl) titleEl.textContent = currentMenu.name;
+}
+
+
+/* ======================================================
+📌 여기 아래 "Footer 개별 네비" 추가
+====================================================== */
+
+// Footer - legal_information
+if (pathname.startsWith("/subpage/footer/legal_information/")) {
+    createFooterMenu("Legal Information", [
+        {name:"Legal Info", link:"/subpage/footer/legal_information/legal-info.html"},
+        {name:"Legal Notice", link:"/subpage/footer/legal_information/legal-notice.html"},
+        {name:"Privacy Policy", link:"/subpage/footer/legal_information/privacy-policy.html"},
+    ]);
+    return;
+}
+
+// Footer - policies
+if (pathname.startsWith("/subpage/footer/policies/")) {
+    createFooterMenu("Policies", [
+        {name:"Refund Policy", link:"/subpage/footer/policies/refund.html"},
+        {name:"Shipping Policy", link:"/subpage/footer/policies/shipping.html"},
+    ]);
+    return;
+}
+
+// Footer - vendor
+if (pathname.startsWith("/subpage/footer/vendor/")) {
+    createFooterMenu("Vendor Guide", [
+        {name:"Vendor Terms", link:"/subpage/footer/vendor/terms.html"},
+        {name:"Settlement Guide", link:"/subpage/footer/vendor/settlement.html"},
+        {name:"VAT Regulations", link:"/subpage/footer/vendor/vat.html"},
+        {name:"Advertisement", link:"/subpage/footer/vendor/advertisement.html"},
+    ]);
+    return;
+}
+
+
+/* ===== footer 공용 함수 ===== */
+function createFooterMenu(title, menuList) {
+    if (breadcrumbEl) breadcrumbEl.textContent = title;
+
+    if (titleEl) {
+        const file = location.pathname.split("/").pop();
+        const match = menuList.find(m => m.link.endsWith(file));
+        titleEl.textContent = match ? match.name : title;
+    }
+
+    if (subNavInner) {
+        subNavInner.innerHTML = menuList.map(m =>
+            `<a href="${m.link}" class="sub-nav__item ${m.link===location.pathname ? 'is-active':''}">
+                ${m.name}
+            </a>`
+        ).join("");
+    }
+}
+
 
         // ---------- breadcrumb ----------
         if (breadcrumbEl) {
@@ -151,5 +206,6 @@ Breadcrumb & Sub-page Info
         }
     }
 })();
+
 
 
