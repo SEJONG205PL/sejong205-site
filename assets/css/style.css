@@ -191,20 +191,36 @@ a { text-decoration: none; color: inherit; }
 .bridge-text p{font-size:22px;color:#555;max-width:900px;margin:0 auto;line-height:1.6;}
 
 /* 메인 세번째 섹션 */
-.kshow-sec{width:100%;padding:90px 0;/*background:#fafafa;*/}
+/* =========================== Base Layout =========================== */
+.kshow-sec{width:100%;padding:90px 0;}
 .kshow-title{text-align:center;margin-bottom:50px;}
 .kshow-title h2{font-size:34px;font-weight:800;color:#111;}
 .kshow-title p{font-size:15px;color:#555;margin-top:8px;}
 .kshow-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;width:92%;max-width:1500px;margin:0 auto;}
 .kshow-item{position:relative;height:260px;overflow:hidden;border-radius:14px;cursor:pointer;display:block;}
+/* =========================== Image =========================== */
 .kshow-bg{position:absolute;top:0;left:0;width:100%;height:100%;background-size:cover;background-position:center;transition:transform .6s ease,opacity .3s;}
 .kshow-item:hover .kshow-bg{transform:scale(1.14);opacity:.85;}
-.kshow-item::after{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,71,186,0.28);opacity:0;transition:.35s;}
+.kshow-item::after{content:"";position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,71,186,.28);opacity:0;transition:.35s;}
 .kshow-item:hover::after{opacity:1;}
+/* =========================== Text Animation =========================== */
 .kshow-text{position:absolute;bottom:22px;left:22px;color:#fff;z-index:3;transform:translateY(20px);opacity:0;transition:.35s;}
 .kshow-item:hover .kshow-text{transform:translateY(0);opacity:1;}
 .kshow-text h3{font-size:26px;font-weight:800;margin-bottom:4px;}
 .kshow-text p{font-size:14px;opacity:.9;}
+/* =========================== Hover 반응 향상 (중요) =========================== */
+.kshow-item,
+.kshow-bg,
+.kshow-text{
+  will-change:transform,opacity;
+  transform:translateZ(0);
+  backface-visibility:hidden;
+  perspective:1000;
+}
+.kshow-item{transition:filter .25s ease-out;}
+.kshow-item:hover .kshow-bg{transition:transform .45s ease-out,opacity .3s ease-out;}
+.kshow-item:hover .kshow-text{transition:transform .28s ease-out,opacity .28s ease-out;}
+
 
 /* tablet */
 @media(max-width:1024px){
