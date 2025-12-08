@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:image" content="https://sejong205.com/assets/img/thum.png">
+  <title>SEJONG205</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/animate.css">
+  <link rel="icon" href="assets/img/favi.ico" type="image/x-icon" sizes="16x16">
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="assets/js/include.js"></script>
+  <script src="assets/js/supabase-init.js"></script>
+  <script src="assets/js/header-menu.js"></script>
+  <script src="assets/js/header.js"></script>
+  <script src="assets/js/section.js"></script>
+  <script src="assets/js/smooth-scroll.js"></script>
+  <script src="assets/js/top-button.js"></script>
+
+
+
+</head>
+
+<body>
+  <!-- HEADER -->
+  <div id="header" data-include="header.html"></div>
+
+  <section class="hero-slider">
+    <div class="hero-slide active" data-bg="assets/img/slide1.jpg">
+      <div class="hero-content width">
+        <h1>Korean Products,<br>Delivered Across Europe.</h1>
+        <p>Poland’s first Korea-focused multi-vendor platform.</p>
+        <!-- <a href="" class="hero-btn">Explore Products</a> -->
+      </div>
+    </div>
+
+    <div class="hero-slide" data-bg="assets/img/slide2.jpg">
+      <div class="hero-content">
+        <h1>Verified Korean Brands.</h1>
+        <p>Trusted products with certified quality.</p>
+        <!-- <a href="assets/img/" class="hero-btn">About Us</a> -->
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <button class="hero-prev">❮</button>
+    <button class="hero-next">❯</button>
+  </section>
+
+  <section class="bridge-sec">
+    <div class="bridge-inner">
+
+      <div class="bridge-graphic" data-aos="fade-up">
+        <div class="bridge-korea"></div>
+        <div class="bridge-line"></div>
+        <div class="bridge-europe"></div>
+      </div>
+
+      <div class="bridge-text" data-swiper-animation="fadeInup" data-aos-delay="150">
+        <h2>Connecting Korea<br>to Europe</h2>
+        <p>SEJONG205 builds a digital bridge enabling Korean brands,
+          lifestyle and culture to reach customers across Europe.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="kshow-sec">
+    <div class="kshow-title" data-aos="fade-up">
+      <h2>Our Main Product Categories</h2>
+      <p>Discover the best-selling Korean products available on SEJONGO.</p>
+    </div>
+    <div class="kshow-grid">
+
+      <a class="kshow-item" data-aos="fade-up">
+        <div class="kshow-bg" style="background-image:url('assets/img/kfood.jpg');"></div>
+        <div class="kshow-text">
+          <h3>K-FOOD</h3>
+          <p>Korean flavors across Europe</p>
+        </div>
+      </a>
+
+      <a class="kshow-item" data-aos="fade-up" data-aos-delay="80">
+        <div class="kshow-bg" style="background-image:url('assets/img/kbeauty.jpg');"></div>
+        <div class="kshow-text">
+          <h3>K-BEAUTY</h3>
+          <p>Leading skincare innovations</p>
+        </div>
+      </a>
+
+      <a class="kshow-item" data-aos="fade-up" data-aos-delay="160">
+        <div class="kshow-bg" style="background-image:url('assets/img/klife.jpg');"></div>
+        <div class="kshow-text">
+          <h3>K-LIFESTYLE</h3>
+          <p>Everyday essentials from Korea</p>
+        </div>
+      </a>
+
+      <a class="kshow-item" data-aos="fade-up" data-aos-delay="240">
+        <div class="kshow-bg" style="background-image:url('assets/img/kpop.jpg');"></div>
+        <div class="kshow-text">
+          <h3>K-POP</h3>
+          <p>Official merchandise & culture</p>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+
+
+
+  <button id="topBtn" class="top-btn">TOP</button>
+  <!-- FOOTER -->
+  <div id="footer" data-include="footer.html"></div>
+
+
+
+</body>
+
+
+</html>

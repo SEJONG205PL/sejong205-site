@@ -1,0 +1,89 @@
+<!-- ================= TOP LANGUAGE BAR ================= -->
+<div class="top-bar">
+    <div class="top-inner width">
+
+        <!-- 로그인 / 로그아웃 -->
+        <div class="header-right">
+            <span id="headerLoginBtn" class="header-link">Login</span>
+
+            <div id="headerUserBox" class="user-box hide">
+                <span id="headerDashboardIcon" class="user-icon">👤</span>
+                <span id="headerLogoutBtn" class="logout-text">Logout</span>
+            </div>
+        </div>
+
+        <!-- 언어 (태극기 컬러 톤 + 아이콘) -->
+        <div class="header_rink">
+            <!-- EN (기본) -->
+            <a class="lang-link" data-lang="en">
+                <img src="https://flagcdn.com/16x12/gb.png" alt="English">
+                <span>EN</span>
+            </a>
+
+            <!-- KO -->
+            <a class="lang-link" data-lang="ko">
+                <img src="https://flagcdn.com/16x12/kr.png" alt="Korean">
+                <span>KO</span>
+            </a>
+
+            <!-- PL -->
+            <a class="lang-link" data-lang="pl">
+                <img src="https://flagcdn.com/16x12/pl.png" alt="Polish">
+                <span>PL</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ================= PC HEADER ================= -->
+<header class="main-header pc">
+    <div class="header-inner width">
+
+        <!-- LOGO -->
+        <div class="logo">
+            <a href="/"><img src="/assets/img/logo.jpg" alt="SEJONG205"></a>
+        </div>
+
+        <!-- NAVIGATION (DB 연동 그대로 사용) -->
+        <div class="nav-wrapper">
+            <nav class="nav-menu" id="pcMenu"></nav>
+            <div class="mega-menus-container" id="megaContainer"></div>
+        </div>
+    </div>
+</header>
+
+<!-- ================= MOBILE ================= -->
+<div class="mob">
+    <header class="main-header mobile">
+        <button class="mobile-nav-toggle"><span></span><span></span><span></span></button>
+
+        <div class="mob_logo">
+            <a href="/"><img src="/assets/img/logo.jpg" alt="SEJONG205"></a>
+        </div>
+
+        <nav class="mobile-nav">
+            <ul class="mobile-menu" id="mobileMenu"></ul>
+        </nav>
+    </header>
+</div>
+
+<!-- ================== SCRIPT ================== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/supabase-init.js"></script>
+<script>
+    // 현재 URL 기준으로 언어 강조 (간단 하이라이트)
+    (function () {
+        const path = location.pathname;
+        const links = document.querySelectorAll('.header_rink .lang-link');
+        links.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === '/kr/' && path.startsWith('/kr/')) {
+                link.classList.add('active');
+            } else if (href === '/pl/' && path.startsWith('/pl/')) {
+                link.classList.add('active');
+            } else if (href === '/' && !path.startsWith('/kr/') && !path.startsWith('/pl/')) {
+                link.classList.add('active');
+            }
+        });
+    })();
+</script>
