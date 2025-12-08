@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>갤러리 작성 | SEJONG205</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/gallery.css">
+
+    <!-- SunEditor -->
+    <link href="https://cdn.jsdelivr.net/npm/suneditor@latest/dist/css/suneditor.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/suneditor@latest/dist/suneditor.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/suneditor@latest/src/lang/ko.js"></script>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Write JS -->
+    <script defer src="/assets/js/gallery-write.js"></script>
+</head>
+
+<body>
+
+    <!-- 로딩 오버레이 -->
+    <div id="loadingOverlay" style="display: none;" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>처리 중...</p>
+        </div>
+    </div>
+
+    <div id="header" data-include="/header.html"></div>
+
+    <main class="subpage">
+
+        <section class="sub-hero sub-hero--company">
+            <div class="sub-hero__inner width">
+                <p class="sub-hero__label">SEJONG205</p>
+                <h1 class="sub-hero__title">SEJONG Nenws_WRITE</h1>
+            </div>
+        </section>
+
+        <div class="gallery-detail-form">
+            <div class="write-wrap width">
+
+                <form id="galleryForm" onsubmit="return false;">
+
+                    <!-- 공지 체크 -->
+                    <div class="form-row" style="display: flex;">
+                        <label for="notice">공지 설정</label>
+                        <input type="checkbox" id="notice" name="notice">
+                    </div>
+
+                    <!-- 제목 -->
+                    <div class="form-row">
+                        <label for="title">제목 *</label>
+                        <input type="text" id="title" name="title" class="input-text" placeholder="갤러리 제목을 입력하세요"
+                            required>
+                    </div>
+
+                    <!-- 🔥 썸네일 이미지 업로드 -->
+                    <div class="form-row">
+                        <label for="thumbnail">썸네일 이미지 *</label>
+                        <div class="thumbnail-upload-container">
+                            <div class="thumbnail-preview" id="thumbnailPreview">
+                                <img id="thumbnailImage" src="/assets/img/news/default.jpg" alt="썸네일 미리보기"
+                                    style="display: none;">
+                                <div class="thumbnail-placeholder" id="thumbnailPlaceholder">
+                                    <div class="upload-icon">📷</div>
+                                    <p>썸네일 이미지를 업로드하세요</p>
+                                    <p class="help-text">권장 크기: 800x600px, 최대 10MB</p>
+                                </div>
+                            </div>
+                            <input type="file" id="thumbnail" name="thumbnail" class="file-input" accept="image/*"
+                                required>
+                            <button type="button" id="btnRemoveThumbnail" class="btn-mini"
+                                style="display: none;">삭제</button>
+                        </div>
+                        <input type="hidden" id="thumbnail_url" name="thumbnail_url">
+                    </div>
+
+                    <!-- 에디터 -->
+                    <div class="form-row">
+                        <label for="editorContent">설명 *</label>
+                        <textarea id="editorContent" name="description" style="display: none;"></textarea>
+                    </div>
+
+                    <!-- 🔥 링크 -->
+                    <div class="form-row">
+                        <label>링크</label>
+                        <div id="linkContainer" class="multi-input-wrap"></div>
+                        <button type="button" id="btnAddLink" class="btn-mini">+ Add link</button>
+                    </div>
+
+                    <!-- 🔥 파일 첨부 여러 개 -->
+                    <div class="form-row">
+                        <label>파일</label>
+                        <div id="fileContainer" class="multi-input-wrap"></div>
+                        <button type="button" id="btnAddFile" class="btn-mini">+ Add file</button>
+                        <p class="help-text">Select a file (image, document, etc.)</p>
+                    </div>
+
+                    <!-- 버튼 -->
+                    <div class="btn-area">
+                        <button class="btn" onclick="history.back()">취소</button>
+                        <button type="submit" class="btn btn-dark" id="btnSubmit">작성완료</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer" data-include="/footer.html"></div>
+
+    <script src="/assets/js/include.js"></script>
+    <script src="/assets/js/supabase-init.js"></script>
+    <script src="/assets/js/header-menu.js"></script>
+    <script src="/assets/js/header.js"></script>
+
+</body>
+
+</html>

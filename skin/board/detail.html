@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 상세 | SEJONG205</title>
+
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/board.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/assets/js/supabase-init.js"></script>
+</head>
+
+<body>
+
+    <div id="header" data-include="/header.html"></div>
+
+    <main class="subpage">
+
+        <section class="sub-hero sub-hero--company">
+            <div class="sub-hero__inner width">
+                <p class="sub-hero__label" id="breadcrumb"></p>
+                <h1 class="sub-hero__title"></h1>
+            </div>
+        </section>
+
+        <div class="board_form">
+            <div class="post-detail-container width">
+
+                <div class="admin-actions" id="adminActions">
+                    <button class="edit-btn">수정</button>
+                    <button class="delete-btn">삭제</button>
+                </div>
+
+                <div id="noticeIndicator"></div>
+                <h1 class="post-title"></h1>
+
+                <div class="post-meta">
+                    <span class="author"></span>
+                    <span class="date"></span>
+                    <span class="views"></span>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="post-content"></div>
+
+                <div id="extraArea" class="extra-area"></div>
+
+                <div class="divider"></div>
+
+                <div class="post-footer">
+                    <a href="#" id="backToList" class="list-btn">inventory</a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="footer" data-include="/footer.html"></div>
+
+    <script src="/assets/js/include.js"></script>
+    <script src="/assets/js/header-menu.js"></script>
+    <script src="/assets/js/header.js"></script>
+
+    <script src="/assets/js/board-detail.js"></script>
+
+</body>
+
+</html>

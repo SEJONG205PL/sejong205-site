@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/gallery.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/assets/js/breadcrumb.js"></script>
+    <title>SEJONG News</title>
+</head>
+
+<body>
+    <div id="header" data-include="/header.html"></div>
+
+
+
+    <main class="subpage">
+
+        <!-- 서브페이지 상단 배너 -->
+        <section class="sub-hero sub-hero--company">
+            <div class="sub-hero__inner width">
+                <p class="sub-hero__label" id="breadcrumb"></p>
+                <h1 class="sub-hero__title"></h1>
+            </div>
+        </section>
+
+        <div class="gallery-detail-form width">
+
+            <!-- 관리자 영역 -->
+            <div class="admin_board hide">
+                <div class="board-top">
+                    <button id="btnWrite">글쓰기</button>
+                    <button id="btnDeleteSelected">선택삭제</button>
+                    <button id="btnDeleteAll">전체삭제</button>
+                </div>
+            </div>
+
+            <div class="sejong-news-wrapper width">
+                <div class="sn-grid">
+                    <!-- 갤러리 카드가 여기에 동적으로 생성됩니다 -->
+                </div>
+
+                <div class="sn-pagination"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="footer" data-include="/footer.html"></div>
+    <script src="/assets/js/include.js"></script>
+    <script src="/assets/js/supabase-init.js"></script>
+    <script src="/assets/js/header-menu.js"></script>
+    <script src="/assets/js/header.js"></script>
+
+    <script src="/assets/js/gallery-list.js"></script>
+</body>
+
+</html>

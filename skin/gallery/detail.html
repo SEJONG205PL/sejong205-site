@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>갤러리 상세 | SEJONG205 Community</title>
+
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/gallery.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <div id="header" data-include="/header.html"></div>
+
+
+    <main class="subpage">
+
+        <section class="sub-hero sub-hero--company">
+            <div class="sub-hero__inner width">
+                <p class="sub-hero__label" id="breadcrumb"></p>
+                <h1 class="sub-hero__title"></h1>
+            </div>
+        </section>
+
+        <div class="gallery-detail-form">
+            <div class="gallery-detail-container width">
+
+                <!-- 관리자 전용 - 상단에 위치 -->
+                <div class="admin-actions" id="adminActions">
+                    <button class="edit-btn">수정</button>
+                    <button class="delete-btn">삭제</button>
+                </div>
+
+                <div id="noticeIndicator"></div>
+                <h1 class="gallery-detail-title"></h1>
+
+                <div class="gallery-detail-meta">
+                    <span class="author"></span>
+                    <span class="date"></span>
+                    <span class="views"></span>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="gallery-detail-content"></div>
+
+                <!-- 🔥 링크/파일 출력 영역 (ID 중복 제거) -->
+                <div id="extraArea" class="extra-area"></div>
+
+                <div class="divider"></div>
+
+                <div class="gallery-detail-footer">
+                    <a href="/subpage/gallery/list.html" class="list-btn">inventory</a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="footer" data-include="/footer.html"></div>
+
+    <script src="/assets/js/include.js"></script>
+    <script src="/assets/js/supabase-init.js"></script>
+    <script src="/assets/js/header-menu.js"></script>
+    <script src="/assets/js/header.js"></script>
+
+    <script src="/assets/js/gallery-detail.js"></script>
+
+
+
+</body>
+
+</html>

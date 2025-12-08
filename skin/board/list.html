@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 목록 | SEJONG205</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/board.css">
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <div data-include="/header.html"></div>
+
+    <main class="subpage">
+        <section class="sub-hero sub-hero--company">
+            <div class="sub-hero__inner width">
+                <p class="sub-hero__label" id="breadcrumb"></p>
+                <h1 class="sub-hero__title"></h1>
+            </div>
+        </section>
+
+        <!-- 게시판 -->
+        <section class="board_form width">
+
+            <!-- 관리자 버튼 (기본적으로 숨김) -->
+            <div class="admin_board hide">
+                <div class="board-top">
+                    <button id="btnWrite">글쓰기</button>
+                    <button id="btnDeleteSelected">선택삭제</button>
+                    <button id="btnDeleteAll">전체삭제</button>
+                </div>
+            </div>
+
+            <div class="board-wrapper">
+                <table class="board-table">
+                    <thead>
+                        <tr>
+                            <th style="width:60px">No</th>
+                            <th style="width:50px" class="admin-th hide">✔</th>
+                            <th>Title</th>
+                            <th style="width:120px">Author</th>
+                            <th style="width:80px">Views</th>
+                            <th style="width:100px">Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="postList">
+                        <tr>
+                            <td colspan="6" class="Looking_box">
+                                Looking...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="sn-pagination"></div>
+            </div>
+        </section>
+    </main>
+
+    <div data-include="/footer.html"></div>
+
+    <!-- JS -->
+    <script src="/assets/js/include.js"></script>
+    <script src="/assets/js/supabase-init.js"></script>
+    <script src="/assets/js/breadcrumb.js"></script>
+    <script src="/assets/js/header-menu.js"></script>
+    <script src="/assets/js/header.js"></script>
+    <script src="/assets/js/board-list.js"></script>
+
+</body>
+
+</html>
