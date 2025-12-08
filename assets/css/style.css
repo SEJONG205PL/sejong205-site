@@ -233,8 +233,8 @@ a { text-decoration: none; color: inherit; }
 .sub-nav { background-color: #ffffff; border-bottom: 1px solid #e1e4ea; }
 .sub-nav__inner { margin: 0 auto; display: flex; flex-wrap: wrap; gap: 8px 16px; }
 .sub-nav__item { position: relative; display: inline-flex; align-items: center; padding: 12px 4px; font-size: 14px; color: #596173; text-decoration: none; border-bottom: 2px solid transparent; transition: color 0.2s ease, border-color 0.2s ease; }
-.sub-nav__item:hover { color: #8A2E2B; }
-.sub-nav__item.is-active { color: #001b3f; font-weight: 600; border-bottom-color: #8A2E2B; }
+.sub-nav__item:hover { color: #8A2E2B; border-bottom-color: #8A2E2B !important; }
+.sub-nav__item.is-active {border-bottom-color: #8A2E2B !important;}
 
 /* 어바웃 서브페이지 컨텐츠 변경 가능성 있음 */
 .sub-content { padding: 40px 20px 0; }
@@ -353,3 +353,4 @@ a { text-decoration: none; color: inherit; }
 @media (max-width: 480px) {
 
 }
+
