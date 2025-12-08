@@ -126,7 +126,12 @@ Breadcrumb & Sub-page Navigation Full Version
 
         if (subNavInner) {
             subNavInner.innerHTML = items
-            .map((m) => `<a href="${m.link}" class="sub-nav__item ${m.link === path ? "is-active" : ""}">${m.name}</a>`)
+                        .map((m) => {
+                const cleanA = m.link.replace(".html", "").replace(/\/$/, "");
+                const cleanB = path.replace(".html", "").replace(/\/$/, "");
+                const active = cleanB.includes(cleanA) ? "is-active" : "";
+                return `<a href="${m.link}" class="sub-nav__item ${active}">${m.name}</a>`;
+            })
             .join("");
         }
     }
@@ -151,3 +156,4 @@ Breadcrumb & Sub-page Navigation Full Version
         return chain.join(" > ");
     }
 })();
+
