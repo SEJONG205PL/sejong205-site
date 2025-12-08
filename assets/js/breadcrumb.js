@@ -50,6 +50,12 @@ Breadcrumb & Sub-page Navigation Full Version
 
         const path = location.pathname;
 
+        // ⚡ Footer는 DB 메뉴 필요 X → 즉시 처리하고 return
+    if (path.startsWith("/subpage/footer/")) {
+        buildFooterMenu(path, breadcrumbEl, titleEl, subNavInner);
+        return;
+    }
+
         // =======================
         // 1) Footer Pages 먼저 처리 (정적)
         // =======================
@@ -156,4 +162,5 @@ Breadcrumb & Sub-page Navigation Full Version
         return chain.join(" > ");
     }
 })();
+
 
