@@ -47,23 +47,40 @@
     <button class="hero-next">❯</button>
   </section>
 
-  <section class="bridge-sec">
-    <div class="bridge-inner">
-
-      <div class="bridge-graphic" data-aos="fade-up">
-        <div class="bridge-korea"></div>
-        <div class="bridge-line"></div>
-        <div class="bridge-europe"></div>
+  <section class="scroll-intro" id="intro">
+    <div class="width scroll-intro_box" style="max-width: 1600px;">
+      <div class="intro-left">
+        <h2 class="phase">
+          Bridge Korea<br>
+          to Europe
+        </h2>
       </div>
 
-      <div class="bridge-text" data-swiper-animation="fadeInup" data-aos-delay="150">
-        <h2>Connecting Korea<br>to Europe</h2>
-        <p>SEJONG205 builds a digital bridge enabling Korean brands,
-          lifestyle and culture to reach customers across Europe.</p>
-      </div>
+      <div class="intro-right">
+        <p class="intro-head">
+          We build the path where Korean brands meet European consumers.
+        </p>
 
+        <p class="intro-desc">
+          SEJONG205 operates from Poland — one of the most dynamic K-culture growth markets in EU.
+          A commerce platform designed for expansion, logistics, and brand localization.
+        </p>
+
+        <ul class="intro-list">
+          <li>Korean product gateway to the EU market</li>
+          <li>Warsaw-based multi-vendor structure</li>
+          <li>Fulfillment & cross-border scalability</li>
+          <li>Local insight for Polish consumer trends</li>
+        </ul>
+      </div>
     </div>
   </section>
+
+
+
+
+
+
 
   <section class="kshow-sec">
     <div class="kshow-title" data-aos="fade-up">
@@ -113,6 +130,28 @@
   <button id="topBtn" class="top-btn">TOP</button>
   <!-- FOOTER -->
   <div id="footer" data-include="footer.html"></div>
+
+
+  <script>
+    const phases = document.querySelectorAll('.phase');
+    const intro = document.getElementById('intro');
+
+    window.addEventListener('scroll', () => {
+      const rect = intro.getBoundingClientRect();
+      const viewH = window.innerHeight;
+
+      if (rect.top < viewH * 0.8 && rect.bottom > 0) {
+        const progress = Math.min(Math.max((viewH - rect.top) / viewH, 0), 1);
+
+        if (progress >= 0.3) {
+          phases[0].classList.add('active');
+        }
+        if (progress >= 0.5) {
+          phases[1].classList.add('active');
+        }
+      }
+    });
+  </script>
 
 
 
