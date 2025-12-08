@@ -329,6 +329,7 @@ a { text-decoration: none; color: inherit; }
 
 
 @media (max-width: 768px) {
+   .sub-hero__title,.sub-hero__label {text-align: center;}
   .sub-nav__inner {flex-direction: column;align-items: flex-start; width: 100% !important;}
   .sub-nav__item {display: block; width: 100%; padding: 12px 0;text-align: center;border-bottom: 1px solid #8f8f8f14;}
   .sub-nav__item.is-active {border-bottom: none;background-color: #8A2E2B;color: #fff;}
@@ -357,7 +358,7 @@ a { text-decoration: none; color: inherit; }
 
 @media (max-width: 640px) {
   .sub-hero {padding: 60px 16px 40px;}
-  .sub-hero__title {font-size: 24px;}
+  .sub-hero__title {font-size: 24px; }
   .sub-hero__desc {font-size: 13px;}
   .sub-content__inner {padding: 24px 18px 28px;}
   .sub-grid,.core-grid {grid-template-columns: 1fr;}
