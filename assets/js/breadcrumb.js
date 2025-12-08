@@ -99,9 +99,29 @@ Breadcrumb & Sub-page Info
             }
         }
         // ---------- 일반 subpage ----------
-        else if (pathname.startsWith("/subpage/")) {
+         else if (pathname.startsWith("/subpage/")) {
+            // 1) 정확히 일치하는 메뉴 찾기
             currentMenu = menuData.find((m) => m.link === pathname);
 
+            // 2) 언더바/폴더 구조 다를 때 유사매칭 (company_info <-> company/info)
+            if (!currentMenu) {
+                const fixed1 = pathname.replace("company_info", "company/info");
+                const fixed2 = pathname.replace("company/info", "company_info");
+                currentMenu = menuData.find((m) => m.link === fixed1 || m.link === fixed2);
+            }
+
+            // 3) 확장자 제거 후 포함매칭
+            if (!currentMenu) {
+                currentMenu = menuData.find((m) => pathname.includes(m.link.replace(/\.html$/, "")));
+            }
+
+            // 4) depth2 이상 fallback (페이지명 포함 매칭)
+            if (!currentMenu) {
+                const nameKey = pathname.split("/").pop().replace(".html", "");
+                currentMenu = menuData.find((m) => m.name && m.name.toLowerCase().includes(nameKey.toLowerCase()));
+            }
+
+            // 페이지 상단 제목 표시
             if (currentMenu && titleEl) {
                 titleEl.textContent = currentMenu.name;
             }
@@ -136,3 +156,4 @@ Breadcrumb & Sub-page Info
         }
     }
 })();
+
