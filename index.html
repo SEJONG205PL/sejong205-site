@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/animate.css">
   <link rel="icon" href="assets/img/favi.ico" type="image/x-icon" sizes="16x16">
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> -->
 
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -19,67 +19,159 @@
   <script src="assets/js/section.js"></script>
   <script src="assets/js/smooth-scroll.js"></script>
   <script src="assets/js/top-button.js"></script>
+
+  <style>
+    /* 기본 헤더 */
+    .main-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      z-index: 1000;
+      transition: all 0.4s ease;
+    }
+
+    /* PC + 메인 페이지 투명 헤더 */
+    @media (min-width:1025px) {
+      body.main-page .main-header.transparent-header {
+        background: transparent;
+        box-shadow: none;
+      }
+
+      body.main-page .main-header.transparent-header .logo img {
+        filter: brightness(0) invert(1);
+        transition: filter 0.4s ease;
+      }
+
+      body.main-page .main-header.transparent-header .nav-menu a {
+        color: #fff;
+        transition: color 0.4s ease;
+        /* text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+         */
+      }
+
+      /* 호버 시 흰색 배경 */
+      body.main-page .main-header.transparent-header.hovered {
+        background: #fff;
+      }
+
+      body.main-page .main-header.transparent-header.hovered .logo img {
+        filter: none;
+      }
+
+      body.main-page .main-header.transparent-header.hovered .nav-menu a {
+        color: #000;
+        text-shadow: none;
+      }
+
+      /* 스크롤 시 완전 흰색 */
+      body.main-page .main-header.scrolled {
+        background: #fff;
+        /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+      }
+
+      body.main-page .main-header.scrolled .logo img {
+        filter: none;
+      }
+
+      body.main-page .main-header.scrolled .nav-menu a {
+        color: #000;
+        text-shadow: none;
+      }
+    }
+
+    /* 모바일 항상 흰색 */
+    @media (max-width:1024px) {
+      .main-header {
+        background: #fff !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .main-header .logo img {
+        filter: none !important;
+      }
+
+      .main-header a {
+        color: #000 !important;
+        text-shadow: none !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <!-- HEADER -->
-  <div id="header" data-include="header.html"></div>
+  <div data-include="header.html"></div>
 
-  <section class="hero-slider">
-    <div class="hero-slide active" data-bg="assets/img/slide1.jpg">
-      <div class="hero-content width">
-        <h1>Korean Products,<br>Delivered Across Europe.</h1>
-        <p>Poland’s first Korea-focused multi-vendor platform.</p>
-        <!-- <a href="" class="hero-btn">Explore Products</a> -->
+  <section class="hero-section">
+    <!-- 배경 -->
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+
+    <!-- 글로우 효과 -->
+    <div class="glow-element glow-1"></div>
+    <div class="glow-element glow-2"></div>
+
+    <!-- 컨텐츠 -->
+    <div class="hero-content">
+      <!-- <div class="hero-label">GLOBAL K-COMMERCE</div> -->
+
+      <h1 class="hero-title">
+        <span class="line1"><span class="highlight">Bridging Korea</span> to Europe</span>
+        <span class="line2">We Build Global Growth</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Premium Korean products, lifestyle, and food brands<br>
+        expanding across European markets
+      </p>
+
+      <div class="category-tags">
+        <div class="category-tag">Food & Beverage</div>
+        <div class="category-tag">Lifestyle Products</div>
+        <div class="category-tag">Franchise Solutions</div>
+        <div class="category-tag">EU Distribution</div>
       </div>
+
+      <!-- <div class="cta-buttons">
+        <a href="#" class="cta-btn">Explore Products</a>
+        <a href="#" class="cta-btn secondary">Partner With Us</a>
+      </div> -->
     </div>
 
-    <div class="hero-slide" data-bg="assets/img/slide2.jpg">
-      <div class="hero-content">
-        <h1>Verified Korean Brands.</h1>
-        <p>Trusted products with certified quality.</p>
-        <!-- <a href="assets/img/" class="hero-btn">About Us</a> -->
-      </div>
+    <!-- 스크롤 인디케이터 -->
+    <div class="scroll-indicator">
+      <p>SCROLL</p>
+      <div class="scroll-icon"></div>
     </div>
-
-    <!-- Controls -->
-    <button class="hero-prev">❮</button>
-    <button class="hero-next">❯</button>
   </section>
 
-  <section class="scroll-intro" id="intro">
-    <div class="width scroll-intro_box" style="max-width: 1600px;">
-      <div class="intro-left">
-        <h2 class="phase">
-          Bridge Korea<br>
-          to Europe
-        </h2>
+
+  <section class="mein_introduction">
+    <div class="mein_intro">
+      <div class="intro-tit">
+        K-Brands<br>
+        To Europe<br>
+        Built to Scale
       </div>
-
-      <div class="intro-right">
-        <p class="intro-head">
-          We build the path where Korean brands meet European consumers.
-        </p>
-
+      <div class="intro-content">
+        <h3>We take Korean brands global.</h3>
+        <p>Poland-based, Europe-ready.</p>
         <p class="intro-desc">
-          SEJONG205 operates from Poland — one of the most dynamic K-culture growth markets in EU.
-          A commerce platform designed for expansion, logistics, and brand localization.
+          Korea's innovation meets European markets. We provide end-to-end solutions for brands ready to scale across
+          the EU,
+          combining local expertise with global reach.
         </p>
-
-        <ul class="intro-list">
-          <li>Korean product gateway to the EU market</li>
-          <li>Warsaw-based multi-vendor structure</li>
-          <li>Fulfillment & cross-border scalability</li>
-          <li>Local insight for Polish consumer trends</li>
+        <ul class="service-list">
+          <li>Market entry & localization strategies</li>
+          <li>Fulfillment & vendor integration</li>
+          <li>Scalable EU retail access</li>
+          <li>Cross-border logistics management</li>
+          <li>Multi-channel distribution network</li>
         </ul>
       </div>
     </div>
   </section>
-
-
-
-
-
 
 
   <section class="kshow-sec">
@@ -128,34 +220,7 @@
 
 
   <button id="topBtn" class="top-btn">TOP</button>
-  <!-- FOOTER -->
   <div id="footer" data-include="footer.html"></div>
-
-
-  <script>
-    const phases = document.querySelectorAll('.phase');
-    const intro = document.getElementById('intro');
-
-    window.addEventListener('scroll', () => {
-      const rect = intro.getBoundingClientRect();
-      const viewH = window.innerHeight;
-
-      if (rect.top < viewH * 0.8 && rect.bottom > 0) {
-        const progress = Math.min(Math.max((viewH - rect.top) / viewH, 0), 1);
-
-        if (progress >= 0.3) {
-          phases[0].classList.add('active');
-        }
-        if (progress >= 0.5) {
-          phases[1].classList.add('active');
-        }
-      }
-    });
-  </script>
-
-
-
 </body>
-
 
 </html>
