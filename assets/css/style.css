@@ -453,7 +453,7 @@ a { text-decoration: none; color: inherit; }
   .sub-nav__item {display: block; width: 100%; padding: 12px 0;text-align: center;border-bottom: 1px solid #8f8f8f14;}
   .sub-nav__item.is-active {border-bottom: none;background-color: #8A2E2B;color: #fff;}
   .hero-slider{height:60vh}
-  .hero-content{left:8%}
+  /* .hero-content{left:8%} */
   .hero-content h1{font-size:32px}
   .hero-content p{font-size:15px}
   .hero-btn{padding:10px 24px;font-size:14px}
