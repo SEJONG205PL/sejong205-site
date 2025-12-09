@@ -84,7 +84,7 @@ a { text-decoration: none; color: inherit; }
 .nav-item:hover > .nav-link::after,
 .nav-link:hover::after,
 .nav-link.active::after {transform: scaleX(1);}
-.mega-menus-container {position: absolute;top: 100%; left: 0; width: 100%; background: #fff;}
+.mega-menus-container {position: absolute;top: 70%; left: 0; width: 100%; background: #fff;}
 .mega-menu {max-width: 800px; margin: 0 auto; width: 100%; display: none; width: 100%; overflow: hidden;z-index: 50; }
 .mega-menu.open {display: block;border-bottom: 1px solid var(--sj-gray);animation: slideDown 0.25s ease forwards;opacity: 1;pointer-events: auto;}
 .mega-inner {display: flex;justify-content: flex-start;align-items: flex-start;gap: 40px;padding: 26px 0 24px;}
