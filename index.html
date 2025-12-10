@@ -21,7 +21,6 @@
   <script src="assets/js/top-button.js"></script>
 
   <style>
-    /* 기본 헤더 */
     .main-header {
       position: fixed;
       top: 0;
@@ -32,23 +31,25 @@
       transition: all 0.4s ease;
     }
 
-    /* PC + 메인 페이지 투명 헤더 */
     @media (min-width:1025px) {
       body.main-page .main-header.transparent-header {
         background: transparent;
         box-shadow: none;
       }
 
-      body.main-page .main-header.transparent-header .logo img {
-        filter: brightness(0) invert(1);
-        transition: filter 0.4s ease;
+      body.main-page .main-header.transparent-header .logo .nomain,
+      body.main-page .main-header.transparent-header.hovered .logo .main {
+        display: none;
+      }
+
+      body.main-page .main-header.transparent-header .logo .main,
+      body.main-page .main-header.transparent-header.hovered .logo .nomain {
+        display: block;
       }
 
       body.main-page .main-header.transparent-header .nav-menu a {
         color: #fff;
         transition: color 0.4s ease;
-        /* text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-         */
       }
 
       /* 호버 시 흰색 배경 */
@@ -56,23 +57,13 @@
         background: #fff;
       }
 
-      body.main-page .main-header.transparent-header.hovered .logo img {
-        filter: none;
-      }
-
       body.main-page .main-header.transparent-header.hovered .nav-menu a {
         color: #000;
         text-shadow: none;
       }
 
-      /* 스크롤 시 완전 흰색 */
       body.main-page .main-header.scrolled {
         background: #fff;
-        /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
-      }
-
-      body.main-page .main-header.scrolled .logo img {
-        filter: none;
       }
 
       body.main-page .main-header.scrolled .nav-menu a {
@@ -81,15 +72,10 @@
       }
     }
 
-    /* 모바일 항상 흰색 */
     @media (max-width:1024px) {
       .main-header {
         background: #fff !important;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      .main-header .logo img {
-        filter: none !important;
       }
 
       .main-header a {
