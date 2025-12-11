@@ -17,71 +17,67 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/header-core.js"></script>
   <script src="assets/js/section.js"></script>
-  <script src="assets/js/smooth-scroll.js"></script>
+  <!-- <script src="assets/js/smooth-scroll.js"></script> -->
   <script src="assets/js/top-button.js"></script>
 
   <style>
+    /* 일반 페이지 헤더 */
     .main-header {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
+      z-index: 100;
       background: #fff;
-      z-index: 1000;
-      transition: all 0.4s ease;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
     }
 
-    @media (min-width:1025px) {
-      body.main-page .main-header.transparent-header {
-        background: transparent;
-        box-shadow: none;
-      }
-
-      body.main-page .main-header.transparent-header .logo .nomain,
-      body.main-page .main-header.transparent-header.hovered .logo .main {
-        display: none;
-      }
-
-      body.main-page .main-header.transparent-header .logo .main,
-      body.main-page .main-header.transparent-header.hovered .logo .nomain {
-        display: block;
-      }
-
-      body.main-page .main-header.transparent-header .nav-menu a {
-        color: #fff;
-        /* transition: color 0.4s ease; */
-      }
-
-      /* 호버 시 흰색 배경 */
-      body.main-page .main-header.transparent-header.hovered {
-        background: #fff;
-      }
-
-      body.main-page .main-header.transparent-header.hovered .nav-menu a {
-        color: #000;
-        text-shadow: none;
-      }
-
-      body.main-page .main-header.scrolled {
-        background: #fff;
-      }
-
-      body.main-page .main-header.scrolled .nav-menu a {
-        color: #000;
-        text-shadow: none;
-      }
+    /* 일반 페이지 - nav-menu 호버 시 메가메뉴 컨테이너에 하단 선 */
+    .nav-menu:has(.nav-item:hover)~.mega-menus-container,
+    .mega-menus-container:hover,
+    .mega-menus-container.active {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
 
-    @media (max-width:1024px) {
-      .main-header {
-        background: #fff !important;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
+    /* 메인 페이지 - 첫 섹션(투명, 선 없음) */
+    body.main-page .main-header {
+      background: transparent;
+      border-bottom: 1px solid transparent;
+    }
 
-      .main-header a {
-        color: #000 !important;
-        text-shadow: none !important;
-      }
+    /* 메인 페이지 - 투명 상태에서는 선 없음 */
+    body.main-page .logo img {
+      /* filter: brightness(0) saturate(100%) invert(86%) sepia(13%) saturate(482%) hue-rotate(349deg) brightness(99%) contrast(92%); */
+      filter: brightness(0) invert(1);
+    }
+
+    body.main-page .nav-link {
+      color: #fff;
+    }
+
+    /* 메인 페이지 - 스크롤 시 원래 헤더로 */
+    body.main-page .main-header.scrolled {
+      background: #fff;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    body.main-page .main-header.scrolled .logo img,
+    body.main-page .main-header:hover .logo img {
+      filter: none;
+    }
+
+    body.main-page .main-header.scrolled .nav-link {
+      color: #000;
+    }
+
+    /* 메인 페이지 - 호버 시 */
+    body.main-page .main-header:hover {
+      background: #fff;
+    }
+
+    body.main-page .main-header:hover .nav-link {
+      color: #000;
     }
   </style>
 </head>
@@ -89,197 +85,81 @@
 <body>
   <div data-include="header.html"></div>
 
-  <section class="hero-section">
-    <div class="hero-bg"></div>
-    <div class="hero-overlay"></div>
-    <div class="glow-element glow-1"></div>
-    <div class="glow-element glow-2"></div>
-    <div class="hero-content">
-      <h1 class="hero-title">
-        <span class="line1"><span class="highlight">Bridging Korea</span> to Europe</span>
-        <span class="line2">We Build Global Growth</span>
-      </h1>
-      <p class="hero-subtitle">
-        Premium Korean products, lifestyle, and food brands<br>
-        expanding across European markets
-      </p>
-      <div class="category-tags">
-        <a href="#" class="category-tag">Food & Beverage</a>
-        <a href="#" class="category-tag">Lifestyle Products</a>
-        <a href="#" class="category-tag">Franchise Solutions</a>
-        <a href="#" class="category-tag">EU Distribution</a>
-      </div>
-    </div>
 
-    <div class="scroll-indicator">
-      <p>SCROLL</p>
-      <div class="scroll-icon"></div>
-    </div>
-  </section>
-
-
-  <section class="mein_introduction">
-    <div class="mein_intro">
-      <div class="intro-tit">
-        K-Brands<br>
-        To Europe<br>
-        Built to Scale
-      </div>
-      <div class="intro-content">
-        <h3>We take Korean brands global.</h3>
-        <p>Poland-based, Europe-ready.</p>
-        <p class="intro-desc">
-          Korea's innovation meets European markets. We provide end-to-end solutions for brands ready to scale across
-          the EU,
-          combining local expertise with global reach.
+  <section class="section">
+    <div class="hero-section">
+      <div class="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="glow-element glow-1"></div>
+      <div class="glow-element glow-2"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span class="line1"><span class="highlight">Bridging Korea</span> to Europe</span>
+          <span class="line2">We Build Global Growth</span>
+        </h1>
+        <p class="hero-subtitle">
+          Premium Korean products, lifestyle, and food brands<br>
+          expanding across European markets
         </p>
-        <ul class="service-list">
-          <li>Market entry & localization strategies</li>
-          <li>Fulfillment & vendor integration</li>
-          <li>Scalable EU retail access</li>
-          <li>Cross-border logistics management</li>
-          <li>Multi-channel distribution network</li>
-        </ul>
+        <div class="category-tags">
+          <a href="#" class="category-tag">Food & Beverage</a>
+          <a href="#" class="category-tag">Lifestyle Products</a>
+          <a href="#" class="category-tag">Franchise Solutions</a>
+          <a href="#" class="category-tag">EU Distribution</a>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">
+        <p>SCROLL</p>
+        <div class="scroll-icon"></div>
       </div>
     </div>
   </section>
 
 
-  <section class="section-categories">
-    <div class="categories-header">
-      <div class="categories-label">SEJONGO — PREMIUM KOREAN MARKETPLACE</div>
-      <h2 class="categories-title">
-        Six <span class="categories-title-accent">Signature Categories</span><br>Crafted for Global Shoppers
-      </h2>
-      <p class="categories-subtitle">
-        Discover authentic Korean products — curated by SEJONGO and delivered across Europe with verified quality.
-      </p>
-    </div>
-
-    <div class="categories-grid">
-
-      <!-- Beauty -->
-      <div class="category-item" onclick="window.open('https://sejongo.pl/collections/beauty','_blank')">
-        <div class="category-item-inner">
-          <div class="category-item-watermark" data-text="B"></div>
-          <div class="category-item-content">
-            <div class="category-item-left">
-              <div class="category-item-number">01</div>
-              <h3 class="category-item-name">Beauty</h3>
-              <p class="category-item-desc">
-                Skincare, cosmetics and K-Beauty innovations trusted by Korean consumers first.
-              </p>
-            </div>
-            <div class="category-item-right">
-              <div class="category-item-tag">K-Beauty</div>
-              <div class="category-item-arrow"><span>→</span></div>
-            </div>
-          </div>
+  <section class="section">
+    <div class="mein_introduction">
+      <div class="mein_intro">
+        <div class="intro-tit">
+          K-Brands<br>
+          To Europe<br>
+          Built to Scale
+        </div>
+        <div class="intro-content">
+          <h3>We take Korean brands global.</h3>
+          <p>Poland-based, Europe-ready.</p>
+          <p class="intro-desc">
+            Korea's innovation meets European markets. We provide end-to-end solutions for brands ready to scale across
+            the EU,
+            combining local expertise with global reach.
+          </p>
+          <ul class="service-list">
+            <li>Market entry & localization strategies</li>
+            <li>Fulfillment & vendor integration</li>
+            <li>Scalable EU retail access</li>
+            <li>Cross-border logistics management</li>
+            <li>Multi-channel distribution network</li>
+          </ul>
         </div>
       </div>
-
-      <!-- Food -->
-      <div class="category-item" onclick="window.open('https://sejongo.pl/collections/food','_blank')">
-        <div class="category-item-inner">
-          <div class="category-item-watermark" data-text="F"></div>
-          <div class="category-item-content">
-            <div class="category-item-left">
-              <div class="category-item-number">02</div>
-              <h3 class="category-item-name">Food</h3>
-              <p class="category-item-desc">
-                From ramen to sauces — everyday Korean flavors brought to your kitchen.
-              </p>
-            </div>
-            <div class="category-item-right">
-              <div class="category-item-tag">K-Food</div>
-              <div class="category-item-arrow"><span>→</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- K-Pop -->
-      <div class="category-item" onclick="window.open('https://sejongo.pl/collections/k-pop','_blank')">
-        <div class="category-item-inner">
-          <div class="category-item-watermark" data-text="K"></div>
-          <div class="category-item-content">
-            <div class="category-item-left">
-              <div class="category-item-number">03</div>
-              <h3 class="category-item-name">K-POP</h3>
-              <p class="category-item-desc">
-                Albums, photocards, official goods — enjoy the global fandom experience.
-              </p>
-            </div>
-            <div class="category-item-right">
-              <div class="category-item-tag">Entertainment</div>
-              <div class="category-item-arrow"><span>→</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Fashion -->
-      <div class="category-item" onclick="window.open('https://sejongo.pl/collections/fashion','_blank')">
-        <div class="category-item-inner">
-          <div class="category-item-watermark" data-text="F"></div>
-          <div class="category-item-content">
-            <div class="category-item-left">
-              <div class="category-item-number">04</div>
-              <h3 class="category-item-name">Fashion</h3>
-              <p class="category-item-desc">
-                Seoul-inspired streetwear and modern minimalist fits.
-              </p>
-            </div>
-            <div class="category-item-right">
-              <div class="category-item-tag">Style</div>
-              <div class="category-item-arrow"><span>→</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Home & Lifestyle -->
-      <div class="category-item" onclick="window.open('https://sejongo.pl/collections/home-lifestyle','_blank')">
-        <div class="category-item-inner">
-          <div class="category-item-watermark" data-text="H"></div>
-          <div class="category-item-content">
-            <div class="category-item-left">
-              <div class="category-item-number">05</div>
-              <h3 class="category-item-name">Home & Lifestyle</h3>
-              <p class="category-item-desc">
-                Kitchenware, decor, and lifestyle goods that embody modern Korean living.
-              </p>
-            </div>
-            <div class="category-item-right">
-              <div class="category-item-tag">Living</div>
-              <div class="category-item-arrow"><span>→</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Books & Stationery -->
-      <div class="category-item" onclick="window.open('https://sejongo.pl/collections/books-stationery','_blank')">
-        <div class="category-item-inner">
-          <div class="category-item-watermark" data-text="S"></div>
-          <div class="category-item-content">
-            <div class="category-item-left">
-              <div class="category-item-number">06</div>
-              <h3 class="category-item-name">Books & Stationery</h3>
-              <p class="category-item-desc">
-                Korean language books, creative stationery & cultural publications.
-              </p>
-            </div>
-            <div class="category-item-right">
-              <div class="category-item-tag">Culture</div>
-              <div class="category-item-arrow"><span>→</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
   </section>
+
+
+  <section class="section">
+    <div class="section-categories">
+      <div class="categories-header">
+        <div class="categories-label">SEJONGO — PREMIUM KOREAN MARKETPLACE</div>
+        <h2 class="categories-title">
+          Six <span class="categories-title-accent">Signature Categories</span><br>Crafted for Global Shoppers
+        </h2>
+        <p class="categories-subtitle">
+          Discover authentic Korean products — curated by SEJONGO and delivered across Europe with verified quality.
+        </p>
+      </div>
+    </div>
+  </section>
+
 
 
 
