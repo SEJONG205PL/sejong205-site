@@ -221,3 +221,38 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 });
+
+// Categories Slider Initialize
+document.addEventListener("DOMContentLoaded", () => {
+    const swiper = new Swiper(".categorySwiper", {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: true,
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 1.5,
+                spaceBetween: 20,
+            },
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 24,
+            },
+            1024: {
+                slidesPerView: 2.5,
+                spaceBetween: 28,
+            },
+            1280: {
+                slidesPerView: 3,
+                spaceBetween: 32,
+            },
+        },
+    });
+});

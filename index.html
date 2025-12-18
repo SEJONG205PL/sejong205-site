@@ -11,13 +11,12 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/animate.css">
   <link rel="icon" href="assets/img/favi.ico" type="image/x-icon" sizes="16x16">
-  <!-- <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/header-core.js"></script>
   <script src="assets/js/section.js"></script>
-  <!-- <script src="assets/js/smooth-scroll.js"></script> -->
   <script src="assets/js/top-button.js"></script>
 
   <style>
@@ -160,9 +159,196 @@
     </div>
   </section>
 
+  <!-- Categories Slider Section -->
+  <section class="section">
+    <div class="categories-swiper-container">
+      <div class="swiper categorySwiper">
+        <div class="swiper-wrapper">
 
+          <!-- Beauty -->
+          <div class="swiper-slide">
+            <a href="/category/beauty" class="category-card">
+              <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800" alt="Beauty">
+                <div class="category-badge">TRENDING</div>
+              </div>
+              <div class="category-content">
+                <div class="category-top">
+                  <div class="category-number">01</div>
+                  <h3 class="category-name">Beauty</h3>
+                  <p class="category-desc">Premium K-Beauty skincare and makeup essentials.</p>
+                </div>
+                <div class="category-footer">
+                  <span class="category-count">240+ Products</span>
+                  <div class="category-arrow">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
 
+          <!-- Food -->
+          <div class="swiper-slide">
+            <a href="/category/food" class="category-card">
+              <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=800" alt="Food">
+                <div class="category-badge">POPULAR</div>
+              </div>
+              <div class="category-content">
+                <div class="category-top">
+                  <div class="category-number">02</div>
+                  <h3 class="category-name">Food</h3>
+                  <p class="category-desc">Authentic Korean snacks, noodles, and ingredients.</p>
+                </div>
+                <div class="category-footer">
+                  <span class="category-count">350+ Products</span>
+                  <div class="category-arrow">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
 
+          <!-- K-Pop -->
+          <div class="swiper-slide">
+            <a href="/category/kpop" class="category-card">
+              <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800" alt="K-Pop">
+                <div class="category-badge">NEW</div>
+              </div>
+              <div class="category-content">
+                <div class="category-top">
+                  <div class="category-number">03</div>
+                  <h3 class="category-name">K-Pop</h3>
+                  <p class="category-desc">Official albums, merchandise, and collectibles.</p>
+                </div>
+                <div class="category-footer">
+                  <span class="category-count">180+ Products</span>
+                  <div class="category-arrow">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- Fashion -->
+          <div class="swiper-slide">
+            <a href="/category/fashion" class="category-card">
+              <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?w=800" alt="Fashion">
+                <div class="category-badge">CURATED</div>
+              </div>
+              <div class="category-content">
+                <div class="category-top">
+                  <div class="category-number">04</div>
+                  <h3 class="category-name">Fashion</h3>
+                  <p class="category-desc">Contemporary Korean street style and fashion.</p>
+                </div>
+                <div class="category-footer">
+                  <span class="category-count">200+ Products</span>
+                  <div class="category-arrow">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- Home & Lifestyle -->
+          <div class="swiper-slide">
+            <a href="/category/home-lifestyle" class="category-card">
+              <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800" alt="Home & Lifestyle">
+                <div class="category-badge">FEATURED</div>
+              </div>
+              <div class="category-content">
+                <div class="category-top">
+                  <div class="category-number">05</div>
+                  <h3 class="category-name">Home & Lifestyle</h3>
+                  <p class="category-desc">Minimalist home goods and lifestyle essentials.</p>
+                </div>
+                <div class="category-footer">
+                  <span class="category-count">150+ Products</span>
+                  <div class="category-arrow">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- Books & Stationery -->
+          <div class="swiper-slide">
+            <a href="/category/books-stationery" class="category-card">
+              <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800" alt="Books & Stationery">
+                <div class="category-badge">EXCLUSIVE</div>
+              </div>
+              <div class="category-content">
+                <div class="category-top">
+                  <div class="category-number">06</div>
+                  <h3 class="category-name">Books & Stationery</h3>
+                  <p class="category-desc">Korean literature and beautifully designed stationery.</p>
+                </div>
+                <div class="category-footer">
+                  <span class="category-count">120+ Products</span>
+                  <div class="category-arrow">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- Kids & Family -->
+          <div class="swiper-slide">
+            <a href="/category/kids-family" class="category-card">
+              <div class="category-image">
+                <img src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=800" alt="Kids & Family">
+                <div class="category-badge">FAMILY</div>
+              </div>
+              <div class="category-content">
+                <div class="category-top">
+                  <div class="category-number">07</div>
+                  <h3 class="category-name">Kids & Family</h3>
+                  <p class="category-desc">Educational toys, books, and family essentials.</p>
+                </div>
+                <div class="category-footer">
+                  <span class="category-count">160+ Products</span>
+                  <div class="category-arrow">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <div class="main_contact">
+    <a href="subpage/customer/support/contact.html">Vendor Partnership Inquiry</a>
+  </div>
   <button id="topBtn" class="top-btn">TOP</button>
   <div id="footer" data-include="footer.html"></div>
 </body>
