@@ -266,6 +266,7 @@ function initMobileMenu() {
 }
 
 /* ================= 7. AUTH UI ================= */
+
 document.addEventListener("menusReady", checkAuthHeaderUI);
 
 async function checkAuthHeaderUI() {
@@ -295,4 +296,10 @@ document.addEventListener("click", async (e) => {
 
 document.addEventListener("click", (e) => {
     if (e.target.id === "headerDashboardIcon") location.href = "/admin/index.html";
+});
+
+document.addEventListener("click", (e) => {
+    if (e.target.id === "headerLoginBtn") {
+        location.href = "admin/login.html";
+    }
 });
