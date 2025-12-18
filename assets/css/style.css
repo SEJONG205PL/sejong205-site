@@ -13,7 +13,11 @@
   --sj-gray: #E4E4E4;
   --sj-light-gray: #F8F8F8;
   --sj-white: #FFFFFF;
+  --dark:#0a0a0a;
+  --light-bg:#fafafa;
+  --gray:#999;
 }
+
 html,body {
   margin: 0;
   color: var(--sj-black);
@@ -26,6 +30,9 @@ body {
 ::-webkit-scrollbar {
   display: none;
 }
+
+
+
 
 a { text-decoration: none; color: inherit;}
 
@@ -255,7 +262,7 @@ a { text-decoration: none; color: inherit;}
 }
 
 /* 메인 세번째 섹션 */
-/* :root{--dark:#0a0a0a;--light-bg:#fafafa;--gray:#999;} */
+
 .section-categories{padding:100px 10%;max-width:1800px;margin:0 auto;position:relative;height:100vh;}
 .categories-header{text-align:right;margin-top:110px;opacity:0;animation:fadeIn 1s ease-out 0.2s forwards;}
 .categories-label{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gray);margin-bottom:32px;font-weight:400;}
