@@ -118,11 +118,7 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
 
     function buildFooter(currentPath) {
         console.log("=== buildFooter Debug ===");
-
-        // ✅ 1. 경로 정규화 (이게 제일 중요)
-        const cleanPath = currentPath.split("?")[0].split("#")[0].replace(/\/$/, ""); // trailing slash 제거
-
-        console.log("Clean path:", cleanPath);
+        console.log("Current path:", currentPath);
 
         const labelEl = document.querySelector(".sub-hero__label");
         const titleEl = document.querySelector(".sub-hero__title");
@@ -134,7 +130,7 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
         }
 
         const map = {
-            "/subpage/footer/legal_information": {
+            "/subpage/footer/legal_information/": {
                 group: "Legal Information",
                 list: [
                     ["Legal Info", "/subpage/footer/legal_information/legal-info.html"],
@@ -142,14 +138,14 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
                     ["Privacy Policy", "/subpage/footer/legal_information/privacy-policy.html"],
                 ],
             },
-            "/subpage/footer/policies": {
+            "/subpage/footer/policies/": {
                 group: "Policies",
                 list: [
                     ["Refund Policy", "/subpage/footer/policies/refund.html"],
                     ["Shipping Policy", "/subpage/footer/policies/shipping.html"],
                 ],
             },
-            "/subpage/footer/vendor": {
+            "/subpage/footer/vendor/": {
                 group: "Vendor Guide",
                 list: [
                     ["Vendor Terms", "/subpage/footer/vendor/terms.html"],
@@ -160,8 +156,10 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
             },
         };
 
-        // ✅ 2. 그룹 매칭 (단순 + 정확)
-        const currentGroup = Object.keys(map).find((groupPath) => cleanPath.startsWith(groupPath));
+        // 🔥 현재 경로에서 그룹 찾기
+        const currentGroup = Object.keys(map).find(
+            (groupPath) => currentPath.startsWith(groupPath) || currentPath.includes(groupPath.slice(0, -1))
+        );
 
         console.log("Found group:", currentGroup);
 
@@ -174,31 +172,49 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
         }
 
         const {group, list} = map[currentGroup];
+        console.log("Group name:", group);
+        console.log("Available items:", list);
 
-        // Breadcrumb
+        // Breadcrumb 설정
         labelEl.textContent = group;
 
-        // ✅ 3. 현재 파일명 안전하게 추출
-        const currentFile = cleanPath.split("/").pop();
-        console.log("Current file:", currentFile);
+        // 🔥 현재 페이지명 찾기 (path에서 마지막 파일명 추출)
+        const currentPageFile = currentPath.split("/").pop();
+        console.log("Current page file:", currentPageFile);
 
-        // Title 설정
-        const matchedItem = list.find(([, itemPath]) => itemPath.endsWith(currentFile));
+        // 타이틀 설정 - 정확한 파일 매칭
+        const matchedItem = list.find(([itemName, itemPath]) => {
+            const targetFile = itemPath.split("/").pop();
+            console.log(`Matching: "${currentPageFile}" === "${targetFile}"?`, currentPageFile === targetFile);
+            return currentPageFile === targetFile;
+        });
 
+        // 🔥 강제 타이틀 설정
         if (matchedItem) {
             titleEl.textContent = matchedItem[0];
+            console.log("✅ Title set to:", matchedItem[0]);
         } else {
-            titleEl.textContent = group;
+            // 매칭 실패시 현재 URL에서 파일명 기반으로 타이틀 생성
+            const fileNameWithoutExt = currentPageFile.replace(".html", "");
+            titleEl.textContent = fileNameWithoutExt.replace(/-|_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+            console.log("⚠️ Generated title from filename:", titleEl.textContent);
         }
 
-        // ✅ 4. 네비게이션 생성 (이동 절대 안 막음)
-        subNavEl.innerHTML = list
-        .map(([name, link]) => {
-            const targetFile = link.split("/").pop();
-            const isActive = targetFile === currentFile ? "is-active" : "";
-            return `<a href="${link}" class="sub-nav__item ${isActive}">${name}</a>`;
+        // 🔥 네비게이션 생성 - 정확한 active 상태 설정
+        const navHTML = list
+        .map(([itemName, itemPath]) => {
+            // 파일명만으로 정확한 active 상태 확인
+            const targetFile = itemPath.split("/").pop();
+            const isActive = currentPageFile === targetFile ? "is-active" : "";
+
+            console.log(`NavItem: "${itemName}" - Target: "${targetFile}" - Active: "${isActive}"`);
+
+            return `<a href="${itemPath}" class="sub-nav__item ${isActive}">${itemName}</a>`;
         })
         .join("");
+
+        console.log("Generated Navigation HTML:", navHTML);
+        subNavEl.innerHTML = navHTML;
     }
 
     /* ===============================
