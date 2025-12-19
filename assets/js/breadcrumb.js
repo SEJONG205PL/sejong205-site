@@ -156,10 +156,12 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
             },
         };
 
+        // 🔥 경로 정규화 (쿼리스트링, 해시 제거)
+        const cleanPath = currentPath.split("?")[0].split("#")[0];
+        console.log("Clean path:", cleanPath);
+
         // 🔥 현재 경로에서 그룹 찾기
-        const currentGroup = Object.keys(map).find(
-            (groupPath) => currentPath.startsWith(groupPath) || currentPath.includes(groupPath.slice(0, -1))
-        );
+        const currentGroup = Object.keys(map).find((groupPath) => cleanPath.includes(groupPath.replace(/\/$/, "")));
 
         console.log("Found group:", currentGroup);
 
@@ -178,44 +180,62 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
         // Breadcrumb 설정
         labelEl.textContent = group;
 
-        // 🔥 현재 페이지명 찾기 (path에서 마지막 파일명 추출)
-        const currentPageFile = currentPath.split("/").pop();
-        console.log("Current page file:", currentPageFile);
-
-        // 타이틀 설정 - 정확한 파일 매칭
+        // 🔥 현재 전체 경로로 매칭 (더 정확함)
         const matchedItem = list.find(([itemName, itemPath]) => {
+            // 방법 1: 전체 경로 비교
+            const pathMatch = cleanPath === itemPath || cleanPath.endsWith(itemPath);
+
+            // 방법 2: 파일명만 비교
+            const currentFile = cleanPath.split("/").pop();
             const targetFile = itemPath.split("/").pop();
-            console.log(`Matching: "${currentPageFile}" === "${targetFile}"?`, currentPageFile === targetFile);
-            return currentPageFile === targetFile;
+            const fileMatch = currentFile === targetFile;
+
+            console.log(`Checking "${itemName}":`, {
+                currentPath: cleanPath,
+                itemPath: itemPath,
+                pathMatch,
+                currentFile,
+                targetFile,
+                fileMatch,
+            });
+
+            return pathMatch || fileMatch;
         });
 
-        // 🔥 강제 타이틀 설정
+        // 🔥 타이틀 설정
         if (matchedItem) {
             titleEl.textContent = matchedItem[0];
             console.log("✅ Title set to:", matchedItem[0]);
         } else {
-            // 매칭 실패시 현재 URL에서 파일명 기반으로 타이틀 생성
-            const fileNameWithoutExt = currentPageFile.replace(".html", "");
+            const currentFile = cleanPath.split("/").pop();
+            const fileNameWithoutExt = currentFile.replace(".html", "");
             titleEl.textContent = fileNameWithoutExt.replace(/-|_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
             console.log("⚠️ Generated title from filename:", titleEl.textContent);
         }
 
-        // 🔥 네비게이션 생성 - 정확한 active 상태 설정
+        // 🔥 네비게이션 생성 - active 상태 정확하게 설정
         const navHTML = list
         .map(([itemName, itemPath]) => {
-            // 파일명만으로 정확한 active 상태 확인
-            const targetFile = itemPath.split("/").pop();
-            const isActive = currentPageFile === targetFile ? "is-active" : "";
+            // 전체 경로 또는 파일명으로 매칭
+            const isActive =
+                cleanPath === itemPath ||
+                cleanPath.endsWith(itemPath) ||
+                cleanPath.split("/").pop() === itemPath.split("/").pop();
 
-            console.log(`NavItem: "${itemName}" - Target: "${targetFile}" - Active: "${isActive}"`);
+            console.log(`NavItem: "${itemName}" - Path: "${itemPath}" - Active: ${isActive}`);
 
-            return `<a href="${itemPath}" class="sub-nav__item ${isActive}">${itemName}</a>`;
+            return `<a href="${itemPath}" class="sub-nav__item ${isActive ? "is-active" : ""}">${itemName}</a>`;
         })
         .join("");
 
         console.log("Generated Navigation HTML:", navHTML);
         subNavEl.innerHTML = navHTML;
     }
+
+    // 🔥 페이지 로드 시 실행
+    document.addEventListener("DOMContentLoaded", () => {
+        buildFooter(window.location.pathname);
+    });
 
     /* ===============================
        Utility
