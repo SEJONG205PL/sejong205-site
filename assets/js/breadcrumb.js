@@ -98,12 +98,16 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
             if (titleEl && !titleEl.textContent) titleEl.textContent = current.name;
 
             if (subNavInner) {
+                // 현재 파일명 기준 (overview.html 등)
+                const currentFile = window.location.pathname.split("/").pop();
+
                 // 동일 부모 depth=3 메뉴만 출력
                 const siblings = menu.filter((m) => m.parent_id === current.parent_id && m.depth === 3);
+
                 subNavInner.innerHTML = siblings
                 .map(
                     (m) =>
-                        `<a href="${m.link}" class="sub-nav__item ${m.link === path ? "is-active" : ""}">
+                        `<a href="${m.link}" class="sub-nav__item ${m.link.includes(currentFile) ? "is-active" : ""}">
                         ${m.name}
                     </a>`
                 )
