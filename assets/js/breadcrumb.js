@@ -154,13 +154,19 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
             },
         };
 
-        const key = Object.keys(map).find((k) => path.startsWith(k));
+        // 1) path 정규화: 쿼리/해시 제거
+        const cleanPath = (path || "").split("?")[0].split("#")[0];
+
+        // 2) 그룹 키 찾기
+        const key = Object.keys(map).find((k) => cleanPath.startsWith(k));
         if (!key) return;
 
         const {group, list} = map[key];
 
-        // ✅ 파일명 기준
-        const currentFile = path.split("/").pop();
+        // 3) 현재 "파일명" 결정
+        // - 디렉토리로 끝나면( .../vendor/ ) 기본값을 리스트 첫번째로 잡음
+        const lastSeg = cleanPath.split("/").filter(Boolean).pop(); // 끝이 /면 vendor 같은 폴더명이 나옴
+        const currentFile = lastSeg && lastSeg.includes(".html") ? lastSeg : list[0][1].split("/").pop(); // fallback: 첫 탭 파일명
 
         /* BODY */
         if (labelEl) labelEl.textContent = group;
@@ -172,12 +178,12 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
 
         if (subNavEl) {
             subNavEl.innerHTML = list
-            .map(
-                ([name, link]) =>
-                    `<a href="${link}" class="sub-nav__item ${link.endsWith(currentFile) ? "is-active" : ""}">
-                        ${name}
-                    </a>`
-            )
+            .map(([name, link]) => {
+                const isActive = link.endsWith(currentFile);
+                return `<a href="${link}" class="sub-nav__item ${isActive ? "is-active" : ""}">
+                            ${name}
+                        </a>`;
+            })
             .join("");
         }
     }
