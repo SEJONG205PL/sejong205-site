@@ -126,6 +126,7 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
         const labelEl = document.querySelector(".sub-hero__label");
         const titleEl = document.querySelector(".sub-hero__title");
         const subNavEl = document.querySelector(".sub-nav__inner");
+        const contentArea = document.querySelector(".content-area"); // 내용이 표시될 영역 (실제 선택자에 맞게 수정)
 
         const map = {
             "/subpage/footer/legal_information/": {
@@ -176,11 +177,50 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
                 return `<a href="${link}" class="sub-nav__item ${isActive ? "is-active" : ""}">${name}</a>`;
             })
             .join("");
+
+            // 탭 클릭 이벤트 추가
+            subNavEl.addEventListener("click", async (e) => {
+                if (e.target.classList.contains("sub-nav__item")) {
+                    e.preventDefault(); // 기본 링크 동작 막기
+
+                    const url = e.target.getAttribute("href");
+
+                    try {
+                        // HTML 파일 내용 가져오기
+                        const response = await fetch(url);
+                        const html = await response.text();
+
+                        // HTML을 파싱해서 필요한 부분만 추출
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, "text/html");
+                        const newContent = doc.querySelector(".content-area"); // 실제 컨텐츠 영역 선택자로 수정
+
+                        if (contentArea && newContent) {
+                            contentArea.innerHTML = newContent.innerHTML;
+                        }
+
+                        // URL 변경 (뒤로가기 지원)
+                        history.pushState(null, "", url);
+
+                        // UI 업데이트
+                        buildFooter(url);
+                    } catch (error) {
+                        console.error("페이지 로드 실패:", error);
+                        // 에러 시 일반 페이지 이동
+                        window.location.href = url;
+                    }
+                }
+            });
         }
     }
 
-    // 페이지 로드될 때마다 실행
+    // 초기 로드
     buildFooter(window.location.pathname);
+
+    // 뒤로가기/앞으로가기 지원
+    window.addEventListener("popstate", () => {
+        buildFooter(window.location.pathname);
+    });
 
     /* ===============================
        Utility
