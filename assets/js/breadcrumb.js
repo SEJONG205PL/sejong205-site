@@ -158,12 +158,15 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
         if (!key) return;
 
         const {group, list} = map[key];
-        const filename = path.split("/").pop();
 
-        /* 🔥 BODY */
-        if (labelEl) labelEl.textContent = group; // breadcrumb에 그룹명만!
+        // ✅ 파일명 기준
+        const currentFile = path.split("/").pop();
+
+        /* BODY */
+        if (labelEl) labelEl.textContent = group;
+
         if (titleEl) {
-            const matched = list.find(([n, l]) => l.endsWith(filename));
+            const matched = list.find(([_, link]) => link.endsWith(currentFile));
             titleEl.textContent = matched ? matched[0] : group;
         }
 
@@ -171,9 +174,9 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
             subNavEl.innerHTML = list
             .map(
                 ([name, link]) =>
-                    `<a href="${link}" class="sub-nav__item ${link === path ? "is-active" : ""}">
-                ${name}
-            </a>`
+                    `<a href="${link}" class="sub-nav__item ${link.endsWith(currentFile) ? "is-active" : ""}">
+                        ${name}
+                    </a>`
             )
             .join("");
         }
