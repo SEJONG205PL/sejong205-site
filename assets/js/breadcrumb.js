@@ -117,14 +117,21 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
     }
 
     function buildFooter(path) {
-        // DOM 요소 안전하게 가져오기
+        console.log("=== buildFooter Debug ===");
+        console.log("Received path:", path);
+
+        // DOM 요소 확인 (상세 정보 출력)
         const labelEl = document.querySelector(".sub-hero__label");
         const titleEl = document.querySelector(".sub-hero__title");
         const subNavEl = document.querySelector(".sub-nav__inner");
 
-        // 필수 요소가 없는 경우 조기 종료
+        console.log("DOM Elements Found:");
+        console.log("- labelEl:", labelEl);
+        console.log("- titleEl:", titleEl);
+        console.log("- subNavEl:", subNavEl);
+
         if (!labelEl || !titleEl || !subNavEl) {
-            console.error("Required DOM elements not found");
+            console.error("❌ DOM 요소 누락");
             return;
         }
 
@@ -155,45 +162,69 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
             },
         };
 
-        // 현재 경로에 해당하는 그룹 찾기
-        const key = Object.keys(map).find((k) => path.startsWith(k));
+        console.log("Available map keys:", Object.keys(map));
 
-        // 매핑되는 그룹이 없는 경우 기본 처리
+        // 현재 경로에 해당하는 그룹 찾기
+        const key = Object.keys(map).find((k) => {
+            console.log(`Checking if "${path}" starts with "${k}":`, path.startsWith(k));
+            return path.startsWith(k);
+        });
+
+        console.log("Found key:", key);
+
         if (!key) {
+            console.error("❌ NO MAP MATCH FOUND");
+            console.error("Available prefixes:", Object.keys(map).join(", "));
+            console.error("Current path:", path);
+
             labelEl.textContent = "Unknown";
-            titleEl.textContent = "Page Not Found";
+            titleEl.textContent = "Debug: " + path; // 디버깅용으로 현재 path 표시
             subNavEl.innerHTML = "";
-            console.warn(`No mapping found for path: ${path}`);
             return;
         }
 
         const {group, list} = map[key];
-        const filename = path.split("/").pop(); // .html 제거하지 않고 원본 그대로 사용
+        const filename = path.split("/").pop();
 
-        // Breadcrumb에 그룹명 설정
+        console.log("Group:", group);
+        console.log("Filename:", filename);
+        console.log("List items:", list);
+
         labelEl.textContent = group;
 
-        // 페이지 타이틀 설정 (수정됨)
         const matched = list.find(([name, link]) => {
-            const linkFilename = link.split("/").pop(); // 여기도 .html 제거하지 않음
+            const linkFilename = link.split("/").pop();
+            console.log(`Comparing "${linkFilename}" === "${filename}":`, linkFilename === filename);
             return linkFilename === filename;
         });
 
-        titleEl.textContent = matched ? matched[0] : group; // 매칭 실패 시 그룹명
+        console.log("Matched item:", matched);
 
-        // 서브 네비게이션 생성 (innerHTML 사용하여 간소화)
-        subNavEl.innerHTML = list
+        // 타이틀 설정 강화
+        if (matched) {
+            titleEl.textContent = matched[0];
+            console.log("✅ Title set to:", matched[0]);
+        } else {
+            titleEl.textContent = group; // fallback
+            console.log("⚠️ No match found, using group name:", group);
+        }
+
+        // 서브 네비게이션 생성 - HTML 출력으로 디버깅
+        const navHTML = list
         .map(([name, link]) => {
             const isActive = link === path ? "is-active" : "";
+            console.log(`"${name}": path="${path}", link="${link}", isActive="${isActive}"`);
             return `<a href="${link}" class="sub-nav__item ${isActive}">${name}</a>`;
         })
         .join("");
 
-        // 디버깅용 로그
-        console.log(`Current path: ${path}`);
-        console.log(`Filename: ${filename}`);
-        console.log(`Matched:`, matched);
-        console.log(`Footer built successfully`);
+        console.log("Generated HTML:", navHTML);
+        subNavEl.innerHTML = navHTML;
+
+        // 최종 상태 확인
+        console.log("Final title:", titleEl.textContent);
+        console.log("Final label:", labelEl.textContent);
+        console.log("✅ Footer build completed");
     }
 
     /* ===============================
