@@ -116,19 +116,13 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
         }
     }
 
-    function buildFooter(path) {
+    function buildFooter(currentPath) {
         console.log("=== buildFooter Debug ===");
-        console.log("Received path:", path);
+        console.log("Current path:", currentPath);
 
-        // DOM 요소 확인 (상세 정보 출력)
         const labelEl = document.querySelector(".sub-hero__label");
         const titleEl = document.querySelector(".sub-hero__title");
         const subNavEl = document.querySelector(".sub-nav__inner");
-
-        console.log("DOM Elements Found:");
-        console.log("- labelEl:", labelEl);
-        console.log("- titleEl:", titleEl);
-        console.log("- subNavEl:", subNavEl);
 
         if (!labelEl || !titleEl || !subNavEl) {
             console.error("❌ DOM 요소 누락");
@@ -162,70 +156,93 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
             },
         };
 
-        console.log("Available map keys:", Object.keys(map));
+        // 🔥 현재 경로에서 그룹 찾기
+        const currentGroup = Object.keys(map).find(
+            (groupPath) => currentPath.startsWith(groupPath) || currentPath.includes(groupPath.slice(0, -1))
+        );
 
-        // 현재 경로에 해당하는 그룹 찾기
-        const key = Object.keys(map).find((k) => {
-            console.log(`Checking if "${path}" starts with "${k}":`, path.startsWith(k));
-            return path.startsWith(k);
-        });
+        console.log("Found group:", currentGroup);
 
-        console.log("Found key:", key);
-
-        if (!key) {
-            console.error("❌ NO MAP MATCH FOUND");
-            console.error("Available prefixes:", Object.keys(map).join(", "));
-            console.error("Current path:", path);
-
+        if (!currentGroup) {
+            console.error("❌ NO GROUP MATCH FOUND");
             labelEl.textContent = "Unknown";
-            titleEl.textContent = "Debug: " + path; // 디버깅용으로 현재 path 표시
+            titleEl.textContent = "Page Not Found";
             subNavEl.innerHTML = "";
             return;
         }
 
-        const {group, list} = map[key];
-        const filename = path.split("/").pop();
+        const {group, list} = map[currentGroup];
+        console.log("Group name:", group);
+        console.log("Available items:", list);
 
-        console.log("Group:", group);
-        console.log("Filename:", filename);
-        console.log("List items:", list);
-
+        // Breadcrumb 설정
         labelEl.textContent = group;
 
-        const matched = list.find(([name, link]) => {
-            const linkFilename = link.split("/").pop();
-            console.log(`Comparing "${linkFilename}" === "${filename}":`, linkFilename === filename);
-            return linkFilename === filename;
+        // 🔥 현재 페이지명 찾기 (path에서 마지막 파일명 추출)
+        const currentPageFile = currentPath.split("/").pop();
+        console.log("Current page file:", currentPageFile);
+
+        // 타이틀 설정 - 정확한 파일 매칭
+        const matchedItem = list.find(([itemName, itemPath]) => {
+            const targetFile = itemPath.split("/").pop();
+            console.log(`Matching: "${currentPageFile}" === "${targetFile}"?`, currentPageFile === targetFile);
+            return currentPageFile === targetFile;
         });
 
-        console.log("Matched item:", matched);
-
-        // 타이틀 설정 강화
-        if (matched) {
-            titleEl.textContent = matched[0];
-            console.log("✅ Title set to:", matched[0]);
+        // 🔥 강제 타이틀 설정
+        if (matchedItem) {
+            titleEl.textContent = matchedItem[0];
+            console.log("✅ Title set to:", matchedItem[0]);
         } else {
-            titleEl.textContent = group; // fallback
-            console.log("⚠️ No match found, using group name:", group);
+            // 매칭 실패시 현재 URL에서 파일명 기반으로 타이틀 생성
+            const fileNameWithoutExt = currentPageFile.replace(".html", "");
+            titleEl.textContent = fileNameWithoutExt.replace(/-|_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+            console.log("⚠️ Generated title from filename:", titleEl.textContent);
         }
 
-        // 서브 네비게이션 생성 - HTML 출력으로 디버깅
+        // 🔥 네비게이션 생성 - 정확한 active 상태 설정
         const navHTML = list
-        .map(([name, link]) => {
-            const isActive = link === path ? "is-active" : "";
-            console.log(`"${name}": path="${path}", link="${link}", isActive="${isActive}"`);
-            return `<a href="${link}" class="sub-nav__item ${isActive}">${name}</a>`;
+        .map(([itemName, itemPath]) => {
+            // 파일명만으로 정확한 active 상태 확인
+            const targetFile = itemPath.split("/").pop();
+            const isActive = currentPageFile === targetFile ? "is-active" : "";
+
+            console.log(`NavItem: "${itemName}" - Target: "${targetFile}" - Active: "${isActive}"`);
+
+            return `<a href="${itemPath}" class="sub-nav__item ${isActive}">${itemName}</a>`;
         })
         .join("");
 
-        console.log("Generated HTML:", navHTML);
+        console.log("Generated Navigation HTML:", navHTML);
         subNavEl.innerHTML = navHTML;
 
-        // 최종 상태 확인
-        console.log("Final title:", titleEl.textContent);
-        console.log("Final label:", labelEl.textContent);
+        // 🔥 강제로 DOM 업데이트 확인
+        setTimeout(() => {
+            console.log("DOM Update Verification:");
+            console.log("- Title text:", titleEl.textContent);
+            console.log("- Label text:", labelEl.textContent);
+            console.log("- Active elements:", subNavEl.querySelectorAll(".is-active").length);
+
+            // active 엘리먼트 강제 스타일링
+            const activeItem = subNavEl.querySelector(".is-active");
+            if (activeItem) {
+                activeItem.style.fontWeight = "bold";
+                activeItem.style.color = "#007bff";
+                activeItem.style.borderBottom = "2px solid #007bff";
+                console.log("✅ Applied active styles");
+            } else {
+                console.warn("⚠️ No active item found");
+            }
+        }, 100);
+
         console.log("✅ Footer build completed");
     }
+
+    // 🔥 사용법
+    // 현재 경로로 호출해야 합니다:
+    // buildFooter(window.location.pathname);
+    // 또는
+    // buildFooter("/subpage/footer/legal_information/privacy-policy.html");
 
     /* ===============================
        Utility
