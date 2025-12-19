@@ -116,16 +116,17 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
         }
     }
 
-    /* ===============================
-   FOOTER ONLY – breadcrumb to group name
-   - .sub-hero__label = breadcrumb 위치
-   - .sub-hero__title = 현재 페이지명
-   - .sub-nav__inner  = 하단 탭 메뉴 유지
-=============================== */
     function buildFooter(path) {
-        const labelEl = document.querySelector(".sub-hero__label"); // breadcrumb 위치
-        const titleEl = document.querySelector(".sub-hero__title"); // 페이지 타이틀
-        const subNavEl = document.querySelector(".sub-nav__inner"); // 탭
+        // DOM 요소 안전하게 가져오기
+        const labelEl = document.querySelector(".sub-hero__label");
+        const titleEl = document.querySelector(".sub-hero__title");
+        const subNavEl = document.querySelector(".sub-nav__inner");
+
+        // 필수 요소가 없는 경우 조기 종료
+        if (!labelEl || !titleEl || !subNavEl) {
+            console.error("Required DOM elements not found");
+            return;
+        }
 
         const map = {
             "/subpage/footer/legal_information/": {
@@ -154,29 +155,45 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
             },
         };
 
+        // 현재 경로에 해당하는 그룹 찾기
         const key = Object.keys(map).find((k) => path.startsWith(k));
-        if (!key) return;
+
+        // 매핑되는 그룹이 없는 경우 기본 처리
+        if (!key) {
+            labelEl.textContent = "Unknown";
+            titleEl.textContent = "Page Not Found";
+            subNavEl.innerHTML = "";
+            console.warn(`No mapping found for path: ${path}`);
+            return;
+        }
 
         const {group, list} = map[key];
-        const filename = path.split("/").pop();
+        const filename = path.split("/").pop(); // .html 제거하지 않고 원본 그대로 사용
 
-        /* 🔥 BODY */
-        if (labelEl) labelEl.textContent = group; // breadcrumb에 그룹명만!
-        if (titleEl) {
-            const matched = list.find(([n, l]) => l.endsWith(filename));
-            titleEl.textContent = matched ? matched[0] : group;
-        }
+        // Breadcrumb에 그룹명 설정
+        labelEl.textContent = group;
 
-        if (subNavEl) {
-            subNavEl.innerHTML = list
-            .map(
-                ([name, link]) =>
-                    `<a href="${link}" class="sub-nav__item ${link === path ? "is-active" : ""}">
-                ${name}
-            </a>`
-            )
-            .join("");
-        }
+        // 페이지 타이틀 설정 (수정됨)
+        const matched = list.find(([name, link]) => {
+            const linkFilename = link.split("/").pop(); // 여기도 .html 제거하지 않음
+            return linkFilename === filename;
+        });
+
+        titleEl.textContent = matched ? matched[0] : group; // 매칭 실패 시 그룹명
+
+        // 서브 네비게이션 생성 (innerHTML 사용하여 간소화)
+        subNavEl.innerHTML = list
+        .map(([name, link]) => {
+            const isActive = link === path ? "is-active" : "";
+            return `<a href="${link}" class="sub-nav__item ${isActive}">${name}</a>`;
+        })
+        .join("");
+
+        // 디버깅용 로그
+        console.log(`Current path: ${path}`);
+        console.log(`Filename: ${filename}`);
+        console.log(`Matched:`, matched);
+        console.log(`Footer built successfully`);
     }
 
     /* ===============================
