@@ -123,9 +123,9 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
    - .sub-nav__inner  = 하단 탭 메뉴 유지
 =============================== */
     function buildFooter(path) {
-        const labelEl = document.querySelector(".sub-hero__label"); // breadcrumb 위치
-        const titleEl = document.querySelector(".sub-hero__title"); // 페이지 타이틀
-        const subNavEl = document.querySelector(".sub-nav__inner"); // 탭
+        const labelEl = document.querySelector(".sub-hero__label");
+        const titleEl = document.querySelector(".sub-hero__title");
+        const subNavEl = document.querySelector(".sub-nav__inner");
 
         const map = {
             "/subpage/footer/legal_information/": {
@@ -154,21 +154,14 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
             },
         };
 
-        // 1) path 정규화: 쿼리/해시 제거
         const cleanPath = (path || "").split("?")[0].split("#")[0];
-
-        // 2) 그룹 키 찾기
         const key = Object.keys(map).find((k) => cleanPath.startsWith(k));
         if (!key) return;
 
         const {group, list} = map[key];
+        const lastSeg = cleanPath.split("/").filter(Boolean).pop();
+        const currentFile = lastSeg && lastSeg.includes(".html") ? lastSeg : list[0][1].split("/").pop();
 
-        // 3) 현재 "파일명" 결정
-        // - 디렉토리로 끝나면( .../vendor/ ) 기본값을 리스트 첫번째로 잡음
-        const lastSeg = cleanPath.split("/").filter(Boolean).pop(); // 끝이 /면 vendor 같은 폴더명이 나옴
-        const currentFile = lastSeg && lastSeg.includes(".html") ? lastSeg : list[0][1].split("/").pop(); // fallback: 첫 탭 파일명
-
-        /* BODY */
         if (labelEl) labelEl.textContent = group;
 
         if (titleEl) {
@@ -180,13 +173,14 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
             subNavEl.innerHTML = list
             .map(([name, link]) => {
                 const isActive = link.endsWith(currentFile);
-                return `<a href="${link}" class="sub-nav__item ${isActive ? "is-active" : ""}">
-                            ${name}
-                        </a>`;
+                return `<a href="${link}" class="sub-nav__item ${isActive ? "is-active" : ""}">${name}</a>`;
             })
             .join("");
         }
     }
+
+    // 페이지 로드될 때마다 실행
+    buildFooter(window.location.pathname);
 
     /* ===============================
        Utility
