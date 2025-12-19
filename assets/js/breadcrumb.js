@@ -215,27 +215,6 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
 
         console.log("Generated Navigation HTML:", navHTML);
         subNavEl.innerHTML = navHTML;
-
-        // 🔥 강제로 DOM 업데이트 확인
-        setTimeout(() => {
-            console.log("DOM Update Verification:");
-            console.log("- Title text:", titleEl.textContent);
-            console.log("- Label text:", labelEl.textContent);
-            console.log("- Active elements:", subNavEl.querySelectorAll(".is-active").length);
-
-            // active 엘리먼트 강제 스타일링
-            const activeItem = subNavEl.querySelector(".is-active");
-            if (activeItem) {
-                activeItem.style.fontWeight = "bold";
-                activeItem.style.color = "#007bff";
-                activeItem.style.borderBottom = "2px solid #007bff";
-                console.log("✅ Applied active styles");
-            } else {
-                console.warn("⚠️ No active item found");
-            }
-        }, 100);
-
-        console.log("✅ Footer build completed");
     }
 
     // 🔥 사용법
