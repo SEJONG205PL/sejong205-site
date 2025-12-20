@@ -148,13 +148,20 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
     }
 
     /* ==================================================
-       Footer Navigation (정적 구조)
-    ==================================================*/
-    /* ==================================================
    Footer Pages 처리 (Vendor / Policies / Legal)
    파일명 → Title 자동 변환
 ==================================================*/
-    function buildFooterMenu(path, breadcrumbEl, titleEl, subNavInner) {
+    document.addEventListener("DOMContentLoaded", () => {
+        const path = location.pathname;
+
+        const subHeroLabel = document.querySelector(".sub-hero__label");
+        const subHeroTitle = document.querySelector(".sub-hero__title");
+        const subNavInner = document.querySelector(".sub-nav__inner");
+
+        buildFooterMenu(path, subHeroLabel, subHeroTitle, subNavInner);
+    });
+
+    function buildFooterMenu(path, labelEl, titleEl, navEl) {
         const map = {
             "/subpage/footer/legal_information/": {
                 title: "Legal Information",
@@ -182,34 +189,35 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
             },
         };
 
-        const key = Object.keys(map).find((x) => path.startsWith(x));
+        const key = Object.keys(map).find((k) => path.startsWith(k));
         if (!key) return;
 
         const {title, list} = map[key];
 
-        /* breadcrumb → 그룹 이름만 표시 */
-        if (breadcrumbEl) breadcrumbEl.textContent = title;
+        /* 1. 그룹명 → sub-hero__label */
+        if (labelEl) {
+            labelEl.textContent = title;
+        }
 
-        /* 파일명 → 타이틀 자동 변환 */
+        /* 2. 현재 페이지 제목 */
         const file = path.split("/").pop().replace(".html", "");
         let autoTitle = file.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-        // ex) legal-notice → Legal Notice
 
-        // 데이터 목록에 존재하면 이름으로, 없으면 자동 생성명 사용
-        const matched = list.find(([name, link]) => link.endsWith(file + ".html"));
-        if (titleEl) titleEl.textContent = matched ? matched[0] : autoTitle;
+        const matched = list.find(([, link]) => link.endsWith(file + ".html"));
+        if (titleEl) {
+            titleEl.textContent = matched ? matched[0] : autoTitle;
+        }
 
-        /* Footer 네비게이션 생성 */
-        if (subNavInner) {
-            subNavInner.innerHTML = list
-            .map(
-                ([name, link]) =>
-                    `<a href="${link}" class="sub-nav__item ${link === path ? "is-active" : ""}">${name}</a>`
-            )
+        /* 3. Footer 서브 네비 생성 */
+        if (navEl) {
+            navEl.innerHTML = list
+            .map(([name, link]) => {
+                const active = link === path ? "is-active" : "";
+                return `<a href="${link}" class="sub-nav__item ${active}">${name}</a>`;
+            })
             .join("");
         }
     }
-
     /* ==================================================
        DB 메뉴 검색 util
     ==================================================*/
