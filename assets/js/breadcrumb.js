@@ -89,49 +89,75 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
                 } catch (e) {}
             }
         }
+    }
+})();
 
-        /* =====================
-           일반 SUBPAGE
-        ===================== */
-        if (current) {
-            if (breadcrumbEl) breadcrumbEl.textContent = makeBreadcrumb(current);
-            if (titleEl && !titleEl.textContent) titleEl.textContent = current.name;
+(function () {
+    let menuData = null;
+    let isMenuLoaded = false;
 
-            if (subNavInner) {
-                // 현재 파일명 기준 (overview.html 등)
-                const currentFile = window.location.pathname.split("/").pop();
+    /* =========================
+       header-menu.js에서 데이터 수신
+    ========================= */
+    window.addEventListener("menuDataLoaded", (e) => {
+        menuData = e.detail;
+        isMenuLoaded = true;
+        init(); // 메뉴 로딩 후 실행
+    });
 
-                // 동일 부모 depth=3 메뉴만 출력
-                const siblings = menu.filter((m) => m.parent_id === current.parent_id && m.depth === 3);
+    document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+            if (!isMenuLoaded) init(); // fallback
+        }, 200);
+    });
 
-                subNavInner.innerHTML = siblings
-                .map(
-                    (m) =>
-                        `<a href="${m.link}" class="sub-nav__item ${m.link.includes(currentFile) ? "is-active" : ""}">
-                        ${m.name}
-                    </a>`
-                )
-                .join("");
-            }
+    /* =========================
+       메인 실행
+    ========================= */
+    function init() {
+        const path = location.pathname;
+        const breadcrumbEl = document.getElementById("breadcrumb");
+        const titleEl = document.querySelector(".sub-hero__title");
+        const subNavInner = document.querySelector(".sub-nav__inner");
+
+        /* =======================
+           Footer pages 처리
+        =======================*/
+        if (path.startsWith("/subpage/footer/")) {
+            buildFooterMenu(path, breadcrumbEl, titleEl, subNavInner);
+            return; // DB 메뉴 탐색 중지 → 경고 없음
+        }
+
+        /* =======================
+           일반 Subpage 처리
+        =======================*/
+        if (!menuData) return; // 로딩 안됐으면 그냥 종료 (경고 없음)
+
+        const current = findMenu(path);
+
+        if (breadcrumbEl) breadcrumbEl.textContent = current ? makeBreadcrumb(current) : "";
+        if (titleEl && current) titleEl.textContent = current.name;
+
+        if (subNavInner && current) {
+            const siblings = menuData.filter((m) => m.parent_id === current.parent_id && m.depth === 3);
+
+            subNavInner.innerHTML = siblings
+            .map((m) => `<a href="${m.link}" class="sub-nav__item ${m.link === path ? "is-active" : ""}">${m.name}</a>`)
+            .join("");
         }
     }
 
-    function buildFooter(currentPath) {
-        console.log("=== buildFooter Debug ===");
-        console.log("Current path:", currentPath);
-
-        const labelEl = document.querySelector(".sub-hero__label");
-        const titleEl = document.querySelector(".sub-hero__title");
-        const subNavEl = document.querySelector(".sub-nav__inner");
-
-        if (!labelEl || !titleEl || !subNavEl) {
-            console.error("❌ DOM 요소 누락");
-            return;
-        }
-
+    /* ==================================================
+       Footer Navigation (정적 구조)
+    ==================================================*/
+    /* ==================================================
+   Footer Pages 처리 (Vendor / Policies / Legal)
+   파일명 → Title 자동 변환
+==================================================*/
+    function buildFooterMenu(path, breadcrumbEl, titleEl, subNavInner) {
         const map = {
             "/subpage/footer/legal_information/": {
-                group: "Legal Information",
+                title: "Legal Information",
                 list: [
                     ["Legal Info", "/subpage/footer/legal_information/legal-info.html"],
                     ["Legal Notice", "/subpage/footer/legal_information/legal-notice.html"],
@@ -139,14 +165,14 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
                 ],
             },
             "/subpage/footer/policies/": {
-                group: "Policies",
+                title: "Policies",
                 list: [
                     ["Refund Policy", "/subpage/footer/policies/refund.html"],
                     ["Shipping Policy", "/subpage/footer/policies/shipping.html"],
                 ],
             },
             "/subpage/footer/vendor/": {
-                group: "Vendor Guide",
+                title: "Vendor Guide",
                 list: [
                     ["Vendor Terms", "/subpage/footer/vendor/terms.html"],
                     ["Settlement Guide", "/subpage/footer/vendor/settlement.html"],
@@ -156,100 +182,47 @@ SEJONGO Breadcrumb & Subpage Navigation Final Version
             },
         };
 
-        // 🔥 경로 정규화 (쿼리스트링, 해시 제거)
-        const cleanPath = currentPath.split("?")[0].split("#")[0];
-        console.log("Clean path:", cleanPath);
+        const key = Object.keys(map).find((x) => path.startsWith(x));
+        if (!key) return;
 
-        // 🔥 현재 경로에서 그룹 찾기
-        const currentGroup = Object.keys(map).find((groupPath) => cleanPath.includes(groupPath.replace(/\/$/, "")));
+        const {title, list} = map[key];
 
-        console.log("Found group:", currentGroup);
+        /* breadcrumb → 그룹 이름만 표시 */
+        if (breadcrumbEl) breadcrumbEl.textContent = title;
 
-        if (!currentGroup) {
-            console.error("❌ NO GROUP MATCH FOUND");
-            labelEl.textContent = "Unknown";
-            titleEl.textContent = "Page Not Found";
-            subNavEl.innerHTML = "";
-            return;
+        /* 파일명 → 타이틀 자동 변환 */
+        const file = path.split("/").pop().replace(".html", "");
+        let autoTitle = file.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+        // ex) legal-notice → Legal Notice
+
+        // 데이터 목록에 존재하면 이름으로, 없으면 자동 생성명 사용
+        const matched = list.find(([name, link]) => link.endsWith(file + ".html"));
+        if (titleEl) titleEl.textContent = matched ? matched[0] : autoTitle;
+
+        /* Footer 네비게이션 생성 */
+        if (subNavInner) {
+            subNavInner.innerHTML = list
+            .map(
+                ([name, link]) =>
+                    `<a href="${link}" class="sub-nav__item ${link === path ? "is-active" : ""}">${name}</a>`
+            )
+            .join("");
         }
-
-        const {group, list} = map[currentGroup];
-        console.log("Group name:", group);
-        console.log("Available items:", list);
-
-        // Breadcrumb 설정
-        labelEl.textContent = group;
-
-        // 🔥 현재 전체 경로로 매칭 (더 정확함)
-        const matchedItem = list.find(([itemName, itemPath]) => {
-            // 방법 1: 전체 경로 비교
-            const pathMatch = cleanPath === itemPath || cleanPath.endsWith(itemPath);
-
-            // 방법 2: 파일명만 비교
-            const currentFile = cleanPath.split("/").pop();
-            const targetFile = itemPath.split("/").pop();
-            const fileMatch = currentFile === targetFile;
-
-            console.log(`Checking "${itemName}":`, {
-                currentPath: cleanPath,
-                itemPath: itemPath,
-                pathMatch,
-                currentFile,
-                targetFile,
-                fileMatch,
-            });
-
-            return pathMatch || fileMatch;
-        });
-
-        // 🔥 타이틀 설정
-        if (matchedItem) {
-            titleEl.textContent = matchedItem[0];
-            console.log("✅ Title set to:", matchedItem[0]);
-        } else {
-            const currentFile = cleanPath.split("/").pop();
-            const fileNameWithoutExt = currentFile.replace(".html", "");
-            titleEl.textContent = fileNameWithoutExt.replace(/-|_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
-            console.log("⚠️ Generated title from filename:", titleEl.textContent);
-        }
-
-        // 🔥 네비게이션 생성 - active 상태 정확하게 설정
-        const navHTML = list
-        .map(([itemName, itemPath]) => {
-            // 전체 경로 또는 파일명으로 매칭
-            const isActive =
-                cleanPath === itemPath ||
-                cleanPath.endsWith(itemPath) ||
-                cleanPath.split("/").pop() === itemPath.split("/").pop();
-
-            console.log(`NavItem: "${itemName}" - Path: "${itemPath}" - Active: ${isActive}`);
-
-            return `<a href="${itemPath}" class="sub-nav__item ${isActive ? "is-active" : ""}">${itemName}</a>`;
-        })
-        .join("");
-
-        console.log("Generated Navigation HTML:", navHTML);
-        subNavEl.innerHTML = navHTML;
     }
 
-    // 🔥 페이지 로드 시 실행
-    document.addEventListener("DOMContentLoaded", () => {
-        buildFooter(window.location.pathname);
-    });
+    /* ==================================================
+       DB 메뉴 검색 util
+    ==================================================*/
+    function findMenu(path) {
+        return (
+            menuData.find((m) => m.link === path) || menuData.find((m) => path.includes(m.link.replace(".html", "")))
+        );
+    }
 
-    /* ===============================
-       Utility
-    =============================== */
-    function findMenu(p) {
-        return menu.find((m) => m.link === p);
-    }
-    function findLoose(p) {
-        return menu.find((m) => p.includes(m.link.replace(".html", "")));
-    }
     function makeBreadcrumb(node) {
         const stack = [node.name];
         while (node.parent_id) {
-            node = menu.find((m) => m.id === node.parent_id);
+            node = menuData.find((m) => m.id === node.parent_id);
             if (node) stack.unshift(node.name);
         }
         return stack.join(" > ");
